@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Intellectics</string>
+    <string name="auth_title">Авторизация</string>
+    <string name="auth_without_enter">Запуск без авторизации</string>
+    <string name="auth_enter">Войти</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_login">Логин</string>
+    <string name="auth_remember">Запомнить</string>
+    <string name="user_goods">Мои товары</string>
+    <string name="need_auth">Требуется авторизация</string>
+    <string name="auth_logout">Выход из аккаунта</string>
+    <string name="profile">Профиль</string>
+    <string name="profile.hello">Здравствуйте, %s</string>
+
+    <string name="nav.user_goods">Мои товары</string>
+    <string name="nav.bonus">Бонус</string>
+    <string name="nav.contacts">Контакты</string>
+    <string name="nav.profile">Мой аккаунт</string>
+    <string name="nav.notifications">Уведомления</string>
+    <string name="nav.settings">Настройки</string>
+    <string name="nav.support">Помощь</string>
+    <string name="nav.logout">Выход</string>
+</resources>

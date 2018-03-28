@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_user_goods"
+        android:title="@string/nav.user_goods"
+        android:icon="@drawable/ic_user_goods"/>
+    <item
+        android:id="@+id/nav_bonus"
+        android:title="@string/nav.bonus"
+        android:icon="@drawable/ic_bonus"/>
+    <item
+        android:id="@+id/nav_contacts"
+        android:title="@string/nav.contacts"
+        android:icon="@drawable/ic_contacts"/>
+    <item
+        android:id="@+id/nav_profile"
+        android:title="@string/nav.profile"
+        android:icon="@drawable/ic_person" />
+    <item
+        android:id="@+id/nav_notifications"
+        android:title="@string/nav.notifications"
+        android:icon="@drawable/ic_notifications"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:title="@string/nav.settings"
+        android:icon="@drawable/ic_settings"/>
+    <item
+        android:id="@+id/nav_support"
+        android:title="@string/nav.support"
+        android:icon="@drawable/ic_support"/>
+    <item
+        android:id="@+id/nav_logout"
+        android:title="@string/nav.logout"
+        android:icon="@drawable/ic_logout"/>
+</menu>
