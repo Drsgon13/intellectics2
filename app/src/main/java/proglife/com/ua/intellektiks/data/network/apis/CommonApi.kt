@@ -1,12 +1,8 @@
 package proglife.com.ua.intellektiks.data.network.apis
 
 import io.reactivex.Single
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.UserData
-import proglife.com.ua.intellektiks.data.network.models.GetGoodsRequest
-import proglife.com.ua.intellektiks.data.network.models.GetUserDataRequest
-import proglife.com.ua.intellektiks.data.network.models.GetUserGoodsRequest
+import proglife.com.ua.intellektiks.data.models.*
+import proglife.com.ua.intellektiks.data.network.models.*
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -34,5 +30,15 @@ interface CommonApi {
     fun getGoods(
             @Body body: GetGoodsRequest
     ): Single<Goods>
+
+    @POST(JSON)
+    fun getLessons(
+            @Body body: GetLessonsRequest
+    ): Single<List<LessonPreview>>
+
+    @POST(JSON)
+    fun getLesson(
+            @Body body: GetLessonRequest
+    ): Single<Lesson>
 
 }

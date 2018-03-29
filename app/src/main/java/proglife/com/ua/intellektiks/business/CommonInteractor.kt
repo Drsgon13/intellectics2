@@ -2,9 +2,7 @@ package proglife.com.ua.intellektiks.business
 
 import android.accounts.AuthenticatorException
 import io.reactivex.Single
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.UserData
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 
@@ -24,6 +22,13 @@ class CommonInteractor(
                     mSpRepository.credentials(Pair(login, password), remember)
                     mSpRepository.userData(it, remember)
                 }
+    }
+
+    fun logout(): Single<Unit> {
+        return Single.fromCallable {
+            mSpRepository.credentials(Pair(null, null), true)
+            mSpRepository.userData(null, true)
+        }
     }
 
     fun isAuthenticated(): Single<Boolean> {
@@ -55,11 +60,14 @@ class CommonInteractor(
                 .flatMap { mNetworkRepository.getGoods(it.first!!, it.second!!, id) }
     }
 
-    fun logout(): Single<Unit> {
-        return Single.fromCallable {
-            mSpRepository.credentials(Pair(null, null), true)
-            mSpRepository.userData(null, true)
-        }
+    fun getLessons(id: Long): Single<List<LessonPreview>> {
+        return Single.fromCallable { mSpRepository.credentials() }
+                .flatMap { mNetworkRepository.getLessons(it.first!!, it.second!!, id) }
+    }
+
+    fun getLesson(id: Long): Single<Lesson> {
+        return Single.fromCallable { mSpRepository.credentials() }
+                .flatMap { mNetworkRepository.getLesson(it.first!!, it.second!!, id) }
     }
 
 }

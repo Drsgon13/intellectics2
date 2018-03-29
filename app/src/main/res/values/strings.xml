@@ -20,4 +20,5 @@
     <string name="nav.settings">Настройки</string>
     <string name="nav.support">Помощь</string>
     <string name="nav.logout">Выход</string>
+    <string name="file_info">Вес файла - %s МБ</string>
 </resources>

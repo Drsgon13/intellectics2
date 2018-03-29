@@ -1,13 +1,9 @@
 package proglife.com.ua.intellektiks.data.repositories
 
 import io.reactivex.Single
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.UserData
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.apis.CommonApi
-import proglife.com.ua.intellektiks.data.network.models.GetGoodsRequest
-import proglife.com.ua.intellektiks.data.network.models.GetUserDataRequest
-import proglife.com.ua.intellektiks.data.network.models.GetUserGoodsRequest
+import proglife.com.ua.intellektiks.data.network.models.*
 
 /**
  * Created by Evhenyi Shcherbyna on 27.03.2018.
@@ -25,6 +21,14 @@ class NetworkRepository(private val commonApi: CommonApi) {
 
     fun getGoods(login: String, password: String, id: Long): Single<Goods> {
         return commonApi.getGoods(GetGoodsRequest(login, password, id))
+    }
+
+    fun getLessons(login: String, password: String, id: Long): Single<List<LessonPreview>> {
+        return commonApi.getLessons(GetLessonsRequest(login, password, id))
+    }
+
+    fun getLesson(login: String, password: String, id: Long): Single<Lesson> {
+        return commonApi.getLesson(GetLessonRequest(login, password, id))
     }
 
 }

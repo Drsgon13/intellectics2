@@ -2,10 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
@@ -14,30 +14,31 @@
             android:id="@+id/pbLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"/>
 
         <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/colorTitleBlueText"
+            android:textColor="@color/colorTitleBlackText"
+            android:textSize="18sp"
             android:layout_marginBottom="12dp"
-            tools:text="Заголовок"/>
+            android:padding="12dp"
+            tools:text="Заголовок" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/divider"
-            android:layout_above="@+id/rvMediaObjects"/>
-        
+            android:layout_above="@+id/rvLessons"/>
+
         <android.support.v7.widget.RecyclerView
-            android:layout_below="@id/tvName"
-            android:id="@+id/rvMediaObjects"
-            android:nestedScrollingEnabled="false"
+            android:id="@+id/rvLessons"
+            android:layout_below="@+id/tvTitle"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="12dp"
-            android:layout_height="wrap_content"/>
+            android:nestedScrollingEnabled="false"/>
 
     </RelativeLayout>
 

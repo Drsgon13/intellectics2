@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorTitleBlueText"
+        tools:text="1.1 Отличия алгоритмического мышления"/>
+
+    <ImageButton
+        android:id="@+id/btnDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_file_download"
+        android:layout_below="@+id/tvName"
+        android:layout_marginTop="4dp"
+        android:background="@null"/>
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/btnDownload"
+        android:layout_alignTop="@id/btnDownload"
+        android:textSize="14sp"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/btnDownload"
+        android:textColor="@color/colorInfoText"
+        tools:text="Вес файла - 22 МБ"/>
+
+</RelativeLayout>

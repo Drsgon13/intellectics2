@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#156db4</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorNavigation">#9FD2FF</color>
+
+    <color name="colorTitleBlackText">#222222</color>
+    <color name="colorTitleBlueText">#339BED</color>
+    <color name="colorInfoText">#808080</color>
 </resources>
