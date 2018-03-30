@@ -2,6 +2,7 @@ package proglife.com.ua.intellektiks.di.activity
 
 import dagger.Subcomponent
 import proglife.com.ua.intellektiks.di.activity.modules.CommonModule
+import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.auth.AuthPresenter
 import proglife.com.ua.intellektiks.ui.common.CommonPresenter
 import proglife.com.ua.intellektiks.ui.goods.GoodsShowPresenter
@@ -28,4 +29,5 @@ interface ActivityComponent {
     fun inject(presenter: GoodsShowPresenter)
     fun inject(presenter: LessonsPresenter)
     fun inject(presenter: LessonPresenter)
+    fun inject(service: DownloadService)
 }

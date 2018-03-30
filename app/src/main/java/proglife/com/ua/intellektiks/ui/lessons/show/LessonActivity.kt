@@ -12,6 +12,7 @@ import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Lesson
 import proglife.com.ua.intellektiks.data.models.LessonPreview
+import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.goods.MediaObjectAdapter
 
@@ -41,7 +42,10 @@ class LessonActivity: BaseActivity(), LessonView {
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
-        mMediaObjectAdapter = MediaObjectAdapter()
+        mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
+            override fun onDownload(mediaObject: MediaObject) {
+            }
+        })
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter

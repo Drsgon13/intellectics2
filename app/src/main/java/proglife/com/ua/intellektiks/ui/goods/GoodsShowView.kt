@@ -13,4 +13,5 @@ interface GoodsShowView: BaseView {
     fun showLoading()
     fun dismissLoading()
     fun showGoods(item: Goods)
+    fun showProgress(count: Int, total: Int, progress: Int?)
 }

@@ -44,6 +44,8 @@
         <activity
             android:name=".ui.lessons.show.LessonActivity"
             android:launchMode="singleTop" />
+
+        <service android:name=".extensions.DownloadService" />
     </application>
 
 </manifest>
