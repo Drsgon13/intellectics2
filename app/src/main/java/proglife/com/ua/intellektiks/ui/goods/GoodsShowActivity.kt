@@ -19,7 +19,6 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import kotlinx.android.synthetic.main.activity_goods_show.*
-import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
@@ -165,9 +164,9 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
     override fun showProgress(count: Int, total: Int, progress: Int?) {
         if (total == 0) return
         if (progress != null) {
-            tvProgress.text = getString(R.string.file_progress, count, total, progress)
+            tvProgress.text = getString(R.string.app_name, count, total, progress)
         } else {
-            tvProgress.text = getString(R.string.file_progress_complete, count, total)
+            tvProgress.text = getString(R.string.app_name, count, total)
         }
     }
 }
