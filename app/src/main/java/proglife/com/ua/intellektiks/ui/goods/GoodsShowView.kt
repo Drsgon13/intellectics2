@@ -15,4 +15,5 @@ interface GoodsShowView: BaseView {
     fun dismissLoading()
     fun showGoods(item: Goods)
     fun showVideo(mediaSource: ConcatenatingMediaSource)
+    fun showProgress(count: Int, total: Int, progress: Int?)
 }

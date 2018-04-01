@@ -49,10 +49,6 @@ class MainPresenter: BasePresenter<MainView>() {
                 )
     }
 
-    fun profile() {
-
-    }
-
     fun selectGoods(goods: GoodsPreview) {
         if (goods.trainingId == null) {
             viewState.showGoods(goods)

@@ -15,7 +15,8 @@ import proglife.com.ua.intellektiks.data.models.MediaObject
  * Created by Evhenyi Shcherbyna on 29.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class MediaObjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMediaObjectListener):
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mList: List<MediaObject> = emptyList()
     private lateinit var mContext: Context
@@ -36,6 +37,7 @@ class MediaObjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val mediaObject: MediaObject = mList[position]
             holder.tvName.text = mediaObject.title
             holder.tvInfo.text = mContext.getString(R.string.file_info, mediaObject.size)
+            holder.btnDownload.setOnClickListener { mOnSelectMediaObjectListener.onDownload(mediaObject) }
         }
     }
 
@@ -48,6 +50,10 @@ class MediaObjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun show(mediaObjects: List<MediaObject>) {
         mList = mediaObjects
         notifyDataSetChanged()
+    }
+
+    interface OnSelectMediaObjectListener {
+        fun onDownload(mediaObject: MediaObject)
     }
 
 }

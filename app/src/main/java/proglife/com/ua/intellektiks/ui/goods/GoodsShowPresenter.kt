@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
+import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import javax.inject.Inject
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
@@ -23,6 +24,14 @@ import proglife.com.ua.intellektiks.data.models.MediaObject
  */
 @InjectViewState
 class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowView>() {
+
+    fun progress(files: List<DownloadableFile>?) {
+        if (files == null) return
+        val total: Int = files.size
+        val count: Int = files.filter { it.state == DownloadableFile.State.FINISHED }.size
+        val progress: Int? = files.firstOrNull { it.state == DownloadableFile.State.PROCESSING }?.progress
+        viewState.showProgress(if (count < total) count + 1 else total, total, progress)
+    }
 
     @Inject
     lateinit var mCommonInteractor: CommonInteractor

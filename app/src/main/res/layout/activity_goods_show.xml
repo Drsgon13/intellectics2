@@ -25,6 +25,15 @@
             android:layout_marginBottom="12dp"
             tools:text="Заголовок"/>
 
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorInfoText"
+            android:layout_below="@+id/mediaContainer"
+            android:layout_marginBottom="12dp"
+            tools:text="(4 из 28) Скачиваем файл - 60%"/>
+
         <FrameLayout
             android:id="@+id/mediaContainer"
             android:layout_width="match_parent"
@@ -46,7 +55,7 @@
             android:layout_above="@+id/rvMediaObjects"/>
         
         <android.support.v7.widget.RecyclerView
-            android:layout_below="@id/mediaContainer"
+            android:layout_below="@id/tvProgress"
             android:id="@+id/rvMediaObjects"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
