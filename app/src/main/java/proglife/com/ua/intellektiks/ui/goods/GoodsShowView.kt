@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.goods
 
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.BaseView
@@ -13,4 +14,5 @@ interface GoodsShowView: BaseView {
     fun showLoading()
     fun dismissLoading()
     fun showGoods(item: Goods)
+    fun showVideo(mediaSource: ConcatenatingMediaSource)
 }

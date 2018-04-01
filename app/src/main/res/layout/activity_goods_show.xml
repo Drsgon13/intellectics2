@@ -25,6 +25,20 @@
             android:layout_marginBottom="12dp"
             tools:text="Заголовок"/>
 
+        <FrameLayout
+            android:id="@+id/mediaContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/tvName">
+
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/exoPlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="190dp" />
+        </FrameLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -32,7 +46,7 @@
             android:layout_above="@+id/rvMediaObjects"/>
         
         <android.support.v7.widget.RecyclerView
-            android:layout_below="@id/tvName"
+            android:layout_below="@id/mediaContainer"
             android:id="@+id/rvMediaObjects"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"

@@ -34,6 +34,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.goods.GoodsShowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.support.SupportActivity"
