@@ -37,15 +37,15 @@
         <FrameLayout
             android:id="@+id/mediaContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="190dp"
+            android:visibility="gone"
             android:layout_marginBottom="5dp"
             android:layout_below="@+id/tvName">
 
             <com.google.android.exoplayer2.ui.PlayerView
                 android:id="@+id/exoPlay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="190dp" />
+                android:layout_height="match_parent" />
         </FrameLayout>
 
         <View

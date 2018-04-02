@@ -60,8 +60,10 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
             if(mediaObjects[i].fileType == FileType.MP4)
             media.add(extractor.createMediaSource(Uri.parse(mediaObjects[i].url)))
         }
-
-        viewState.showVideo(ConcatenatingMediaSource(*media.toTypedArray()))
+        if(media.isEmpty())
+            viewState.hideVideo()
+        else
+            viewState.showVideo(ConcatenatingMediaSource(*media.toTypedArray()))
     }
 
     // Build Data Source Factory using DefaultBandwidthMeter and HttpDataSource.Factory

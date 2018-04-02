@@ -8,6 +8,8 @@ import android.os.Parcelable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -35,7 +37,6 @@ import proglife.com.ua.intellektiks.ui.base.BaseActivity
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 class GoodsShowActivity: BaseActivity(), GoodsShowView {
-
 
     @InjectPresenter lateinit var presenter: GoodsShowPresenter
 
@@ -84,6 +85,20 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         withBackAnimation()
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (exoPlay.player != null && exoPlay!!.player.playWhenReady) {
+            exoPlay.player.playWhenReady = false
+        }
+        if(mFullScreenDialog.isShowing)
+            mFullScreenDialog.dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlay.player?.release()
+    }
+
     override fun showInfo(item: GoodsPreview) {
 
     }
@@ -96,14 +111,20 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         pbLoading.hide()
     }
 
+    override fun hideVideo() {
+        mediaContainer.visibility = GONE
+    }
+
     override fun showVideo(mediaSource: ConcatenatingMediaSource) {
+        mediaContainer.visibility = VISIBLE
         val bandwidthMeter = DefaultBandwidthMeter()
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(bandwidthMeter)
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
         val loadControl = DefaultLoadControl()
         val player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), trackSelector, loadControl)
+        exoPlay.hideController()
         exoPlay!!.player = player
-
+        exoPlay.setPlaybackPreparer { exoPlay.showController() }
 
 
         player.prepare(mediaSource)
@@ -120,6 +141,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
                 super.onBackPressed()
             }
         }
+        mFullScreenDialog.setOnDismissListener {  closeFullscreenDialog() }
     }
 
     private fun initFullscreenButton() {
@@ -137,7 +159,6 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen_expand)
         mediaContainer.removeView(exoPlay)
         mFullScreenDialog.addContentView(exoPlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-
 
         mFullScreenDialog.show()
     }
@@ -164,9 +185,9 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
     override fun showProgress(count: Int, total: Int, progress: Int?) {
         if (total == 0) return
         if (progress != null) {
-            tvProgress.text = getString(R.string.app_name, count, total, progress)
+            tvProgress.text = getString(R.string.file_progress, count, total, progress)
         } else {
-            tvProgress.text = getString(R.string.app_name, count, total)
+            tvProgress.text = getString(R.string.file_progress_complete, count, total)
         }
     }
 }
