@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scroll"
     xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true">
 
@@ -41,7 +42,6 @@
             android:visibility="gone"
             android:layout_marginBottom="5dp"
             android:layout_below="@+id/tvName">
-
             <com.google.android.exoplayer2.ui.PlayerView
                 android:id="@+id/exoPlay"
                 android:layout_width="match_parent"

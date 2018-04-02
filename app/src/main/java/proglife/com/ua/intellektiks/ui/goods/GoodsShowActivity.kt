@@ -167,6 +167,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         (exoPlay!!.parent as ViewGroup).removeView(exoPlay)
         mediaContainer.addView(exoPlay)
         mFullScreenDialog.dismiss()
+        scroll.smoothScrollTo(0,0)
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen)
     }
 
