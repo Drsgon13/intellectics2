@@ -10,5 +10,6 @@ object Constants {
         const val LESSONS_PREVIEW = "lessonsPreview"
         const val TITLE: String = "title"
         const val CONTENT: String = "txt"
+        const val TYPE: String = "type"
     }
 }

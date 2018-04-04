@@ -21,5 +21,5 @@ enum class FileType(val icon: Int, val dlIcon: Int) {
     @SerializedName("XLSX") XLSX(R.mipmap.ic_xlxs, R.mipmap.ic_xlsx_dl),
     @SerializedName("ZIP") ZIP(R.mipmap.ic_zip, R.mipmap.ic_zip_dl),
     @SerializedName("RAR") RAR(R.mipmap.ic_rar, R.mipmap.ic_rar_dl),
-    @SerializedName("JPG") JPG(R.mipmap.ic_jpg, R.mipmap.ic_jpg_dl)
+    @SerializedName("JPG") JPG(R.mipmap.ic_jpg, R.mipmap.ic_jpg_dl);
 }

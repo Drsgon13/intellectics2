@@ -75,7 +75,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
         val media: MutableList<MediaSource> = arrayListOf()
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
-            if(mediaObjects[i].fileType!=null && mediaObjects[i].fileType != FileType.UNKNOWN ) {
+            if (mediaObjects[i].fileType == FileType.MP3 || mediaObjects[i].fileType == FileType.MP4 || mediaObjects[i].fileType == FileType.HLS) {
                 list.add(mediaObjects[i].fileType!!)
                 media.add(buildMediaSource(
                         buildDataSourceFactory(context),
