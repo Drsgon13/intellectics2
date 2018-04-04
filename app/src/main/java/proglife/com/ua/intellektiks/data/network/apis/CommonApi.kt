@@ -45,5 +45,5 @@ interface CommonApi {
     ): Observable<Lesson>
 
     @GET(HELP)
-    fun getHelp(): Single<Help>
+    fun getHelp(): Observable<Help>
 }

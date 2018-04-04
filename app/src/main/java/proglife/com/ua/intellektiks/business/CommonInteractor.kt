@@ -143,5 +143,17 @@ class CommonInteractor(
                     it
                 }
     }
-    fun getHelp() : Observable<Help> = mNetworkRepository.getHelp().toObservable()
+
+    fun getHelp(): Observable<Help> =
+            Observable.just(mSpRepository.getHelp())
+                    .flatMap { help ->
+                        if (help.content == null) {
+                            return@flatMap mNetworkRepository.getHelp()
+                                    .doOnNext {
+                                        mSpRepository.setHelp(it)
+                                    }
+                        }
+                        Observable.just(mSpRepository.getHelp())
+                    }
+
 }

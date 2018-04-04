@@ -1,3 +1,3 @@
 package proglife.com.ua.intellektiks.data.models
 
-data class Help(val content: String)
+data class Help(val content: String?)

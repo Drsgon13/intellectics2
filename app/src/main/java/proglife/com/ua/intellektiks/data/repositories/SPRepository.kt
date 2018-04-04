@@ -106,4 +106,12 @@ class SPRepository(context: Context,
         saveCache()
     }
 
+    fun setHelp(help: Help){
+        mCache.help = help
+        saveCache()
+    }
+
+    fun getHelp(): Help {
+        return if(mCache.help == null) Help(null) else mCache.help!!
+    }
 }

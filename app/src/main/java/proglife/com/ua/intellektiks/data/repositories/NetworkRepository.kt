@@ -32,5 +32,5 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getLesson(GetLessonRequest(login, password, id))
     }
 
-    fun getHelp() : Single<Help> = commonApi.getHelp()
+    fun getHelp() : Observable<Help> = commonApi.getHelp()
 }

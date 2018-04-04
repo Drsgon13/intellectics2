@@ -1,9 +1,6 @@
 package proglife.com.ua.intellektiks.data.sp
 
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.Lesson
-import proglife.com.ua.intellektiks.data.models.LessonPreview
+import proglife.com.ua.intellektiks.data.models.*
 
 /**
  * Created by Evhenyi Shcherbyna on 03.04.2018.
@@ -13,5 +10,6 @@ data class Cache(
         var userGoodsPreview: List<GoodsPreview>? = null,
         var goodsList: MutableMap<Long, Goods?> = mutableMapOf(),
         var lessonPreviews: MutableMap<Long, List<LessonPreview>?> = mutableMapOf(),
-        var lessons: MutableMap<Long, Lesson?> = mutableMapOf()
+        var lessons: MutableMap<Long, Lesson?> = mutableMapOf(),
+        var help: Help? = null
 )
