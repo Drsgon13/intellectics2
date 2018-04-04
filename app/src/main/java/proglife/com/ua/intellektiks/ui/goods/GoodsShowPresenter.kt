@@ -16,7 +16,9 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import proglife.com.ua.intellektiks.data.models.FileType
+import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.MediaObject
+import java.io.IOException
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
@@ -33,46 +35,52 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 @InjectViewState
 class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowView>() {
 
-    fun progress(files: List<DownloadableFile>?) {
-        if (files == null) return
-        val total: Int = files.size
-        val count: Int = files.filter { it.state == DownloadableFile.State.FINISHED }.size
-        val progress: Int? = files.firstOrNull { it.state == DownloadableFile.State.PROCESSING }?.progress
-        viewState.showProgress(if (count < total) count + 1 else total, total, progress)
-    }
-
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
     private var list = arrayListOf<FileType>()
 
-    init {
+    private var mGoods: Goods? = null
 
+    init {
         injector().inject(this)
         viewState.showInfo(goodsPreview)
         mCommonInteractor.getGoods(goodsPreview.id)
-                .compose(sAsync())
+                .flatMap { mCommonInteractor.existsFiles(it) }
+                .compose(oAsync())
                 .doOnSubscribe { viewState.showLoading() }
-                .doOnEvent { _, _ -> viewState.dismissLoading() }
+                .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
+                            mGoods = it
                             viewState.showGoods(it)
                         },
-                        {}
+                        {
+                            if (it is IOException && mGoods == null) {
+                                viewState.showNoData()
+                            }
+                        }
                 )
     }
 
-    fun initDataSourse(context: Context, mediaObjects: List<MediaObject>){
+    fun progress(files: List<DownloadableFile>?) {
+        if (files == null) return
+        val total: Int = files.size
+        val count: Int = files.filter { it.state == DownloadableFile.State.FINISHED }.size
+        val progress: Int? = files.firstOrNull { it.state == DownloadableFile.State.PROCESSING }?.progress
+        viewState.showProgress(count, total, progress)
+    }
 
+    fun initDataSourse(context: Context, mediaObjects: List<MediaObject>){
         val media: MutableList<MediaSource> = arrayListOf()
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
             if(mediaObjects[i].fileType!=null && mediaObjects[i].fileType != FileType.UNKNOWN ) {
-                list.add(mediaObjects[i].fileType)
+                list.add(mediaObjects[i].fileType!!)
                 media.add(buildMediaSource(
                         buildDataSourceFactory(context),
                         Uri.parse(mediaObjects[i].url),
-                        mediaObjects[i].fileType))
+                        mediaObjects[i].fileType!!))
             }
         }
 
@@ -109,6 +117,10 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     fun checkType(index: Int) {
         viewState.checkContent(list[index] == FileType.MP3)
-
     }
+
+    fun play(mediaObject: MediaObject) {
+        mGoods?.let { viewState.seekTo(it.playerElements.indexOf(mediaObject) )   }
+    }
+
 }

@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.di.activity.modules
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import proglife.com.ua.intellektiks.business.CommonInteractor
@@ -18,12 +19,13 @@ class CommonModule {
     @ActivityScope
     @Provides
     fun provideCommonInteractor(
+            context: Context,
 //            dbRepository: DBRepository,
             spRepository: SPRepository,
             networkRepository: NetworkRepository,
             aesCrypt: AESCrypt
     ): CommonInteractor {
-        return CommonInteractor(spRepository, networkRepository)
+        return CommonInteractor(context, spRepository, networkRepository)
     }
 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorTitleBlueText"
+        tools:text="1.1 Отличия алгоритмического мышления"/>
+
+    <FrameLayout
+        android:id="@+id/downloadFrame"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/tvName"
+        android:layout_marginTop="4dp">
+
+        <ImageButton
+            android:id="@+id/btnDownload"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_file_download"
+            android:background="@null"/>
+
+        <ProgressBar
+            android:id="@+id/pbDownload"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/downloadFrame"
+        android:layout_alignTop="@id/downloadFrame"
+        android:textSize="14sp"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/downloadFrame"
+        android:textColor="@color/colorInfoText"
+        tools:text="Вес файла - 22 МБ"/>
+
+</RelativeLayout>

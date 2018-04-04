@@ -14,4 +14,5 @@ interface LessonsView: BaseView {
     fun dismissLoading()
     fun showLessons(list: List<LessonPreview>)
     fun showLesson(lessonPreview: LessonPreview)
+    fun showNoData()
 }

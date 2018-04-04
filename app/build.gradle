@@ -67,4 +67,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.7.2'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.7.2'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.7.2'
+
+    // PDF
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

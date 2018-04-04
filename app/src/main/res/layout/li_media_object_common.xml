@@ -7,33 +7,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <ImageView
+        android:id="@+id/ivFormat"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
+
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/colorTitleBlueText"
+        android:layout_toRightOf="@+id/ivFormat"
+        android:layout_marginLeft="4dp"
         tools:text="1.1 Отличия алгоритмического мышления"/>
-
-    <ImageButton
-        android:id="@+id/btnDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_file_download"
-        android:layout_below="@+id/tvName"
-        android:layout_marginTop="4dp"
-        android:background="@null"/>
 
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/btnDownload"
-        android:layout_alignTop="@id/btnDownload"
+        android:layout_alignBottom="@id/downloadFrame"
+        android:layout_alignTop="@id/downloadFrame"
         android:textSize="14sp"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/btnDownload"
+        android:layout_toRightOf="@+id/ivFormat"
+        android:layout_below="@+id/tvName"
         android:textColor="@color/colorInfoText"
+        android:layout_marginLeft="4dp"
         tools:text="Вес файла - 22 МБ"/>
 
 </RelativeLayout>

@@ -41,7 +41,7 @@ abstract class BasePresenter<V: BaseView>: MvpPresenter<V>() {
         return ObservableTransformer { upstream ->
             upstream
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread(), true)
                     .doOnSubscribe { this.unSubscribeOnDestroy(it) }
         }
     }

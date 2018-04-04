@@ -33,9 +33,9 @@ class MainPresenter: BasePresenter<MainView>() {
 
     private fun loadGoods() {
         mCommonInteractor.loadData()
-                .compose(sAsync())
+                .compose(oAsync())
                 .doOnSubscribe { viewState.showLoading() }
-                .doOnEvent { _, _ -> viewState.dismissLoading() }
+                .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
                             mGoods = it
@@ -45,7 +45,8 @@ class MainPresenter: BasePresenter<MainView>() {
                             when (it) {
                                 is ServerException -> viewState.showError(it.message)
                             }
-                        }
+                        },
+                        {}
                 )
     }
 

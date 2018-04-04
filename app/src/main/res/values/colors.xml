@@ -7,6 +7,8 @@
 
     <color name="colorTitleBlackText">#222222</color>
     <color name="colorTitleBlueText">#339BED</color>
+    <color name="colorTitleGreenText">#20a73d</color>
+    <color name="colorTitleRedText">#d6264c</color>
     <color name="colorInfoText">#808080</color>
     <color name="colorController">#252525</color>
     <color name="colorControllerTransparent">#CC000000</color>

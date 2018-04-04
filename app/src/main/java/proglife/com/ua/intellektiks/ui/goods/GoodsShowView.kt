@@ -17,5 +17,7 @@ interface GoodsShowView: BaseView {
     fun showVideo(mediaSource: ConcatenatingMediaSource)
     fun showProgress(count: Int, total: Int, progress: Int?)
     fun emptyList()
+    fun showNoData()
     fun checkContent(isAudio: Boolean)
+    fun seekTo(position: Int)
 }

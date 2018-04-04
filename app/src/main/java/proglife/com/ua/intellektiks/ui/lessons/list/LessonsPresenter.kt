@@ -5,6 +5,7 @@ import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -17,20 +18,25 @@ class LessonsPresenter(goodsPreview: GoodsPreview): BasePresenter<LessonsView>()
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
+    private var mList: List<LessonPreview> = emptyList()
+
     init {
         injector().inject(this)
         viewState.showInfo(goodsPreview)
         goodsPreview.trainingId?.let {
             mCommonInteractor.getLessons(it)
-                    .compose(sAsync())
+                    .compose(oAsync())
                     .doOnSubscribe { viewState.showLoading() }
-                    .doOnEvent { _, _ -> viewState.dismissLoading() }
+                    .doOnNext { viewState.dismissLoading() }
                     .subscribe(
                             {
+                                mList = it
                                 viewState.showLessons(it)
                             },
                             {
-
+                                if (it is IOException && mList.isEmpty()) {
+                                    viewState.showNoData()
+                                }
                             }
                     )
         }

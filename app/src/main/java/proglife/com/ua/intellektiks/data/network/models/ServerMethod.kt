@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
  *
  * Вот список значений:
  * getUserData - Данные пользователя
- * getUserGoods - Купленные товары
+ * userGoods - Купленные товары
  * getGood - Конкретный товар (дополнительно передается параметр goodid)
  * getTrainings - Курс
  * getLessons - Уроки (дополнительно передается параметр id_training)

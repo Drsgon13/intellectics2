@@ -2,8 +2,10 @@ package proglife.com.ua.intellektiks.ui.lessons.show
 
 import com.arellomobile.mvp.InjectViewState
 import proglife.com.ua.intellektiks.business.CommonInteractor
+import proglife.com.ua.intellektiks.data.models.Lesson
 import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -16,18 +18,25 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
+    private var mLesson: Lesson? = null
+
     init {
         injector().inject(this)
         viewState.showInfo(lessonPreview)
         mCommonInteractor.getLesson(lessonPreview.id)
-                .compose(sAsync())
+                .compose(oAsync())
                 .doOnSubscribe { viewState.showLoading() }
-                .doOnEvent { _, _ -> viewState.dismissLoading() }
+                .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
+                            mLesson = it
                             viewState.showLesson(it)
                         },
-                        {}
+                        {
+                            if (it is IOException && mLesson == null) {
+                                viewState.showNoData()
+                            }
+                        }
                 )
     }
 

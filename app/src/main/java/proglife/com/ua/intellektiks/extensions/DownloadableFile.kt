@@ -2,6 +2,7 @@ package proglife.com.ua.intellektiks.extensions
 
 import android.os.Parcel
 import android.os.Parcelable
+import proglife.com.ua.intellektiks.data.models.MediaObject
 
 /**
  * Created by Evhenyi Shcherbyna on 30.03.2018.
@@ -41,6 +42,11 @@ data class DownloadableFile(
     }
 
     companion object CREATOR : Parcelable.Creator<DownloadableFile> {
+
+        fun fromMediaObject(mediaObject: MediaObject, state: State = State.AWAIT): DownloadableFile {
+            return DownloadableFile(mediaObject.id, mediaObject.url, mediaObject.getFileName(), state)
+        }
+
         override fun createFromParcel(parcel: Parcel): DownloadableFile {
             return DownloadableFile(parcel)
         }

@@ -8,5 +8,7 @@ object Constants {
     object Field {
         const val GOODS_PREVIEW = "goodsPreview"
         const val LESSONS_PREVIEW = "lessonsPreview"
+        const val TITLE: String = "title"
+        const val CONTENT: String = "txt"
     }
 }

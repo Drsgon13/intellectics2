@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.data.network.apis
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.*
@@ -24,21 +25,21 @@ interface CommonApi {
     @POST(JSON)
     fun getUserGoods(
             @Body body: GetUserGoodsRequest
-    ): Single<List<GoodsPreview>>
+    ): Observable<List<GoodsPreview>>
 
     @POST(JSON)
     fun getGoods(
             @Body body: GetGoodsRequest
-    ): Single<Goods>
+    ): Observable<Goods>
 
     @POST(JSON)
     fun getLessons(
             @Body body: GetLessonsRequest
-    ): Single<List<LessonPreview>>
+    ): Observable<List<LessonPreview>>
 
     @POST(JSON)
     fun getLesson(
             @Body body: GetLessonRequest
-    ): Single<Lesson>
+    ): Observable<Lesson>
 
 }

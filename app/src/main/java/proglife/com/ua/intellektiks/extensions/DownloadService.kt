@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.IBinder
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import java.io.BufferedInputStream
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URL
@@ -41,7 +42,7 @@ class DownloadService : Service() {
         val mediaObject = intent?.getParcelableExtra<MediaObject>(MEDIA_OBJECT)
         if (mediaObject != null) {
             if (mQueue.all{ it.id != mediaObject.id }) {
-                mQueue.add(DownloadableFile(mediaObject.id, mediaObject.url, mediaObject.getName()))
+                mQueue.add(DownloadableFile.fromMediaObject(mediaObject))
                 if (!mIsRun) startDownload()
             }
         }
@@ -66,6 +67,7 @@ class DownloadService : Service() {
             mIsRun = true
         }
         Thread(Runnable {
+            val filename = nextDownloadableFile.name
             var input: BufferedInputStream? = null
             var output: FileOutputStream? = null
             try {
@@ -74,7 +76,7 @@ class DownloadService : Service() {
                 connection.connect()
                 val fileLength = connection.contentLength
                 input = BufferedInputStream(connection.getInputStream())
-                output = openFileOutput(nextDownloadableFile.name, Context.MODE_PRIVATE)
+                output = openFileOutput(filename, Context.MODE_PRIVATE)
 
                 val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                 var length: Int
@@ -84,8 +86,9 @@ class DownloadService : Service() {
                 while (true) {
                     length = input.read(buffer)
                     if (length <= 0) break
-                    loadedLength += length
+
                     output.write(buffer, 0, length)
+                    loadedLength += length
 
                     val progress = (loadedLength.toFloat() / fileLength * 100).toInt()
 
@@ -94,6 +97,9 @@ class DownloadService : Service() {
                         notifyDataSetChanged()
                     }
                 }
+                val inFile = File("$filesDir/$filename")
+                val outFile = File("$filesDir/c_$filename")
+                inFile.renameTo(outFile)
                 nextDownloadableFile.state = DownloadableFile.State.FINISHED
             } catch (e: IOException) {
                 e.printStackTrace()

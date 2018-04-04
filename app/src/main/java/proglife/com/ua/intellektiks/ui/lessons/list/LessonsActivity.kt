@@ -2,12 +2,14 @@ package proglife.com.ua.intellektiks.ui.lessons.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_lessons.*
+import kotlinx.android.synthetic.main.content_main.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
@@ -72,5 +74,9 @@ class LessonsActivity: BaseActivity(), LessonsView {
         startActivity(Intent(this, LessonActivity::class.java)
                 .putExtra(Constants.Field.LESSONS_PREVIEW, lessonPreview))
         withStartAnimation()
+    }
+
+    override fun showNoData() {
+        Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
     }
 }

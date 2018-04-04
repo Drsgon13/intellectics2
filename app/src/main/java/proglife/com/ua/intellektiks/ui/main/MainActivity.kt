@@ -33,6 +33,7 @@ class MainActivity : NavBaseActivity(), MainView {
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
         mAdapter = GoodsAdapter(presenter)
+        mAdapter.setHasStableIds(true)
         rvGoods.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvGoods.addItemDecoration(divider)
         rvGoods.adapter = mAdapter

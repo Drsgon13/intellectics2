@@ -20,7 +20,14 @@
     <string name="nav.settings">Настройки</string>
     <string name="nav.support">Помощь</string>
     <string name="nav.logout">Выход</string>
+
+    <string name="error.network">Ошибка Интернет подключения</string>
+    <string name="error.loading">Ошибка при загрузке</string>
+
+    <string name="file_download">Скачать %s</string>
+    <string name="file_open">Смотреть %s</string>
     <string name="file_info">Вес файла - %s МБ</string>
-    <string name="file_progress">(%1$d из %2$d) Скачиваем файл - %3$d%%</string>
-    <string name="file_progress_complete">(%1$d из %2$d) Скачано</string>
+    <string name="file_progress">(%1$d из %2$d успешно) Скачиваем файл - %3$d%%</string>
+    <string name="file_progress_complete">(%1$d из %2$d успешно) Скачивание завершено</string>
+    <string name="error_format">Неподдерживаемый формат</string>
 </resources>

@@ -8,7 +8,7 @@ import proglife.com.ua.intellektiks.utils.Generator
  * Created by Evhenyi Shcherbyna on 31.10.2017.
  * Copyright (c) 2017 ProgLife. All rights reserved.
  */
-class LocalStorage(context: Context) {
+class PersistentStorage(context: Context) {
 
     private val sp: SharedPreferences
 
@@ -16,6 +16,7 @@ class LocalStorage(context: Context) {
     var mPassword: String? = null
     var mKey: String? = null
     var mUserData: String? = null
+    var mCache: String? = null
 
     init {
         this.sp = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
@@ -31,6 +32,7 @@ class LocalStorage(context: Context) {
         mPassword = sp.getString(PASSWORD, null)
         mKey = sp.getString(KEY, null)
         mUserData = sp.getString(USER_DATA, null)
+        mCache = sp.getString(CACHE, null)
     }
 
     fun save() {
@@ -39,6 +41,7 @@ class LocalStorage(context: Context) {
         edit.putString(PASSWORD, mPassword)
         edit.putString(KEY, mKey)
         edit.putString(USER_DATA, mUserData)
+        edit.putString(CACHE, mCache)
         edit.apply()
     }
 
@@ -49,6 +52,7 @@ class LocalStorage(context: Context) {
         private const val PASSWORD = "002"
         private const val KEY = "003"
         private const val USER_DATA = "004"
+        private const val CACHE = "005"
     }
 
 }

@@ -4,9 +4,11 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -23,11 +25,11 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
-import kotlinx.android.synthetic.main.activity_goods_show.*
+import kotlinx.android.synthetic.main.activity_goods_show_alt.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
-import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
@@ -35,16 +37,19 @@ import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.utils.PositionListener
+import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
+import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
 
 /**
  * Created by Evhenyi Shcherbyna on 28.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
+class GoodsShowActivity: BaseActivity(), GoodsShowView {
 
-    @InjectPresenter lateinit var presenter: GoodsShowPresenter
+    @InjectPresenter
+    lateinit var presenter: GoodsShowPresenter
 
-    private var mFullScreenDialog: Dialog? =null
+    private var mFullScreenDialog: Dialog? = null
     private lateinit var mMediaObjectAdapter: MediaObjectAdapter
 
     @ProvidePresenter
@@ -54,13 +59,13 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setCustomView(R.layout.activity_goods_show)
+        setCustomView(R.layout.activity_goods_show_alt)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.user_goods)
 
-        findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame).visibility = GONE
+        findViewById<View>(com.google.android.exoplayer2.ui.R.id.exo_content_frame).visibility = GONE
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
@@ -69,7 +74,22 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
                 startService(Intent(this@GoodsShowActivity, DownloadService::class.java)
                         .putExtra(DownloadService.MEDIA_OBJECT, mediaObject))
             }
-        }, this)
+
+            override fun onSelect(mediaObject: MediaObject) {
+                if (mediaObject.type == MediaObject.Type.PLAYER) {
+                    presenter.play(mediaObject)
+                } else {
+                    val intent = MediaViewer.open(this@GoodsShowActivity, mediaObject)
+                    if (intent != null) {
+                        startActivity(intent)
+                        withStartAnimation()
+                    } else {
+                        Snackbar.make(coordinator, R.string.error_format, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        })
+        mMediaObjectAdapter.setHasStableIds(true)
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter
@@ -95,8 +115,9 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
         if (exoPlay.player != null && exoPlay!!.player.playWhenReady) {
             exoPlay.player.playWhenReady = false
         }
-        if(mFullScreenDialog!=null && mFullScreenDialog!!.isShowing)
-            mFullScreenDialog!!.dismiss()
+        mFullScreenDialog?.let {
+            if (it.isShowing) it.dismiss()
+        }
     }
 
     override fun onDestroy() {
@@ -105,7 +126,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
     }
 
     override fun showInfo(item: GoodsPreview) {
-
+        tvName.text = item.name
     }
 
     override fun showLoading() {
@@ -162,59 +183,56 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
         initFullscreenButton()
     }
 
-    override fun onClickPosition(position: Int) {
-        exoPlay.player.seekTo(position, 0)
-        scroll.smoothScrollTo(0,0)
-    }
-
     private fun initFullscreenDialog() {
 
         mFullScreenDialog = object : Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
             override fun onBackPressed() {
-                if (mFullScreenDialog!!.isShowing)
-                    closeFullscreenDialog()
+                mFullScreenDialog?.let {
+                    if (it.isShowing) closeFullscreenDialog()
+                }
                 super.onBackPressed()
             }
         }
-        mFullScreenDialog!!.setOnDismissListener {  closeFullscreenDialog() }
+        mFullScreenDialog?.setOnDismissListener { closeFullscreenDialog() }
     }
 
     private fun initFullscreenButton() {
 
         mFullScreenButton.setOnClickListener {
-            if (!mFullScreenDialog!!.isShowing)
-                openFullscreenDialog()
-            else
-                closeFullscreenDialog()
+            mFullScreenDialog?.let {
+                if (!it.isShowing)
+                    openFullscreenDialog()
+                else
+                    closeFullscreenDialog()
+            }
         }
     }
 
     private fun openFullscreenDialog() {
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen_expand)
         mediaContainer.removeView(exoPlay)
-        mFullScreenDialog!!.addContentView(exoPlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        mFullScreenDialog?.addContentView(exoPlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
-        mFullScreenDialog!!.show()
+        mFullScreenDialog?.show()
     }
 
     private fun closeFullscreenDialog() {
         (exoPlay!!.parent as ViewGroup).removeView(exoPlay)
         mediaContainer.addView(exoPlay)
-        mFullScreenDialog!!.dismiss()
-        scroll.smoothScrollTo(0,0)
+        mFullScreenDialog?.dismiss()
+//        scroll.smoothScrollTo(0,0)
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen)
     }
 
     override fun showGoods(item: Goods) {
         val pi = createPendingResult(DownloadService.CODE_UPDATE_STATE, Intent(), 0)
         val intent = Intent(this, DownloadService::class.java)
-                .putExtra(DownloadService.MEDIA_OBJECT_IDS, item.mediaObjects.map { it.id }.toLongArray())
-                .putExtra(DownloadService.PENDING_INTENT,pi )
+                .putExtra(DownloadService.MEDIA_OBJECT_IDS, item.playerElements.map { it.id }.toLongArray())
+                .putExtra(DownloadService.PENDING_INTENT, pi)
         startService(intent)
 
-        presenter.initDataSourse(this, item.mediaObjects)
-        tvName.text = item.name
-        mMediaObjectAdapter.show(item.getMediaObjects(FileType.HLS, FileType.MP4, FileType.MP3))
+        presenter.initDataSourse(this, item.playerElements)
+        mMediaObjectAdapter.show(item.getMediaObjects())
     }
 
     override fun showProgress(count: Int, total: Int, progress: Int?) {
@@ -224,5 +242,15 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
         } else {
             tvProgress.text = getString(R.string.file_progress_complete, count, total)
         }
+        mMediaObjectAdapter.notifyDataSetChanged()
+    }
+
+    override fun showNoData() {
+        Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun seekTo(position: Int) {
+        exoPlay.player.seekTo(position, 0)
+//        scroll.smoothScrollTo(0,0)
     }
 }

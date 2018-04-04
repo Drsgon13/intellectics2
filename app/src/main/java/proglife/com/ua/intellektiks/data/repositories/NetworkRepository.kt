@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.data.repositories
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.apis.CommonApi
@@ -15,19 +16,19 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getUserData(GetUserDataRequest(login, password))
     }
 
-    fun getUserGoods(login: String, password: String): Single<List<GoodsPreview>> {
+    fun getUserGoods(login: String, password: String): Observable<List<GoodsPreview>> {
         return commonApi.getUserGoods(GetUserGoodsRequest(login, password))
     }
 
-    fun getGoods(login: String, password: String, id: Long): Single<Goods> {
+    fun getGoods(login: String, password: String, id: Long): Observable<Goods> {
         return commonApi.getGoods(GetGoodsRequest(login, password, id))
     }
 
-    fun getLessons(login: String, password: String, id: Long): Single<List<LessonPreview>> {
+    fun getLessons(login: String, password: String, id: Long): Observable<List<LessonPreview>> {
         return commonApi.getLessons(GetLessonsRequest(login, password, id))
     }
 
-    fun getLesson(login: String, password: String, id: Long): Single<Lesson> {
+    fun getLesson(login: String, password: String, id: Long): Observable<Lesson> {
         return commonApi.getLesson(GetLessonRequest(login, password, id))
     }
 

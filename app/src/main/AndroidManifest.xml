@@ -45,6 +45,8 @@
         <activity
             android:name=".ui.lessons.show.LessonActivity"
             android:launchMode="singleTop" />
+        <activity android:name=".ui.viewer.ViewerTxtActivity" />
+        <activity android:name=".ui.viewer.ViewerPdfActivity" />
 
         <service android:name=".extensions.DownloadService" />
     </application>

@@ -27,6 +27,7 @@ class LessonsAdapter(private val mPresenter: LessonsPresenter) : RecyclerView.Ad
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is LessonViewHolder) {
             val lessonPreview = mList[position]
+            holder.ivCheck.visibility = if (lessonPreview.access) View.VISIBLE else View.INVISIBLE
             holder.tvName.text = lessonPreview.name
             holder.itemView.setOnClickListener { mPresenter.openLesson(lessonPreview) }
         }

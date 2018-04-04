@@ -37,6 +37,9 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
                 startActivity(Intent(this, SupportActivity::class.java))
                 withStartAnimation()
             }
+            R.id.nav_profile -> {
+                commonPresenter.profile()
+            }
             R.id.nav_logout -> commonPresenter.logout()
         }
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -51,10 +54,10 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.profile, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.profile, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

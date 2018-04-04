@@ -1,20 +1,21 @@
 package proglife.com.ua.intellektiks.ui.lessons.show
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import kotlinx.android.synthetic.main.activity_lesson.*
+import kotlinx.android.synthetic.main.activity_goods_show_alt.*
+import kotlinx.android.synthetic.main.content_main.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
-import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Lesson
 import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
-import proglife.com.ua.intellektiks.ui.goods.MediaObjectAdapter
+import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
 import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
@@ -35,7 +36,7 @@ class LessonActivity: BaseActivity(), LessonView, PositionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setCustomView(R.layout.activity_lesson)
+        setCustomView(R.layout.activity_goods_show)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
@@ -46,7 +47,9 @@ class LessonActivity: BaseActivity(), LessonView, PositionListener {
         mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
             override fun onDownload(mediaObject: MediaObject) {
             }
-        }, this)
+            override fun onSelect(mediaObject: MediaObject) {
+            }
+        })
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter
@@ -70,7 +73,11 @@ class LessonActivity: BaseActivity(), LessonView, PositionListener {
     }
 
     override fun showLesson(lesson: Lesson) {
-        mMediaObjectAdapter.show(lesson.getMediaObjects(FileType.MP3, FileType.MP4, FileType.HLS))
+        mMediaObjectAdapter.show(lesson.getMediaObjects())
+    }
+
+    override fun showNoData() {
+        Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onClickPosition(position: Int) {
