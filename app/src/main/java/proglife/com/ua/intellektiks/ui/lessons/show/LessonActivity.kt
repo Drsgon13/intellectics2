@@ -15,12 +15,13 @@ import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.goods.MediaObjectAdapter
+import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
  * Created by Evhenyi Shcherbyna on 29.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class LessonActivity: BaseActivity(), LessonView {
+class LessonActivity: BaseActivity(), LessonView, PositionListener {
 
     private lateinit var mMediaObjectAdapter: MediaObjectAdapter
 
@@ -45,7 +46,7 @@ class LessonActivity: BaseActivity(), LessonView {
         mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
             override fun onDownload(mediaObject: MediaObject) {
             }
-        })
+        }, this)
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter
@@ -70,5 +71,9 @@ class LessonActivity: BaseActivity(), LessonView {
 
     override fun showLesson(lesson: Lesson) {
         mMediaObjectAdapter.show(lesson.getMediaObjects(FileType.MP3, FileType.MP4, FileType.HLS))
+    }
+
+    override fun onClickPosition(position: Int) {
+
     }
 }

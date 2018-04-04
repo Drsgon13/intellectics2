@@ -10,12 +10,13 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.li_media_object.view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
  * Created by Evhenyi Shcherbyna on 29.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMediaObjectListener):
+class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMediaObjectListener, private val positionListener: PositionListener):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mList: List<MediaObject> = emptyList()
@@ -36,6 +37,7 @@ class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMedia
         if (holder is MediaObjectViewHolder) {
             val mediaObject: MediaObject = mList[position]
             holder.tvName.text = mediaObject.title
+            holder.tvName.setOnClickListener { positionListener.onClickPosition(position)}
             holder.tvInfo.text = mContext.getString(R.string.file_info, mediaObject.size)
             holder.btnDownload.setOnClickListener { mOnSelectMediaObjectListener.onDownload(mediaObject) }
         }

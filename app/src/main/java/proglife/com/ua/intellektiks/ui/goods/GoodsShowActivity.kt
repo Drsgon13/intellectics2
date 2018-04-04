@@ -1,7 +1,6 @@
 package proglife.com.ua.intellektiks.ui.goods
 
 import android.app.Dialog
-import android.net.Uri
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -16,9 +15,13 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import kotlinx.android.synthetic.main.activity_goods_show.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
@@ -31,17 +34,17 @@ import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
+import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
  * Created by Evhenyi Shcherbyna on 28.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class GoodsShowActivity: BaseActivity(), GoodsShowView {
+class GoodsShowActivity: BaseActivity(), GoodsShowView, PositionListener {
 
     @InjectPresenter lateinit var presenter: GoodsShowPresenter
 
-
-    private lateinit var mFullScreenDialog: Dialog
+    private var mFullScreenDialog: Dialog? =null
     private lateinit var mMediaObjectAdapter: MediaObjectAdapter
 
     @ProvidePresenter
@@ -57,6 +60,8 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.user_goods)
 
+        findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame).visibility = GONE
+
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
         mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
@@ -64,7 +69,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
                 startService(Intent(this@GoodsShowActivity, DownloadService::class.java)
                         .putExtra(DownloadService.MEDIA_OBJECT, mediaObject))
             }
-        })
+        }, this)
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter
@@ -90,8 +95,8 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         if (exoPlay.player != null && exoPlay!!.player.playWhenReady) {
             exoPlay.player.playWhenReady = false
         }
-        if(mFullScreenDialog.isShowing)
-            mFullScreenDialog.dismiss()
+        if(mFullScreenDialog!=null && mFullScreenDialog!!.isShowing)
+            mFullScreenDialog!!.dismiss()
     }
 
     override fun onDestroy() {
@@ -111,9 +116,30 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         pbLoading.hide()
     }
 
-    override fun hideVideo() {
+    override fun emptyList() {
         mediaContainer.visibility = GONE
     }
+
+    /**
+     *
+     */
+    override fun checkContent(isAudio: Boolean) {
+        if(isAudio && mFullScreenDialog!=null && mFullScreenDialog!!.isShowing)
+            closeFullscreenDialog()
+        else if(mFullScreenDialog!!.isShowing) return
+
+        exoPlay.controllerShowTimeoutMs = if(isAudio) Int.MAX_VALUE else 0
+        exoPlay.controllerHideOnTouch = !isAudio
+        mFullScreenButton.visibility = if(isAudio) GONE else VISIBLE
+
+        val view = findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame)
+        view.visibility = if(isAudio) GONE else VISIBLE
+        mediaContainer.layoutParams.height = if(isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
+            else resources.getDimensionPixelSize(R.dimen.height)
+        mediaContainer.requestLayout()
+        mediaContainer.invalidate()
+    }
+
 
     override fun showVideo(mediaSource: ConcatenatingMediaSource) {
         mediaContainer.visibility = VISIBLE
@@ -122,32 +148,41 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
         val loadControl = DefaultLoadControl()
         val player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), trackSelector, loadControl)
-        exoPlay.hideController()
         exoPlay!!.player = player
-        exoPlay.setPlaybackPreparer { exoPlay.showController() }
 
+        player.addListener(object : Player.DefaultEventListener(){
+            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+                super.onTracksChanged(trackGroups, trackSelections)
+                presenter.checkType(exoPlay.player.currentWindowIndex)
+            }
+        })
 
         player.prepare(mediaSource)
         initFullscreenDialog()
         initFullscreenButton()
     }
 
+    override fun onClickPosition(position: Int) {
+        exoPlay.player.seekTo(position, 0)
+        scroll.smoothScrollTo(0,0)
+    }
+
     private fun initFullscreenDialog() {
 
         mFullScreenDialog = object : Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
             override fun onBackPressed() {
-                if (mFullScreenDialog.isShowing)
+                if (mFullScreenDialog!!.isShowing)
                     closeFullscreenDialog()
                 super.onBackPressed()
             }
         }
-        mFullScreenDialog.setOnDismissListener {  closeFullscreenDialog() }
+        mFullScreenDialog!!.setOnDismissListener {  closeFullscreenDialog() }
     }
 
     private fun initFullscreenButton() {
 
         mFullScreenButton.setOnClickListener {
-            if (!mFullScreenDialog.isShowing)
+            if (!mFullScreenDialog!!.isShowing)
                 openFullscreenDialog()
             else
                 closeFullscreenDialog()
@@ -155,18 +190,17 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
     }
 
     private fun openFullscreenDialog() {
-
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen_expand)
         mediaContainer.removeView(exoPlay)
-        mFullScreenDialog.addContentView(exoPlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        mFullScreenDialog!!.addContentView(exoPlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
-        mFullScreenDialog.show()
+        mFullScreenDialog!!.show()
     }
 
     private fun closeFullscreenDialog() {
         (exoPlay!!.parent as ViewGroup).removeView(exoPlay)
         mediaContainer.addView(exoPlay)
-        mFullScreenDialog.dismiss()
+        mFullScreenDialog!!.dismiss()
         scroll.smoothScrollTo(0,0)
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen)
     }
