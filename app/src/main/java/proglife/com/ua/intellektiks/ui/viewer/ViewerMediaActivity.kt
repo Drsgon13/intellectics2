@@ -32,9 +32,6 @@ class ViewerMediaActivity: BaseActivity(){
     fun checkContent(isAudio: Boolean) {
         exoPlayer.controllerShowTimeoutMs = if(isAudio) Int.MAX_VALUE else 0
         exoPlayer.controllerHideOnTouch = !isAudio
-        mFullScreenButton.visibility = GONE
-        exo_next.visibility = GONE
-        exo_prev.visibility = GONE
     }
 
     private fun initPlayer(){

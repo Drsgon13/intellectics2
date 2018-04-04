@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.exoplayer2.ui.PlayerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.exoplayer2.ui.PlayerView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#4d4d4d"
-    android:id="@+id/exoPlayer"/>
+    app:controller_layout_id="@layout/view_exo_controller"
+    android:id="@+id/exoPlayer" />
