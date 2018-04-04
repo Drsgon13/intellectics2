@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.support
 
+import proglife.com.ua.intellektiks.data.models.Help
 import proglife.com.ua.intellektiks.ui.base.BaseView
 
 /**
@@ -7,4 +8,5 @@ import proglife.com.ua.intellektiks.ui.base.BaseView
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 interface SupportView: BaseView {
+    fun showHelp(it: Help)
 }

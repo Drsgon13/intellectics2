@@ -19,4 +19,18 @@ class SupportPresenter: BasePresenter<SupportView>() {
         injector().inject(this)
     }
 
+
+    fun loadHelp(){
+        mCommonInteractor.getHelp()
+                .compose(oAsync())
+                .subscribe (
+                    {
+                        if(it != null)
+                            viewState.showHelp(it)
+                    },
+                    {
+                        it.printStackTrace()
+                    }
+                )
+    }
 }

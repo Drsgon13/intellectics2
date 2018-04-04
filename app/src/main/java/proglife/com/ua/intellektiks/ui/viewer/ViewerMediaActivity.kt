@@ -3,7 +3,6 @@ package proglife.com.ua.intellektiks.ui.viewer
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.View.GONE
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -15,7 +14,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_viwer_media.*
-import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.FileType

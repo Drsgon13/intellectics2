@@ -5,6 +5,7 @@ import io.reactivex.Single
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.*
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
@@ -15,6 +16,7 @@ interface CommonApi {
 
     companion object {
         const val JSON = "?r=api/apps/json"
+        const val HELP = "?r=api/apps/help"
     }
 
     @POST(JSON)
@@ -42,4 +44,6 @@ interface CommonApi {
             @Body body: GetLessonRequest
     ): Observable<Lesson>
 
+    @GET(HELP)
+    fun getHelp(): Single<Help>
 }

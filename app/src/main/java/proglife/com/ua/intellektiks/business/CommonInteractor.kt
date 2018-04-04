@@ -143,5 +143,5 @@ class CommonInteractor(
                     it
                 }
     }
-
+    fun getHelp() : Observable<Help> = mNetworkRepository.getHelp().toObservable()
 }
