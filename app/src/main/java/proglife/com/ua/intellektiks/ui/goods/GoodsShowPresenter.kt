@@ -1,31 +1,27 @@
 package proglife.com.ua.intellektiks.ui.goods
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
-import android.support.annotation.Nullable
+import android.os.Handler
 import com.arellomobile.mvp.InjectViewState
+import com.google.android.exoplayer2.Format
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.MediaSourceEventListener
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 import proglife.com.ua.intellektiks.business.CommonInteractor
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.extensions.DownloadableFile
-import proglife.com.ua.intellektiks.ui.base.BasePresenter
-import javax.inject.Inject
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
-import com.google.android.exoplayer2.source.MediaSource
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Goods
+import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.ui.base.BasePresenter
+import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
 import java.io.IOException
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
-import com.google.android.exoplayer2.source.dash.DashMediaSource
-import android.text.TextUtils
-import android.util.Log
-import com.google.android.exoplayer2.source.MediaSourceEventListener
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import javax.inject.Inject
 
 
 /**
@@ -42,6 +38,20 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     private var mGoods: Goods? = null
 
+    private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
+        override fun onProgressChange(current: Int, total: Int, progress: Int?) {
+            viewState.showProgress(current, total, progress)
+        }
+
+        override fun onItemChange(index: Int) {
+            viewState.notifyItemChanged(index)
+        }
+
+        override fun onDataChange() {
+            viewState.notifyDataSetChanged()
+        }
+    })
+
     init {
         injector().inject(this)
         viewState.showInfo(goodsPreview)
@@ -53,25 +63,20 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
                 .subscribe(
                         {
                             mGoods = it
-                            viewState.showGoods(it)
+                            val mList = it.getMediaObjects()
+                            mMediaStateHelper.mediaObjects = mList
+                            viewState.showGoods(it, mList)
                         },
                         {
                             if (it is IOException && mGoods == null) {
                                 viewState.showNoData()
                             }
+                            it.printStackTrace()
                         }
                 )
     }
 
-    fun progress(files: List<DownloadableFile>?) {
-        if (files == null) return
-        val total: Int = files.size
-        val count: Int = files.filter { it.state == DownloadableFile.State.FINISHED }.size
-        val progress: Int? = files.firstOrNull { it.state == DownloadableFile.State.PROCESSING }?.progress
-        viewState.showProgress(count, total, progress)
-    }
-
-    fun initDataSourse(context: Context, mediaObjects: List<MediaObject>){
+    fun initDataSource(context: Context, mediaObjects: List<MediaObject>){
         val media: MutableList<MediaSource> = arrayListOf()
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
@@ -102,7 +107,6 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
         }
     }
 
-
     // Build Data Source Factory using DefaultBandwidthMeter and HttpDataSource.Factory
     private fun buildDataSourceFactory(context: Context): DefaultDataSourceFactory {
         val userAgent = Util.getUserAgent(context, "android")
@@ -121,6 +125,15 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     fun play(mediaObject: MediaObject) {
         mGoods?.let { viewState.seekTo(it.playerElements.indexOf(mediaObject) )   }
+    }
+
+    // Запрашиваем скачивание
+    fun download(mediaObject: MediaObject) {
+        viewState.startDownload(mediaObject)
+    }
+
+    fun onServiceCallback(code: Int, data: Intent?) {
+        mMediaStateHelper.onServiceCallback(code, data)
     }
 
 }

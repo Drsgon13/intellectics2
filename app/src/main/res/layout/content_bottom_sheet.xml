@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/colorAccent"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="60dp"
+    android:paddingLeft="12dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        tools:text="(4 из 28) Скачиваем файл - 60%" />
+
+</RelativeLayout>

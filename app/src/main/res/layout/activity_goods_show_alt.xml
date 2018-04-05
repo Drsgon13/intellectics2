@@ -43,6 +43,7 @@
                     android:layout_below="@+id/mediaContainer"
                     android:layout_marginBottom="12dp"
                     android:textColor="@color/colorInfoText"
+                    android:visibility="invisible"
                     tools:text="(4 из 28) Скачиваем файл - 60%" />
 
                 <FrameLayout
@@ -76,6 +77,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="12dp"
+        android:paddingBottom="60dp"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <include layout="@layout/content_bottom_sheet"/>
 
 </android.support.design.widget.CoordinatorLayout>

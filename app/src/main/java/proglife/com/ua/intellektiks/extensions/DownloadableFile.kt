@@ -12,7 +12,7 @@ data class DownloadableFile(
         val id: Long,
         val url: String,
         val name: String,
-        var state: State = State.AWAIT,
+        var state: State = State.NONE,
         var progress: Int = 0
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -23,6 +23,7 @@ data class DownloadableFile(
             parcel.readInt())
 
     enum class State {
+        NONE,
         AWAIT,
         PROCESSING,
         FINISHED,

@@ -33,10 +33,10 @@ class PlayerViewHolder(
             tvName.text = mediaObject.title
             tvName.setOnClickListener { mOnSelectMediaObjectListener.onSelect(mediaObject) }
             tvInfo.text = if (mediaObject.size.isNotBlank()) mContext.getString(R.string.file_info, mediaObject.size) else ""
-            btnDownload.visibility = if (mediaObject.downloadableFile?.state == DownloadableFile.State.PROCESSING)
-                View.GONE else View.VISIBLE
-            pbDownload.visibility = if (mediaObject.downloadableFile?.state == DownloadableFile.State.PROCESSING)
-                View.VISIBLE else View.GONE
+            val showLoading: Boolean = mediaObject.downloadableFile?.state == DownloadableFile.State.PROCESSING ||
+                    mediaObject.downloadableFile?.state == DownloadableFile.State.AWAIT
+            btnDownload.visibility = if (showLoading) View.GONE else View.VISIBLE
+            pbDownload.visibility = if (showLoading) View.VISIBLE else View.GONE
             btnDownload.setOnClickListener { mOnSelectMediaObjectListener.onDownload(mediaObject) }
             btnDownload.setColorFilter(ContextCompat.getColor(mContext, buttonColor))
         }
