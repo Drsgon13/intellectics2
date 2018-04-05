@@ -75,4 +75,9 @@ class ViewerMediaActivity: BaseActivity(){
     private fun buildHttpDataSourceFactory(userAgent: String, bandwidthMeter: DefaultBandwidthMeter): HttpDataSource.Factory {
         return DefaultHttpDataSourceFactory(userAgent, bandwidthMeter)
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
+    }
 }

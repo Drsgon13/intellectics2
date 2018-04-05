@@ -179,7 +179,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
         val player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), trackSelector, loadControl)
         exoPlay!!.player = player
 
-        player.addListener(object : Player.DefaultEventListener(){
+        player.addListener(object : Player.DefaultEventListener() {
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
                 super.onTracksChanged(trackGroups, trackSelections)
                 presenter.checkType(exoPlay.player.currentWindowIndex)

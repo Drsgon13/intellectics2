@@ -3,13 +3,10 @@ package proglife.com.ua.intellektiks.ui.goods
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
 import com.arellomobile.mvp.InjectViewState
-import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.MediaSourceEventListener
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
@@ -129,7 +126,9 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     // Запрашиваем скачивание
     fun download(mediaObject: MediaObject) {
-        viewState.startDownload(mediaObject)
+        if (mediaObject.type == MediaObject.Type.PLAYER) {
+            viewState.startDownload(mediaObject)
+        }
     }
 
     fun onServiceCallback(code: Int, data: Intent?) {

@@ -17,7 +17,7 @@ enum class FileType(val icon: Int, val dlIcon: Int) {
     @SerializedName("FB2") FB2(R.mipmap.ic_fb2, R.mipmap.ic_fb2_dl),
     @SerializedName("EPUB") EPUB(R.mipmap.ic_epub, R.mipmap.ic_epub_dl),
     @SerializedName("FLV") FLV(R.mipmap.ic_flv, R.mipmap.ic_flv_dl),
-    @SerializedName("CONTENT") TXT(R.mipmap.ic_txt, R.mipmap.ic_txt_dl),
+    @SerializedName("CONTENT", alternate = ["TXT"]) TXT(R.mipmap.ic_txt, R.mipmap.ic_txt_dl),
     @SerializedName("XLSX") XLSX(R.mipmap.ic_xlxs, R.mipmap.ic_xlsx_dl),
     @SerializedName("ZIP") ZIP(R.mipmap.ic_zip, R.mipmap.ic_zip_dl),
     @SerializedName("RAR") RAR(R.mipmap.ic_rar, R.mipmap.ic_rar_dl),
