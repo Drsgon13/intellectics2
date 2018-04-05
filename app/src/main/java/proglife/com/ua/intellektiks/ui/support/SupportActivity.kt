@@ -21,6 +21,8 @@ class SupportActivity: NavBaseActivity(), SupportView {
         setCustomView(R.layout.activity_support)
 
         supportActionBar?.setTitle(R.string.nav_support)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
         presenter.loadHelp()
     }
 

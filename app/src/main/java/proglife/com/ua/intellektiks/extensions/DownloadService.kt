@@ -21,10 +21,15 @@ class DownloadService : Service() {
 
     companion object {
         const val FILES = "files"
-        const val CODE_UPDATE_STATE = 7777
         const val PENDING_INTENT = "pending_intent"
         const val MEDIA_OBJECT_IDS = "media_object_ids"
         const val MEDIA_OBJECT = "media_object"
+        const val DOWNLOADED_FILE = "downloaded_file"
+
+        const val REQUEST_CODE = 5555
+        const val CODE_INIT = 7776
+        const val CODE_CHANGE_STATE = 7777
+        const val CODE_CHANGE_PROGRESS = 7778
     }
 
     private var mQueue: MutableList<DownloadableFile> = mutableListOf()
@@ -42,7 +47,9 @@ class DownloadService : Service() {
         val mediaObject = intent?.getParcelableExtra<MediaObject>(MEDIA_OBJECT)
         if (mediaObject != null) {
             if (mQueue.all{ it.id != mediaObject.id }) {
-                mQueue.add(DownloadableFile.fromMediaObject(mediaObject))
+                val file = DownloadableFile.fromMediaObject(mediaObject)
+                mQueue.add(file)
+                notifyStateChange(file)
                 if (!mIsRun) startDownload()
             }
         }
@@ -52,7 +59,7 @@ class DownloadService : Service() {
         if (pi != null && mediaObjectIds != null) {
             mActualPi = pi
             mActualMediaObjectIds = mediaObjectIds
-            notifyDataSetChanged()
+            notifyCurrentState()
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -83,6 +90,7 @@ class DownloadService : Service() {
                 var loadedLength = 0
 
                 nextDownloadableFile.state = DownloadableFile.State.PROCESSING
+                notifyStateChange(nextDownloadableFile)
                 while (true) {
                     length = input.read(buffer)
                     if (length <= 0) break
@@ -92,36 +100,55 @@ class DownloadService : Service() {
 
                     val progress = (loadedLength.toFloat() / fileLength * 100).toInt()
 
-                    if (progress - nextDownloadableFile.progress >= 2) {
+                    if (progress - nextDownloadableFile.progress >= 1) {
                         nextDownloadableFile.progress = progress
-                        notifyDataSetChanged()
+                        notifyProgressChange(nextDownloadableFile)
                     }
                 }
+                // Используя префикс c_ отмечаем успешно загруженные файлы
                 val inFile = File("$filesDir/$filename")
                 val outFile = File("$filesDir/c_$filename")
                 inFile.renameTo(outFile)
+
                 nextDownloadableFile.state = DownloadableFile.State.FINISHED
+                notifyStateChange(nextDownloadableFile)
             } catch (e: IOException) {
                 e.printStackTrace()
                 nextDownloadableFile.state = DownloadableFile.State.FAILED
+                notifyStateChange(nextDownloadableFile)
             } finally {
                 output?.flush()
                 output?.close()
                 input?.close()
-                notifyDataSetChanged()
             }
             startDownload()
         }).start()
     }
 
+    // Получением следующий объект в очереди
     private fun getNextAwait(): DownloadableFile? {
         return mQueue.firstOrNull { it.state == DownloadableFile.State.AWAIT }
     }
 
-    private fun notifyDataSetChanged() {
+    // Отправляем статус интерисующий файлов в активность
+    private fun notifyCurrentState() {
         if (mActualMediaObjectIds == null || mActualPi == null) return
         val list = mQueue.filter { mActualMediaObjectIds!!.contains(it.id) }.toTypedArray()
-        mActualPi?.send(this, CODE_UPDATE_STATE, Intent().putExtra(FILES, list))
+        mActualPi?.send(this, CODE_INIT, Intent().putExtra(FILES, list))
+    }
+
+    // Уведомляем активность о изменении прогресса скачивания интерисующего файла
+    private fun notifyProgressChange(nextDownloadableFile: DownloadableFile) {
+        if (mActualMediaObjectIds == null || mActualPi == null ||
+                !mActualMediaObjectIds!!.contains(nextDownloadableFile.id)) return
+        mActualPi?.send(this, CODE_CHANGE_PROGRESS, Intent().putExtra(DOWNLOADED_FILE, nextDownloadableFile))
+    }
+
+    // Уведомляем активность о изменении состояния интерисующего файла
+    private fun notifyStateChange(nextDownloadableFile: DownloadableFile) {
+        if (mActualMediaObjectIds == null || mActualPi == null ||
+                !mActualMediaObjectIds!!.contains(nextDownloadableFile.id)) return
+        mActualPi?.send(this, CODE_CHANGE_STATE, Intent().putExtra(DOWNLOADED_FILE, nextDownloadableFile))
     }
 
 }

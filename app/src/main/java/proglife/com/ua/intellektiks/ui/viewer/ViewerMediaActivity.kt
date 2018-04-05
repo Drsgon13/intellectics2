@@ -49,4 +49,9 @@ class ViewerMediaActivity: BaseActivity(){
         if(exoPlayer.player!=null)
             exoPlayer.player.release()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
+    }
 }
