@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:autoLink="email"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/email"
+            android:textColor="@color/colorTitleBlackText" />
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvEmail"
+            android:layout_marginTop="7dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/phone"
+            android:textColor="@color/colorTitleBlackText" />
+
+        <TextView
+            android:id="@+id/tvGrah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvPhone"
+            android:layout_marginTop="7dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/grah"
+            android:textColor="@color/colorTitleBlackText" />
+
+        <TextView
+            android:id="@+id/tvWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvGrah"
+            android:layout_marginTop="7dp"
+            android:autoLink="web"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/web"
+
+            android:textColor="@color/colorTitleBlackText" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvWeb"
+            android:layout_marginTop="7dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/address"
+            android:textColor="@color/colorTitleBlackText" />
+
+        <ru.yandex.yandexmapkit.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/tvAddress"
+            android:layout_marginTop="7dp"
+            android:apiKey="1234567890"
+            android:focusable="false"
+            android:touchscreenBlocksFocus="true" />
+    </RelativeLayout>
+</ScrollView>

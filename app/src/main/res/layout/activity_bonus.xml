@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp"
+    android:paddingTop="20dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_bonus"
+        android:id="@+id/text"/>
+
+    <com.google.android.exoplayer2.ui.PlayerControlView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playController"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        app:controller_layout_id="@layout/view_exo_controller"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@drawable/divider"
+        android:layout_below="@+id/playController"
+        android:layout_height="1dp"/>
+
+    <include layout="@layout/li_media_object_common"
+        android:layout_below="@+id/playController"
+        android:layout_width="wrap_content"
+        android:id="@+id/item"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_width="match_parent"
+        android:background="@drawable/divider"
+        android:layout_below="@+id/item"
+        android:layout_height="1dp"/>
+</RelativeLayout>

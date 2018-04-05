@@ -26,6 +26,7 @@ import android.text.TextUtils
 import android.util.Log
 import com.google.android.exoplayer2.source.MediaSourceEventListener
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import proglife.com.ua.intellektiks.utils.ExoUtils
 
 
 /**
@@ -73,12 +74,13 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     fun initDataSourse(context: Context, mediaObjects: List<MediaObject>){
         val media: MutableList<MediaSource> = arrayListOf()
+        val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
             if (mediaObjects[i].fileType == FileType.MP3 || mediaObjects[i].fileType == FileType.MP4 || mediaObjects[i].fileType == FileType.HLS) {
                 list.add(mediaObjects[i].fileType!!)
-                media.add(buildMediaSource(
-                        buildDataSourceFactory(context),
+                media.add(ExoUtils.buildMediaSource(
+                        dataSourceFactory,
                         Uri.parse(mediaObjects[i].url),
                         mediaObjects[i].fileType!!))
             }
@@ -88,31 +90,6 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
             viewState.emptyList()
         else
             viewState.showVideo(ConcatenatingMediaSource(*media.toTypedArray()))
-    }
-
-    private fun buildMediaSource(
-            factory: DataSource.Factory,
-            uri: Uri,
-            fileType: FileType): MediaSource {
-        return when (fileType) {
-            FileType.HLS -> HlsMediaSource.Factory(factory)
-                    .createMediaSource(uri)
-            else -> ExtractorMediaSource.Factory(factory)
-                    .createMediaSource(uri)
-        }
-    }
-
-
-    // Build Data Source Factory using DefaultBandwidthMeter and HttpDataSource.Factory
-    private fun buildDataSourceFactory(context: Context): DefaultDataSourceFactory {
-        val userAgent = Util.getUserAgent(context, "android")
-        val bandwidthMeter = DefaultBandwidthMeter()
-        return DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(userAgent, bandwidthMeter))
-    }
-
-    // Build Http Data Source Factory using DefaultBandwidthMeter
-    private fun buildHttpDataSourceFactory(userAgent: String, bandwidthMeter: DefaultBandwidthMeter): HttpDataSource.Factory {
-        return DefaultHttpDataSourceFactory(userAgent, bandwidthMeter)
     }
 
     fun checkType(index: Int) {

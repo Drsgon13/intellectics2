@@ -48,6 +48,8 @@
         <activity android:name=".ui.viewer.ViewerTxtActivity" />
         <activity android:name=".ui.viewer.ViewerPdfActivity" />
         <activity android:name=".ui.viewer.ViewerMediaActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".ui.bonus.BonusActivity" />
+        <activity android:name=".ui.contact.ContactActivity" />
 
         <service android:name=".extensions.DownloadService" />
     </application>

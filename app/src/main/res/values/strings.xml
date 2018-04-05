@@ -30,4 +30,11 @@
     <string name="file_progress">(%1$d из %2$d успешно) Скачиваем файл - %3$d%%</string>
     <string name="file_progress_complete">(%1$d из %2$d успешно) Скачивание завершено</string>
     <string name="error_format">Неподдерживаемый формат</string>
+    <string name="text_bonus">Эксклюзивный бонус от Константина Шереметьева только для пользователей мобильного приложения. Прослушайте его прямо сейчас или сохраните для прослушивания оффлайн.</string>
+    <string name="address">Адрес офиса: г. Москва, ул. Академика Королёва, д. 13, стр. 1, подъезд 5, этаж 8, офис 849 «Интеллектикс»</string>
+    <string name="phone">Телефон: 8-800-555-04-84 (звонок по России бесплатный) +7 (495) 724-60-58 (для Москвы и звонков из-за рубежа)</string>
+    <string name="email">E-mail: zakaz@sheremetev.info</string>
+    <string name="grah">График работы офиса и телефонной службы поддержки: понедельник - пятница с 11:00 до 19:00</string>
+    <string name="web">Сайт: https://www.sheremetev.info</string>
+
 </resources>

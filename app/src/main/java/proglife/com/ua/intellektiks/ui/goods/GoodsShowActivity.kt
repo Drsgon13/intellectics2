@@ -14,17 +14,11 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import kotlinx.android.synthetic.main.activity_goods_show_alt.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
@@ -36,9 +30,9 @@ import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
-import proglife.com.ua.intellektiks.utils.PositionListener
 import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
+import proglife.com.ua.intellektiks.utils.ExoUtils
 
 /**
  * Created by Evhenyi Shcherbyna on 28.03.2018.
@@ -164,11 +158,7 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
 
     override fun showVideo(mediaSource: ConcatenatingMediaSource) {
         mediaContainer.visibility = VISIBLE
-        val bandwidthMeter = DefaultBandwidthMeter()
-        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(bandwidthMeter)
-        val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-        val loadControl = DefaultLoadControl()
-        val player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), trackSelector, loadControl)
+        val player = ExoUtils.initExoPlayerFactory(this)
         exoPlay!!.player = player
 
         player.addListener(object : Player.DefaultEventListener(){

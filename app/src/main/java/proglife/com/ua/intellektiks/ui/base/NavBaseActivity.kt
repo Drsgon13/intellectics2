@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.content_navigation.*
 import proglife.com.ua.intellektiks.R
+import proglife.com.ua.intellektiks.ui.bonus.BonusActivity
+import proglife.com.ua.intellektiks.ui.contact.ContactActivity
 import proglife.com.ua.intellektiks.ui.main.MainActivity
 import proglife.com.ua.intellektiks.ui.support.SupportActivity
 
@@ -31,6 +33,14 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
         when (item.itemId) {
             R.id.nav_user_goods -> {
                 startActivity(Intent(this, MainActivity::class.java))
+                withStartAnimation()
+            }
+            R.id.nav_bonus -> {
+                startActivity(Intent(this, BonusActivity::class.java))
+                withStartAnimation()
+            }
+            R.id.nav_contacts -> {
+                startActivity(Intent(this, ContactActivity::class.java))
                 withStartAnimation()
             }
             R.id.nav_support -> {

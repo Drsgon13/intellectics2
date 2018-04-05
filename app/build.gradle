@@ -70,4 +70,7 @@ dependencies {
 
     // PDF
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
+    //Yandex
+    implementation 'ru.yandex:yandexmapkit:2.5.4@aar'
 }
