@@ -72,4 +72,8 @@ class MainActivity : NavBaseActivity(), MainView {
         withStartAnimation()
     }
 
+    override fun showNoData() {
+        Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
+    }
+
 }

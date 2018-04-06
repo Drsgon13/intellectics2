@@ -5,6 +5,7 @@ import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.network.ServerException
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -42,9 +43,12 @@ class MainPresenter: BasePresenter<MainView>() {
                             viewState.showGoods(it)
                         },
                         {
-                            when (it) {
-                                is ServerException -> viewState.showError(it.message)
+                            if (it is ServerException) {
+                                viewState.showError(it.message)
+                            } else if (it is IOException && mGoods.isEmpty()) {
+                                viewState.showNoData()
                             }
+                            it.printStackTrace()
                         },
                         {}
                 )

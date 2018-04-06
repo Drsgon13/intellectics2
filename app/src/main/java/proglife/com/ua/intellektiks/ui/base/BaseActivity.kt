@@ -2,7 +2,6 @@ package proglife.com.ua.intellektiks.ui.base
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.support.v7.widget.Toolbar
 import android.view.ViewStub
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -11,8 +10,7 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.ui.auth.AuthActivity
 import proglife.com.ua.intellektiks.ui.common.CommonPresenter
 import proglife.com.ua.intellektiks.ui.common.CommonView
-import proglife.com.ua.intellektiks.ui.profile.ProfileActivity
-import javax.inject.Inject
+import proglife.com.ua.intellektiks.ui.settings.SettingsActivity
 
 /**
  * Created by Evhenyi Shcherbyna on 22.03.2018.
@@ -49,7 +47,7 @@ abstract class BaseActivity: MvpAppCompatActivity(), CommonView {
     }
 
     override fun showProfile() {
-        startActivity(Intent(this, ProfileActivity::class.java))
+        startActivity(Intent(this, SettingsActivity::class.java))
         withStartAnimation()
     }
 

@@ -32,7 +32,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
-            android:name=".ui.profile.ProfileActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity

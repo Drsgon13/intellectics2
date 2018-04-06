@@ -133,12 +133,13 @@ class CommonInteractor(
         return Observable.just(goods)
                 .map {
                     it.playerElements.forEach {
+                        it.type = MediaObject.Type.PLAYER
                         val cExists = File("${mContext.filesDir}/c_${it.getFileName()}").exists()
                         val state = when {
                             cExists -> DownloadableFile.State.FINISHED
                             else -> DownloadableFile.State.NONE
                         }
-                        it.type = MediaObject.Type.PLAYER
+
                         it.downloadableFile = DownloadableFile.fromMediaObject(it, state)
                     }
                     it
@@ -156,5 +157,17 @@ class CommonInteractor(
                         }
                         Observable.just(mSpRepository.getHelp())
                     }
+
+    fun getMediaCacheSize(): Single<Long> {
+        return Single.fromCallable {
+            mContext.filesDir.listFiles().fold(0L, { acc, file -> acc + file.length() })
+        }
+    }
+
+    fun clearMediaCache(): Single<Boolean> {
+        return Single.fromCallable {
+            mContext.filesDir.listFiles().map { it.delete() }.all { it }
+        }
+    }
 
 }

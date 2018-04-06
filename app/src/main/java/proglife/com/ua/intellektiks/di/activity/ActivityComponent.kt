@@ -9,7 +9,7 @@ import proglife.com.ua.intellektiks.ui.goods.GoodsShowPresenter
 import proglife.com.ua.intellektiks.ui.lessons.list.LessonsPresenter
 import proglife.com.ua.intellektiks.ui.lessons.show.LessonPresenter
 import proglife.com.ua.intellektiks.ui.main.MainPresenter
-import proglife.com.ua.intellektiks.ui.profile.ProfilePresenter
+import proglife.com.ua.intellektiks.ui.settings.SettingsPresenter
 import proglife.com.ua.intellektiks.ui.splash.SplashPresenter
 import proglife.com.ua.intellektiks.ui.support.SupportPresenter
 
@@ -24,7 +24,7 @@ interface ActivityComponent {
     fun inject(presenter: MainPresenter)
     fun inject(presenter: SplashPresenter)
     fun inject(presenter: CommonPresenter)
-    fun inject(presenter: ProfilePresenter)
+    fun inject(presenter: SettingsPresenter)
     fun inject(presenter: SupportPresenter)
     fun inject(presenter: GoodsShowPresenter)
     fun inject(presenter: LessonsPresenter)

@@ -295,7 +295,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
     override fun startCommonDownload(mediaObject: MediaObject) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Сохранено в ${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Сохранено в ${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}${mediaObject.getFileName()}", Toast.LENGTH_LONG).show()
             startService(Intent(this@GoodsShowActivity, DownloadService::class.java)
                     .putExtra(DownloadService.MEDIA_OBJECT, mediaObject))
         } else {

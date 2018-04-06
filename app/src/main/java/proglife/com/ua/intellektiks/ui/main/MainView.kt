@@ -15,4 +15,5 @@ interface MainView: BaseView {
     fun showGoods(list: List<GoodsPreview>)
     fun showGoods(item: GoodsPreview)
     fun showLessons(item: GoodsPreview)
+    fun showNoData()
 }

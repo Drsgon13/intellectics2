@@ -47,7 +47,7 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
                 startActivity(Intent(this, SupportActivity::class.java))
                 withStartAnimation()
             }
-            R.id.nav_profile -> {
+            R.id.nav_settings -> {
                 commonPresenter.profile()
             }
             R.id.nav_logout -> commonPresenter.logout()

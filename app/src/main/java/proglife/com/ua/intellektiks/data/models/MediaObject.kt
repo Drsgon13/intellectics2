@@ -52,7 +52,11 @@ data class MediaObject(
     }
 
     fun getFileName(): String {
-        return "$id.${fileType?.name}"
+        return when (type) {
+            Type.PLAYER -> "$id.${fileType?.name}"
+            Type.COMMON -> url.substring(url.lastIndexOf("/"))
+            else -> ""
+        }
     }
 
     companion object CREATOR : Parcelable.Creator<MediaObject> {
