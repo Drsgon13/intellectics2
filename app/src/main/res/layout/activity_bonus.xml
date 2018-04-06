@@ -27,7 +27,7 @@
         android:layout_below="@+id/playController"
         android:layout_height="1dp"/>
 
-    <include layout="@layout/li_media_object_common"
+    <include layout="@layout/li_media_object_player"
         android:layout_below="@+id/playController"
         android:layout_width="wrap_content"
         android:id="@+id/item"
