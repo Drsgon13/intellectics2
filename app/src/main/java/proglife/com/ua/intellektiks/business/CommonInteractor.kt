@@ -138,6 +138,7 @@ class CommonInteractor(
                             cExists -> DownloadableFile.State.FINISHED
                             else -> DownloadableFile.State.NONE
                         }
+                        it.type = MediaObject.Type.PLAYER
                         it.downloadableFile = DownloadableFile.fromMediaObject(it, state)
                     }
                     it

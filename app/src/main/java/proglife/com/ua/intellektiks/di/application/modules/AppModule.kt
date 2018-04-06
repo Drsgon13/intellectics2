@@ -9,9 +9,7 @@ import javax.inject.Singleton
 import dagger.Module
 import dagger.Provides
 import proglife.com.ua.intellektiks.App
-import proglife.com.ua.intellektiks.data.db.DataBase
 import proglife.com.ua.intellektiks.data.network.apis.CommonApi
-import proglife.com.ua.intellektiks.data.repositories.DBRepository
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.utils.AESCrypt
@@ -36,18 +34,6 @@ class AppModule(private val application: App) {
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create()
     }
-
-    @Provides
-    @Singleton
-    fun provideDataBase(context: Context): DataBase {
-        return DataBase.getInstance(context)
-    }
-
-//    @Provides
-//    @Singleton
-//    fun provideDBRepository(dataBase: DataBase): DBRepository {
-//        return DBRepository(dataBase)
-//    }
 
     @Provides
     @Singleton

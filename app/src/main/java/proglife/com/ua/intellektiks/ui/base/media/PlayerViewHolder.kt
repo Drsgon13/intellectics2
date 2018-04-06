@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.base.media
 
+import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -23,7 +24,7 @@ class PlayerViewHolder(
     val tvInfo: TextView = itemView.tvInfo
     val pbDownload: ProgressBar = itemView.pbDownload
 
-    fun bind(mediaObject: MediaObject) {
+    fun bind(mediaObject: MediaObject, selected: Boolean) {
         val linkColor = if (mediaObject.downloadableFile?.state == DownloadableFile.State.FINISHED)
             R.color.colorTitleGreenText else R.color.colorTitleBlueText
         val buttonColor = when (mediaObject.downloadableFile?.state) {
@@ -34,6 +35,7 @@ class PlayerViewHolder(
         tvName.setTextColor(ContextCompat.getColor(mContext, linkColor))
         tvName.text = mediaObject.title
         tvName.setOnClickListener { mOnSelectMediaObjectListener.onSelect(mediaObject) }
+        tvName.typeface = if (selected) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
         tvInfo.text = if (mediaObject.size.isNotBlank()) mContext.getString(R.string.file_info, mediaObject.size) else ""
         if (mediaObject.fileType == FileType.HLS) {
             downloadFrame.visibility = View.GONE

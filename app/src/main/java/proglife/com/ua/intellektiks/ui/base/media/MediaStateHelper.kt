@@ -25,7 +25,7 @@ class MediaStateHelper(private val mCallback: Callback) {
         println("Download service: initState")
         mediaObjects?.forEach { mo ->
             files.forEach { df ->
-                if (df.id == mo.id) mo.downloadableFile = df
+                if (df.id == mo.id && mo.downloadable) mo.downloadableFile = df
             }
         }
         mDownloadableFilesTotal = files.size
@@ -54,13 +54,16 @@ class MediaStateHelper(private val mCallback: Callback) {
                 mDownloadableFilesCurrent +=1
                 mProgress = null
             }
+            DownloadableFile.State.FAILED -> {
+                mProgress = null
+            }
             else -> {}
         }
         mCallback.onProgressChange(mDownloadableFilesCurrent, mDownloadableFilesTotal, mProgress)
 
         // Меняем статус скачивания в MediaObject для отображения в списке
         mediaObjects?.forEachIndexed { index, mediaObject ->
-            if (mediaObject.id == file.id) {
+            if (mediaObject.id == file.id && mediaObject.downloadable) {
                 mediaObject.downloadableFile = file
                 mCallback.onItemChange(index)
             }

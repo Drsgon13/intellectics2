@@ -31,4 +31,9 @@ class SupportActivity: NavBaseActivity(), SupportView {
         val encoding = "UTF-8"
         webView.loadDataWithBaseURL("", it.content, mimeType, encoding, "")
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
+    }
 }

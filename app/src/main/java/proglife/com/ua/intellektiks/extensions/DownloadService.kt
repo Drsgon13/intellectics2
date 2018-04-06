@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Environment
 import android.os.IBinder
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import java.io.BufferedInputStream
@@ -83,8 +84,11 @@ class DownloadService : Service() {
                 connection.connect()
                 val fileLength = connection.contentLength
                 input = BufferedInputStream(connection.getInputStream())
-                output = openFileOutput(filename, Context.MODE_PRIVATE)
-
+                output = if (nextDownloadableFile.type == MediaObject.Type.PLAYER) {
+                    openFileOutput(filename, Context.MODE_PRIVATE)
+                } else {
+                    FileOutputStream(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename))
+                }
                 val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                 var length: Int
                 var loadedLength = 0
@@ -95,7 +99,7 @@ class DownloadService : Service() {
                     length = input.read(buffer)
                     if (length <= 0) break
 
-                    output.write(buffer, 0, length)
+                    output?.write(buffer, 0, length)
                     loadedLength += length
 
                     val progress = (loadedLength.toFloat() / fileLength * 100).toInt()

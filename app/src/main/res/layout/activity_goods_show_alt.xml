@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/innerCoordinator"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/innerAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="0dp"
@@ -31,20 +33,20 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
                     android:textColor="@color/colorTitleBlueText"
                     android:textSize="20sp"
+                    android:layout_margin="12dp"
                     tools:text="Заголовок" />
 
-                <TextView
-                    android:id="@+id/tvProgress"
+                <Button
+                    android:id="@+id/btnDownloadAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mediaContainer"
-                    android:layout_marginBottom="12dp"
-                    android:textColor="@color/colorInfoText"
-                    android:visibility="invisible"
-                    tools:text="(4 из 28) Скачиваем файл - 60%" />
+                    android:layout_margin="12dp"
+                    android:background="@null"
+                    android:textColor="@color/colorTitleBlueText"
+                    android:text="@string/file_download_all"/>
 
                 <FrameLayout
                     android:id="@+id/mediaContainer"

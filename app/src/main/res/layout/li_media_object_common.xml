@@ -7,11 +7,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/ivFormat"
+    <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"/>
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/ivFormat"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"/>
+
+        <ProgressBar
+            android:id="@+id/pbDownload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvName"
@@ -19,7 +33,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/colorTitleBlueText"
-        android:layout_toRightOf="@+id/ivFormat"
+        android:layout_toRightOf="@+id/container"
         android:layout_marginLeft="4dp"
         tools:text="1.1 Отличия алгоритмического мышления"/>
 
@@ -30,7 +44,7 @@
         android:layout_alignBottom="@id/downloadFrame"
         android:layout_alignTop="@id/downloadFrame"
         android:textSize="14sp"
-        android:layout_toRightOf="@+id/ivFormat"
+        android:layout_toRightOf="@+id/container"
         android:layout_below="@+id/tvName"
         android:textColor="@color/colorInfoText"
         android:layout_marginLeft="4dp"

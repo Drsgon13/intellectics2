@@ -36,7 +36,7 @@ class LessonActivity: BaseActivity(), LessonView, PositionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setCustomView(R.layout.activity_goods_show)
+        setCustomView(R.layout.activity_lesson)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }

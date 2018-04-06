@@ -5,6 +5,7 @@ package proglife.com.ua.intellektiks.data
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 object Constants {
+
     object Field {
         const val GOODS_PREVIEW = "goodsPreview"
         const val LESSONS_PREVIEW = "lessonsPreview"

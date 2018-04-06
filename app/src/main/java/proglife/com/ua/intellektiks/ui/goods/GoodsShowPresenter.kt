@@ -11,10 +11,12 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 import proglife.com.ua.intellektiks.business.CommonInteractor
+import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
@@ -64,6 +66,8 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
                             val mList = it.getMediaObjects()
                             mMediaStateHelper.mediaObjects = mList
                             viewState.showGoods(it, mList)
+
+                            mList.firstOrNull()?.let { viewState.selectItem(it) }
                         },
                         {
                             if (it is IOException && mGoods == null) {
@@ -74,7 +78,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
                 )
     }
 
-    fun initDataSource(context: Context, mediaObjects: List<MediaObject>){
+    fun initDataSource(context: Context, mediaObjects: List<MediaObject>) {
         val media: MutableList<MediaSource> = arrayListOf()
         val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
         for (i in 0 until mediaObjects.size) {
@@ -88,7 +92,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
             }
         }
 
-        if(media.isEmpty())
+        if (media.isEmpty())
             viewState.emptyList()
         else
             viewState.showVideo(ConcatenatingMediaSource(*media.toTypedArray()))
@@ -99,18 +103,33 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
     }
 
     fun play(mediaObject: MediaObject) {
-        mGoods?.let { viewState.seekTo(it.playerElements.indexOf(mediaObject) )   }
+        mGoods?.let {
+            viewState.selectItem(mediaObject)
+            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject))
+        }
     }
 
     // Запрашиваем скачивание
     fun download(mediaObject: MediaObject) {
         if (mediaObject.type == MediaObject.Type.PLAYER) {
             viewState.startDownload(mediaObject)
+        } else {
+            viewState.startCommonDownload(mediaObject)
         }
     }
 
     fun onServiceCallback(code: Int, data: Intent?) {
         mMediaStateHelper.onServiceCallback(code, data)
+    }
+
+    fun downloadAll() {
+        val list = mMediaStateHelper.mediaObjects
+                ?.filter { it.type == MediaObject.Type.PLAYER &&
+                        (it.downloadableFile?.state == null ||
+                                it.downloadableFile?.state == DownloadableFile.State.NONE) }
+        if (list != null && list.isNotEmpty()) {
+            list.forEach { viewState.startDownload(it) }
+        }
     }
 
 }

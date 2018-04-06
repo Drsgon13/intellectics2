@@ -13,12 +13,13 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.*
-import com.google.android.exoplayer2.util.Util
 import proglife.com.ua.intellektiks.data.models.FileType
 
 class ExoUtils{
 
     companion object {
+
+        private const val USER_AGENT: String = "intellecticsandroid"
 
         fun initExoPlayerFactory(context: Context): SimpleExoPlayer {
             val bandwidthMeter = DefaultBandwidthMeter()
@@ -42,9 +43,8 @@ class ExoUtils{
         }
 
         fun buildDataSourceFactory(context: Context): DefaultDataSourceFactory {
-            val userAgent = Util.getUserAgent(context, "android")
             val bandwidthMeter = DefaultBandwidthMeter()
-            return DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(userAgent, bandwidthMeter))
+            return DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(USER_AGENT, bandwidthMeter))
         }
 
         private fun buildHttpDataSourceFactory(userAgent: String, bandwidthMeter: DefaultBandwidthMeter): HttpDataSource.Factory {

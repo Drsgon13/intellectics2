@@ -3,6 +3,7 @@
     package="proglife.com.ua.intellektiks">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".App"
@@ -18,19 +19,21 @@
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.auth.AuthActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:noHistory="true" />
         <activity
             android:name=".ui.main.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.profile.ProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.goods.GoodsShowActivity"
@@ -38,18 +41,26 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.support.SupportActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.lessons.list.LessonsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.lessons.show.LessonActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
-        <activity android:name=".ui.viewer.ViewerTxtActivity" />
-        <activity android:name=".ui.viewer.ViewerPdfActivity" />
-        <activity android:name=".ui.viewer.ViewerMediaActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".ui.bonus.BonusActivity" />
-        <activity android:name=".ui.contact.ContactActivity" />
+        <activity android:name=".ui.viewer.ViewerTxtActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".ui.viewer.ViewerPdfActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".ui.viewer.ViewerMediaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".ui.bonus.BonusActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".ui.contact.ContactActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <service android:name=".extensions.DownloadService" />
     </application>

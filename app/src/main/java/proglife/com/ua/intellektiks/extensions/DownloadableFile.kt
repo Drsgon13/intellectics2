@@ -13,14 +13,16 @@ data class DownloadableFile(
         val url: String,
         val name: String,
         var state: State = State.NONE,
-        var progress: Int = 0
+        var progress: Int = 0,
+        var type: MediaObject.Type = MediaObject.Type.COMMON
 ): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readString(),
             parcel.readString(),
             parcel.readSerializable() as State,
-            parcel.readInt())
+            parcel.readInt(),
+            parcel.readSerializable() as MediaObject.Type)
 
     enum class State {
         NONE,
@@ -36,6 +38,7 @@ data class DownloadableFile(
         parcel.writeString(name)
         parcel.writeSerializable(state)
         parcel.writeInt(progress)
+        parcel.writeSerializable(type)
     }
 
     override fun describeContents(): Int {
@@ -45,7 +48,13 @@ data class DownloadableFile(
     companion object CREATOR : Parcelable.Creator<DownloadableFile> {
 
         fun fromMediaObject(mediaObject: MediaObject, state: State = State.AWAIT): DownloadableFile {
-            return DownloadableFile(mediaObject.id, mediaObject.url, mediaObject.getFileName(), state)
+            return DownloadableFile(
+                    mediaObject.id,
+                    mediaObject.url,
+                    mediaObject.getFileName(),
+                    state,
+                    0,
+                    mediaObject.type)
         }
 
         override fun createFromParcel(parcel: Parcel): DownloadableFile {

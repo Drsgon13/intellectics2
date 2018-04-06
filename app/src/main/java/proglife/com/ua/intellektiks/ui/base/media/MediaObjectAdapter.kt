@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.utils.inflate
-import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
  * Created by Evhenyi Shcherbyna on 29.03.2018.
@@ -18,6 +17,7 @@ class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMedia
 
     private var mList: List<MediaObject> = emptyList()
     private lateinit var mContext: Context
+    private var mSelectedItem: MediaObject? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         mContext = recyclerView.context
@@ -46,7 +46,7 @@ class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMedia
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val mediaObject: MediaObject = mList[position]
         when (holder) {
-            is PlayerViewHolder -> holder.bind(mediaObject)
+            is PlayerViewHolder -> holder.bind(mediaObject, mediaObject == mSelectedItem)
             is CommonViewHolder -> holder.bind(mediaObject)
         }
     }
@@ -56,6 +56,14 @@ class MediaObjectAdapter(private val mOnSelectMediaObjectListener: OnSelectMedia
     fun show(mediaObjects: List<MediaObject>) {
         mList = mediaObjects
         notifyDataSetChanged()
+    }
+
+    fun selectItem(mediaObject: MediaObject) {
+        val oldPosition = mList.indexOf(mSelectedItem)
+        val newPosition = mList.indexOf(mediaObject)
+        mSelectedItem = mediaObject
+        notifyItemChanged(oldPosition)
+        notifyItemChanged(newPosition)
     }
 
     interface OnSelectMediaObjectListener {

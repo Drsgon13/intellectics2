@@ -27,7 +27,7 @@ data class Goods(
                 .filter { it.fileType != FileType.JPG }
                 .map {
                     it.type = if (it.bootType == DIVIDER_BOOT_TYPE) MediaObject.Type.DIVIDER else MediaObject.Type.PLAYER
-                    it.downloadable = MediaObject.DOWNLOADABLE_BOOT_TYPE.contains(it.bootType)
+                    it.downloadable = true
                     it
                 }
                 .plus(MediaObject.getDividerInstance())

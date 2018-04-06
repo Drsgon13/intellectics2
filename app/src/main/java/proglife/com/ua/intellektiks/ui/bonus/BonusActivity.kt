@@ -23,6 +23,9 @@ class BonusActivity: NavBaseActivity(), BonusView{
         setCustomView(R.layout.activity_bonus)
         supportActionBar?.setTitle(R.string.nav_bonus)
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
         val spanable = SpannableString(getString(R.string.text_bonus))
         spanable.setSpan(StyleSpan(Typeface.BOLD), 0, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         text.text =  spanable
@@ -45,4 +48,10 @@ class BonusActivity: NavBaseActivity(), BonusView{
         if(playController.player!=null)
             playController.player.playWhenReady = false
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
+    }
+
 }

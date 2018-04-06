@@ -1,20 +1,29 @@
 package proglife.com.ua.intellektiks.ui.goods
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.os.Parcelable
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.android.exoplayer2.Player
@@ -43,7 +52,7 @@ import proglife.com.ua.intellektiks.utils.ExoUtils
  * Created by Evhenyi Shcherbyna on 28.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class GoodsShowActivity: BaseActivity(), GoodsShowView {
+class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
     @InjectPresenter
     lateinit var presenter: GoodsShowPresenter
@@ -91,11 +100,15 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
                 }
             }
         })
-        mMediaObjectAdapter.setHasStableIds(true)
+//        mMediaObjectAdapter.setHasStableIds(true)
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
         rvMediaObjects.adapter = mMediaObjectAdapter
         (rvMediaObjects.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+        btnDownloadAll.setOnClickListener {
+            presenter.downloadAll()
+        }
 
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
@@ -148,18 +161,18 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
      *
      */
     override fun checkContent(isAudio: Boolean) {
-        if(isAudio && mFullScreenDialog!=null && mFullScreenDialog!!.isShowing)
+        if (isAudio && mFullScreenDialog != null && mFullScreenDialog!!.isShowing)
             closeFullscreenDialog()
-        else if(mFullScreenDialog!!.isShowing) return
+        else if (mFullScreenDialog!!.isShowing) return
 
-        exoPlay.controllerShowTimeoutMs = if(isAudio) Int.MAX_VALUE else 0
+        exoPlay.controllerShowTimeoutMs = if (isAudio) Int.MAX_VALUE else 0
         exoPlay.controllerHideOnTouch = !isAudio
-        mFullScreenButton.visibility = if(isAudio) GONE else VISIBLE
+        mFullScreenButton.visibility = if (isAudio) GONE else VISIBLE
 
         val view = findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame)
-        view.visibility = if(isAudio) GONE else VISIBLE
-        mediaContainer.layoutParams.height = if(isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
-            else resources.getDimensionPixelSize(R.dimen.height)
+        view.visibility = if (isAudio) GONE else VISIBLE
+        mediaContainer.layoutParams.height = if (isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
+        else resources.getDimensionPixelSize(R.dimen.height)
         mediaContainer.requestLayout()
         mediaContainer.invalidate()
     }
@@ -232,7 +245,14 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
                 .putExtra(DownloadService.PENDING_INTENT, pi)
         startService(intent)
 
-        presenter.initDataSource(this, item.playerElements)
+        val playerList = mList.filter { it.type == MediaObject.Type.PLAYER }
+        val size = playerList.fold(0, { acc, mediaObject -> acc + mediaObject.size.toInt() })
+        val sizeText = if (size >= 1000)
+            getString(R.string.file_download_all_gb, size.toFloat() / 1000)
+        else getString(R.string.file_download_all_mb, size)
+        btnDownloadAll.text = sizeText
+
+        presenter.initDataSource(this, playerList)
         mMediaObjectAdapter.show(mList)
     }
 
@@ -253,7 +273,8 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
 
     override fun seekTo(position: Int) {
         exoPlay.player.seekTo(position, 0)
-//        scroll.smoothScrollTo(0,0)
+        rvMediaObjects.scrollToPosition(0)
+        innerAppBar.setExpanded(true, true)
     }
 
     override fun notifyItemChanged(index: Int) {
@@ -270,5 +291,19 @@ class GoodsShowActivity: BaseActivity(), GoodsShowView {
 
     override fun notifyDataSetChanged() {
         mMediaObjectAdapter.notifyDataSetChanged()
+    }
+
+    override fun startCommonDownload(mediaObject: MediaObject) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Сохранено в ${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}", Toast.LENGTH_LONG).show()
+            startService(Intent(this@GoodsShowActivity, DownloadService::class.java)
+                    .putExtra(DownloadService.MEDIA_OBJECT, mediaObject))
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 9999)
+        }
+    }
+
+    override fun selectItem(mediaObject: MediaObject) {
+        mMediaObjectAdapter.selectItem(mediaObject)
     }
 }

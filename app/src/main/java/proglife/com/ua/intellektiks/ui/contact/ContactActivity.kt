@@ -54,7 +54,15 @@ class ContactActivity: NavBaseActivity() {
         address.setSpan(StyleSpan(Typeface.BOLD), 0, 12, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         tvAddress.text = address
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
         initMap()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
     }
 
     private fun  initMap(){

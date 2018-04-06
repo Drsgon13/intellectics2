@@ -24,4 +24,6 @@ interface GoodsShowView: BaseView {
     fun notifyItemChanged(index: Int)
     fun startDownload(mediaObject: MediaObject)
     fun notifyDataSetChanged()
+    fun startCommonDownload(mediaObject: MediaObject)
+    fun selectItem(mediaObject: MediaObject)
 }
