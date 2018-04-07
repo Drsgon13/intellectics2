@@ -9,6 +9,8 @@ import proglife.com.ua.intellektiks.ui.goods.GoodsShowPresenter
 import proglife.com.ua.intellektiks.ui.lessons.list.LessonsPresenter
 import proglife.com.ua.intellektiks.ui.lessons.show.LessonPresenter
 import proglife.com.ua.intellektiks.ui.main.MainPresenter
+import proglife.com.ua.intellektiks.ui.notifications.list.NotificationListPresenter
+import proglife.com.ua.intellektiks.ui.notifications.show.NotificationShowPresenter
 import proglife.com.ua.intellektiks.ui.settings.SettingsPresenter
 import proglife.com.ua.intellektiks.ui.splash.SplashPresenter
 import proglife.com.ua.intellektiks.ui.support.SupportPresenter
@@ -30,4 +32,6 @@ interface ActivityComponent {
     fun inject(presenter: LessonsPresenter)
     fun inject(presenter: LessonPresenter)
     fun inject(service: DownloadService)
+    fun inject(presenter: NotificationListPresenter)
+    fun inject(presenter: NotificationShowPresenter)
 }

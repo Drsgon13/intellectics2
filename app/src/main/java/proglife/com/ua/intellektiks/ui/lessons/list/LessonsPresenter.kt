@@ -43,7 +43,7 @@ class LessonsPresenter(goodsPreview: GoodsPreview): BasePresenter<LessonsView>()
     }
 
     fun openLesson(lessonPreview: LessonPreview) {
-        viewState.showLesson(lessonPreview)
+        if (lessonPreview.access) viewState.showLesson(lessonPreview)
     }
 
 }

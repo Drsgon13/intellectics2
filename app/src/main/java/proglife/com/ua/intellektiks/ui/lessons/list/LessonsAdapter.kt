@@ -1,5 +1,7 @@
 package proglife.com.ua.intellektiks.ui.lessons.list
 
+import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +19,15 @@ import proglife.com.ua.intellektiks.data.models.LessonPreview
 class LessonsAdapter(private val mPresenter: LessonsPresenter) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mList: List<LessonPreview> = emptyList()
+    private lateinit var mContext: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return LessonViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.li_lesson, parent, false))
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mContext = recyclerView.context
     }
 
     override fun getItemCount() = mList.size
@@ -27,7 +35,8 @@ class LessonsAdapter(private val mPresenter: LessonsPresenter) : RecyclerView.Ad
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is LessonViewHolder) {
             val lessonPreview = mList[position]
-            holder.ivCheck.visibility = if (lessonPreview.access) View.VISIBLE else View.INVISIBLE
+            holder.ivCheck.setImageResource( if (lessonPreview.access) R.drawable.ic_check else R.drawable.ic_remove )
+            holder.tvName.setTextColor(ContextCompat.getColor(mContext, if (lessonPreview.access) R.color.colorTitleBlueText else R.color.colorTitleBlackText ))
             holder.tvName.text = lessonPreview.name
             holder.itemView.setOnClickListener { mPresenter.openLesson(lessonPreview) }
         }

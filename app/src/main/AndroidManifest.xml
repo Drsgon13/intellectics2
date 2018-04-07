@@ -3,7 +3,7 @@
     package="proglife.com.ua.intellektiks">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -51,16 +51,27 @@
             android:name=".ui.lessons.show.LessonActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
-        <activity android:name=".ui.viewer.ViewerTxtActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".ui.viewer.ViewerPdfActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".ui.viewer.ViewerMediaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".ui.bonus.BonusActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".ui.contact.ContactActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".ui.viewer.ViewerTxtActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.viewer.ViewerPdfActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.viewer.ViewerMediaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.bonus.BonusActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.contact.ContactActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.notifications.list.NotificationListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.notifications.show.NotificationShowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <service android:name=".extensions.DownloadService" />
     </application>

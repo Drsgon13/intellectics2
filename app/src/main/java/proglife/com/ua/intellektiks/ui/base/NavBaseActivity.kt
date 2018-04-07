@@ -11,6 +11,7 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.ui.bonus.BonusActivity
 import proglife.com.ua.intellektiks.ui.contact.ContactActivity
 import proglife.com.ua.intellektiks.ui.main.MainActivity
+import proglife.com.ua.intellektiks.ui.notifications.list.NotificationListActivity
 import proglife.com.ua.intellektiks.ui.support.SupportActivity
 
 /**
@@ -37,6 +38,10 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
             }
             R.id.nav_bonus -> {
                 startActivity(Intent(this, BonusActivity::class.java))
+                withStartAnimation()
+            }
+            R.id.nav_notifications -> {
+                startActivity(Intent(this, NotificationListActivity::class.java))
                 withStartAnimation()
             }
             R.id.nav_contacts -> {

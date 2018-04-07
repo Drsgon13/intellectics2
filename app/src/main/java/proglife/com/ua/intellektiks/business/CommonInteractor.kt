@@ -64,7 +64,7 @@ class CommonInteractor(
     fun loadData(): Observable<List<GoodsPreview>> {
         return credentials()
                 .flatMap {
-                    Observable.mergeDelayError (
+                    Observable.mergeDelayError(
                             Observable.fromCallable { mSpRepository.userGoods() ?: emptyList() },
                             mNetworkRepository.getUserGoods(it.first, it.second)
                                     .doOnNext {
@@ -105,7 +105,9 @@ class CommonInteractor(
         return credentials()
                 .flatMap {
                     Observable.mergeDelayError(
-                            Observable.fromCallable { mSpRepository.getLessonPreviews(id) ?: emptyList() },
+                            Observable.fromCallable {
+                                mSpRepository.getLessonPreviews(id) ?: emptyList()
+                            },
                             mNetworkRepository.getLessons(it.first, it.second, id)
                                     .doOnNext {
                                         mSpRepository.setLessonPreviews(id, it)
@@ -125,7 +127,7 @@ class CommonInteractor(
                                     }
                     )
                 }
-                .filter { it is Lesson}
+                .filter { it is Lesson }
                 .cast(Lesson::class.java)
     }
 
@@ -168,6 +170,16 @@ class CommonInteractor(
         return Single.fromCallable {
             mContext.filesDir.listFiles().map { it.delete() }.all { it }
         }
+    }
+
+    fun loadNotifications(): Observable<List<NotificationMessagePreview>> {
+        return credentials()
+                .flatMap { mNetworkRepository.getNotifications(it.first, it.second) }
+    }
+
+    fun loadNotification(id: Long): Observable<NotificationMessage> {
+        return credentials()
+                .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
     }
 
 }

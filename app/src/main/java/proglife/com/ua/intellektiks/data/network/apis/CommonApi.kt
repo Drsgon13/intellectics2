@@ -46,4 +46,15 @@ interface CommonApi {
 
     @GET(HELP)
     fun getHelp(): Observable<Help>
+
+    @POST(JSON)
+    fun getNotifications(
+            @Body body: GetNotificationsRequest
+    ): Observable<List<NotificationMessagePreview>>
+
+    @POST(JSON)
+    fun getNotification(
+            @Body body: GetNotificationRequest
+    ): Observable<NotificationMessage>
+
 }

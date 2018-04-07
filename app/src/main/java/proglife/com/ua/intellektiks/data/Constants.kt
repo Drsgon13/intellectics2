@@ -12,5 +12,6 @@ object Constants {
         const val TITLE: String = "title"
         const val CONTENT: String = "txt"
         const val TYPE: String = "type"
+        const val NOTIFICATION: String = "notification"
     }
 }

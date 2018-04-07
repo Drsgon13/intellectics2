@@ -33,4 +33,12 @@ class NetworkRepository(private val commonApi: CommonApi) {
     }
 
     fun getHelp() : Observable<Help> = commonApi.getHelp()
+
+    fun getNotifications(login: String, password: String): Observable<List<NotificationMessagePreview>> {
+        return commonApi.getNotifications(GetNotificationsRequest(login, password))
+    }
+
+    fun getNotification(login: String, password: String, id: Long): Observable<NotificationMessage> {
+        return commonApi.getNotification(GetNotificationRequest(login, password, id))
+    }
 }
