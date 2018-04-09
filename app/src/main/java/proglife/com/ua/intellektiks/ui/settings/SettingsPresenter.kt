@@ -20,7 +20,7 @@ class SettingsPresenter: BasePresenter<SettingsView>() {
     init {
         injector().inject(this)
         mCommonInteractor.userData()
-                .compose(sAsync())
+                .compose(oAsync())
                 .subscribe(
                         {
                             viewState.showData(it)

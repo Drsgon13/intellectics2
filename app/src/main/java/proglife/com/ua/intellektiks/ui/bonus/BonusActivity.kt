@@ -21,11 +21,12 @@ import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.base.NavBaseActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import java.io.File
 
-class BonusActivity: NavBaseActivity(), BonusView{
+class BonusActivity: BaseActivity(), BonusView{
 
     @InjectPresenter lateinit var presenter: BonusPresenter
 
@@ -70,7 +71,14 @@ class BonusActivity: NavBaseActivity(), BonusView{
             mediaObject.downloadable = true
             mediaObject.downloadableFile!!.state = DownloadableFile.State.FINISHED
             updateStateItem(mediaObject)
-        } else btnDownload.setOnClickListener { presenter.startDownload() }
+        } else {
+            val pi = createPendingResult(DownloadService.REQUEST_CODE, Intent(), 0)
+            val intent = Intent(this, DownloadService::class.java)
+                    .putExtra(DownloadService.MEDIA_OBJECT_IDS, longArrayOf(mediaObject.id))
+                    .putExtra(DownloadService.PENDING_INTENT, pi)
+            startService(intent)
+            btnDownload.setOnClickListener { presenter.startDownload() }
+        }
 
         val player = ExoUtils.initExoPlayerFactory(this)
         player.prepare(ExoUtils.buildMediaSource(ExoUtils.buildDataSourceFactory(this), Uri.parse(file), FileType.MP3))
