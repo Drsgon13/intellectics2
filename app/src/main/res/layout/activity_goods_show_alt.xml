@@ -45,6 +45,7 @@
                     android:layout_below="@+id/mediaContainer"
                     android:layout_margin="12dp"
                     android:background="@null"
+                    android:visibility="gone"
                     android:textColor="@color/colorTitleBlueText"
                     android:text="@string/file_download_all"/>
 
