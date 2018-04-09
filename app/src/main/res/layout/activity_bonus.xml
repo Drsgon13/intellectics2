@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="17dp"
-    android:paddingRight="17dp"
-    android:paddingTop="20dp">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_bonus"
-        android:id="@+id/text"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.google.android.exoplayer2.ui.PlayerControlView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/playController"
-        android:layout_below="@+id/text"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="18dp"
-        app:controller_layout_id="@layout/view_exo_controller"/>
+        android:layout_height="match_parent"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:paddingTop="20dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:background="@drawable/divider"
-        android:layout_below="@+id/playController"
-        android:layout_height="1dp"/>
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_bonus" />
 
-    <include layout="@layout/li_media_object_player"
-        android:layout_below="@+id/playController"
-        android:layout_width="wrap_content"
-        android:id="@+id/item"
-        android:layout_height="wrap_content"/>
-    <View
-        android:layout_width="match_parent"
-        android:background="@drawable/divider"
-        android:layout_below="@+id/item"
-        android:layout_height="1dp"/>
-</RelativeLayout>
+        <com.google.android.exoplayer2.ui.PlayerControlView
+            android:id="@+id/playController"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="18dp"
+            app:controller_layout_id="@layout/view_exo_controller" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/playController"
+            android:background="@drawable/divider" />
+
+        <include
+            android:id="@+id/item"
+            layout="@layout/li_media_object_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/playController" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/item"
+            android:background="@drawable/divider" />
+    </RelativeLayout>
+
+
+    <include layout="@layout/content_bottom_sheet" />
+
+</android.support.design.widget.CoordinatorLayout>

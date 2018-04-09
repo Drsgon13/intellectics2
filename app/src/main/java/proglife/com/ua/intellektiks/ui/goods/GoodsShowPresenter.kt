@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.arellomobile.mvp.InjectViewState
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -20,6 +21,7 @@ import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -37,6 +39,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
     private var list = arrayListOf<FileType>()
 
     private var mGoods: Goods? = null
+    private val dynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
 
     private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
         override fun onProgressChange(current: Int, total: Int, progress: Int?) {
@@ -78,24 +81,49 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
                 )
     }
 
-    fun initDataSource(context: Context, mediaObjects: List<MediaObject>) {
+    fun initDataSource(context: Context) {
+        val  mediaObjects = mGoods!!.getMediaObjects()
         val media: MutableList<MediaSource> = arrayListOf()
         val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
             if (mediaObjects[i].fileType == FileType.MP3 || mediaObjects[i].fileType == FileType.MP4 || mediaObjects[i].fileType == FileType.HLS) {
                 list.add(mediaObjects[i].fileType!!)
+                val file: String = if(mediaObjects[i].downloadable &&
+                        File("${context.filesDir}/c_${mediaObjects[i].downloadableFile!!.name}").exists() &&
+                        mediaObjects[i].fileType != FileType.HLS)
+                    File("${context.filesDir}/c_${mediaObjects[i].downloadableFile!!.name}").absolutePath else mediaObjects[i].url
                 media.add(ExoUtils.buildMediaSource(
                         dataSourceFactory,
-                        Uri.parse(mediaObjects[i].url),
+                        Uri.parse(file),
                         mediaObjects[i].fileType!!))
             }
         }
 
         if (media.isEmpty())
             viewState.emptyList()
-        else
-            viewState.showVideo(ConcatenatingMediaSource(*media.toTypedArray()))
+        else {
+            dynamicMediaSource.addMediaSources(media)
+            viewState.showVideo(dynamicMediaSource)
+        }
+    }
+
+    fun checkDownload(context: Context, index: Int, currentWindowIndex: Int){
+        val mediaObjects = mGoods!!.getMediaObjects()
+        if(mediaObjects[index].downloadable &&
+                File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").exists()){
+            val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
+            val mediaSource = ExoUtils.buildMediaSource(
+                    dataSourceFactory,
+                    Uri.parse(File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").absolutePath),
+                    mediaObjects[index].fileType!!)
+            dynamicMediaSource.addMediaSource(index, mediaSource)
+            dynamicMediaSource.removeMediaSource(index + 1, {
+                if(currentWindowIndex == index)
+                    viewState.seekTo(currentWindowIndex)
+            })
+
+        }
     }
 
     fun checkType(index: Int) {

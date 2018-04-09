@@ -28,6 +28,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
@@ -168,7 +169,6 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         exoPlay.controllerShowTimeoutMs = if (isAudio) Int.MAX_VALUE else 0
         exoPlay.controllerHideOnTouch = !isAudio
         mFullScreenButton.visibility = if (isAudio) GONE else VISIBLE
-
         val view = findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame)
         view.visibility = if (isAudio) GONE else VISIBLE
         mediaContainer.layoutParams.height = if (isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
@@ -178,7 +178,15 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
     }
 
 
-    override fun showVideo(mediaSource: ConcatenatingMediaSource) {
+    override fun showVideo(mediaSource: DynamicConcatenatingMediaSource) {
+        var currentPosition = 0
+        var seekTo: Long = 0
+        if(exoPlay!!.player !=null){
+            currentPosition = exoPlay.player.currentWindowIndex
+            seekTo = exoPlay.player.currentPosition
+            exoPlay.player.release()
+        }
+
         mediaContainer.visibility = VISIBLE
         val player = ExoUtils.initExoPlayerFactory(this)
         exoPlay!!.player = player
@@ -191,6 +199,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         })
 
         player.prepare(mediaSource)
+        player.seekTo(currentPosition, seekTo)
         initFullscreenDialog()
         initFullscreenButton()
     }
@@ -252,7 +261,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         else getString(R.string.file_download_all_mb, size)
         btnDownloadAll.text = sizeText
 
-        presenter.initDataSource(this, playerList)
+        presenter.initDataSource(this)
         mMediaObjectAdapter.show(mList)
     }
 
@@ -279,6 +288,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
     override fun notifyItemChanged(index: Int) {
         mMediaObjectAdapter.notifyItemChanged(index)
+        presenter.checkDownload(this, index, exoPlay.player!!.currentWindowIndex)
     }
 
     /**
