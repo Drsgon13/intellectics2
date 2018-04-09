@@ -57,4 +57,9 @@ interface CommonApi {
             @Body body: GetNotificationRequest
     ): Observable<NotificationMessage>
 
+    @POST(JSON)
+    fun createLessonMessage(
+            @Body request: CreateLessonMessageRequest
+    ): Observable<Unit>
+
 }

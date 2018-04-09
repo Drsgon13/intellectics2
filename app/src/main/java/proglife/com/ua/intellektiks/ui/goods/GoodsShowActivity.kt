@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
+import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.MediaObject
@@ -169,6 +170,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         exoPlay.controllerShowTimeoutMs = if (isAudio) Int.MAX_VALUE else 0
         exoPlay.controllerHideOnTouch = !isAudio
         mFullScreenButton.visibility = if (isAudio) GONE else VISIBLE
+
         val view = findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame)
         view.visibility = if (isAudio) GONE else VISIBLE
         mediaContainer.layoutParams.height = if (isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
@@ -254,13 +256,13 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
                 .putExtra(DownloadService.PENDING_INTENT, pi)
         startService(intent)
 
-        val playerList = mList.filter { it.type == MediaObject.Type.PLAYER }
+        val playerList = mList.filter { it.type == MediaObject.Type.PLAYER && it.fileType != FileType.HLS }
         val size = playerList.fold(0, { acc, mediaObject -> acc + mediaObject.size.toInt() })
         val sizeText = if (size >= 1000)
             getString(R.string.file_download_all_gb, size.toFloat() / 1000)
         else getString(R.string.file_download_all_mb, size)
         btnDownloadAll.text = sizeText
-
+        btnDownloadAll.visibility = if (size > 0) View.VISIBLE else View.GONE
         presenter.initDataSource(this)
         mMediaObjectAdapter.show(mList)
     }

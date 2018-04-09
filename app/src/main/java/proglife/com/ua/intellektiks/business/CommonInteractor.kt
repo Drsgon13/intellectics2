@@ -4,6 +4,7 @@ import android.accounts.AuthenticatorException
 import android.content.Context
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
@@ -77,8 +78,8 @@ class CommonInteractor(
     /**
      * Информация о пользователе
      */
-    fun userData(): Single<Pair<String?, UserData?>> {
-        return Single.fromCallable {
+    fun userData(): Observable<Pair<String?, UserData?>> {
+        return Observable.fromCallable {
             Pair(mSpRepository.credentials().first, mSpRepository.userData())
         }
     }
@@ -180,6 +181,19 @@ class CommonInteractor(
     fun loadNotification(id: Long): Observable<NotificationMessage> {
         return credentials()
                 .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
+    }
+
+    fun createLessonMessage(lessonId: Long, message: String): Observable<Unit> {
+        return Observable.zip(
+                credentials(),
+                userData(),
+                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
+                    credentials, userData -> Pair(credentials, userData.second!!.id)
+                }
+        ).flatMap {
+            mNetworkRepository.createLessonMessage(it.first.first, it.first.second, it.second, lessonId, message)
+        }
+
     }
 
 }
