@@ -5,16 +5,22 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlaybackException.TYPE_SOURCE
+import com.google.android.exoplayer2.Player
 import kotlinx.android.synthetic.main.activity_bonus.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.li_media_object_player.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.FileType
@@ -50,8 +56,6 @@ class BonusActivity: BaseActivity(), BonusView{
         tvName.text = getString(R.string.name_bonus)
         tvInfo.text = getString(R.string.file_info, "9")
 
-
-
         presenter.init()
     }
 
@@ -67,7 +71,7 @@ class BonusActivity: BaseActivity(), BonusView{
 
         var file = mediaObject.url
         if(File("${filesDir}/c_${mediaObject.downloadableFile!!.id}.MP3").exists()){
-            file = File("${filesDir}/c_${mediaObject.downloadableFile!!.id}").absolutePath
+            file = File("${filesDir}/c_${mediaObject.downloadableFile!!.id}.MP3").absolutePath
             mediaObject.downloadable = true
             mediaObject.downloadableFile!!.state = DownloadableFile.State.FINISHED
             updateStateItem(mediaObject)
@@ -81,6 +85,14 @@ class BonusActivity: BaseActivity(), BonusView{
         }
 
         val player = ExoUtils.initExoPlayerFactory(this)
+        player.addListener(object : Player.DefaultEventListener(){
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                super.onPlayerError(error)
+                if(error!!.type == TYPE_SOURCE){
+                    Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
+                }
+            }
+        })
         player.prepare(ExoUtils.buildMediaSource(ExoUtils.buildDataSourceFactory(this), Uri.parse(file), FileType.MP3))
         playController.player = player
         playController.showTimeoutMs = Int.MAX_VALUE

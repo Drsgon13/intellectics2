@@ -2,4 +2,5 @@
 <resources>
     <dimen name="exo_media_button_height">37dp</dimen>
     <dimen name="height">170dp</dimen>
+    <dimen name="max_weight">400dp</dimen>
 </resources>

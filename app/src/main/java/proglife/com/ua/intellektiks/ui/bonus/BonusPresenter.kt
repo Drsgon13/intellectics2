@@ -1,6 +1,7 @@
 package proglife.com.ua.intellektiks.ui.bonus
 
 import android.content.Intent
+import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
@@ -23,6 +24,8 @@ class BonusPresenter: BasePresenter<BonusView>(){
 
     private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
         override fun onProgressChange(current: Int, total: Int, progress: Int?) {
+            if(progress == 100)
+                viewState.initPlayer(mediaObject)
             viewState.showProgress(current, total, progress)
         }
 

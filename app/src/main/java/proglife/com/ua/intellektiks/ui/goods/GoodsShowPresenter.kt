@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
+import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.FileType
@@ -75,7 +76,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
                         {
                             if (it is IOException && mGoods == null) {
                                 viewState.showNoData()
-                            }
+                            } else viewState.showError(R.string.error_network)
                             it.printStackTrace()
                         }
                 )

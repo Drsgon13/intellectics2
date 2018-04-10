@@ -318,4 +318,8 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
     override fun selectItem(mediaObject: MediaObject) {
         mMediaObjectAdapter.selectItem(mediaObject)
     }
+
+    override fun showError(res: Int) {
+        Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+    }
 }
