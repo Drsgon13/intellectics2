@@ -241,7 +241,6 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         (exoPlay!!.parent as ViewGroup).removeView(exoPlay)
         mediaContainer.addView(exoPlay)
         mFullScreenDialog?.dismiss()
-//        scroll.smoothScrollTo(0,0)
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen)
     }
 
@@ -264,6 +263,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         btnDownloadAll.text = sizeText
         btnDownloadAll.visibility = if (size > 0) View.VISIBLE else View.GONE
         presenter.initDataSource(this)
+
         mMediaObjectAdapter.show(mList)
     }
 

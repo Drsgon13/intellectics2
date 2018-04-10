@@ -149,6 +149,23 @@ class CommonInteractor(
                 }
     }
 
+    fun existsFiles(lesson: Lesson): Observable<Lesson> {
+        return Observable.just(lesson)
+                .map {
+                    it.playerElements.forEach {
+                        it.type = MediaObject.Type.PLAYER
+                        val cExists = File("${mContext.filesDir}/c_${it.getFileName()}").exists()
+                        val state = when {
+                            cExists -> DownloadableFile.State.FINISHED
+                            else -> DownloadableFile.State.NONE
+                        }
+
+                        it.downloadableFile = DownloadableFile.fromMediaObject(it, state)
+                    }
+                    it
+                }
+    }
+
     fun getHelp(): Observable<Help> =
             Observable.just(mSpRepository.getHelp())
                     .flatMap { help ->

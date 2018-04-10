@@ -1,43 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/innerCoordinator"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/innerAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        app:elevation="0dp"
+        android:background="@android:color/white">
 
-        <android.support.v4.widget.ContentLoadingProgressBar
-            android:id="@+id/pbLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/colorTitleBlackText"
-            android:textSize="20sp"
-            tools:text="Заголовок" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/rvMediaObjects"
-            android:background="@drawable/divider" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvMediaObjects"
+        <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvName"
-            android:nestedScrollingEnabled="false"
-            android:paddingLeft="12dp" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    </RelativeLayout>
-</ScrollView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin">
+
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/pbLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTitleBlackText"
+                    android:textSize="20sp"
+                    android:layout_margin="12dp"
+                    tools:text="Заголовок" />
+
+                <Button
+                    android:id="@+id/btnShowDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:textColor="@color/colorTitleBlueText"
+                    android:layout_below="@+id/tvName"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone"
+                    android:minHeight="0dp"
+                    android:text="@string/show_description"/>
+
+                <Button
+                    android:id="@+id/btnDownloadAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mediaContainer"
+                    android:layout_margin="12dp"
+                    android:background="@null"
+                    android:visibility="gone"
+                    android:textColor="@color/colorTitleBlueText"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/file_download_all"/>
+
+                <FrameLayout
+                    android:id="@+id/mediaContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_below="@+id/btnShowDescription"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone">
+
+                    <com.google.android.exoplayer2.ui.PlayerView
+                        android:id="@+id/exoPlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/divider" />
+
+            </RelativeLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMediaObjects"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingBottom="60dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <include layout="@layout/content_bottom_sheet"/>
+
+</android.support.design.widget.CoordinatorLayout>

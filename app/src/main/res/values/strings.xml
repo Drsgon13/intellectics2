@@ -43,5 +43,7 @@
     <string name="clear_cache">Удалить все сохраненные файлы</string>
     <string name="cache_size_mb">Размер сохраненых файлов - %d МБ</string>
     <string name="cache_size_gb">Размер сохраненых файлов - %.2f ГБ</string>
+    <string name="show_description">Просмотреть описание</string>
+    <string name="description">Описание</string>
 
 </resources>

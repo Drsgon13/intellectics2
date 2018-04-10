@@ -23,20 +23,22 @@ data class Goods(
 ) {
 
     fun getMediaObjects(): List<MediaObject> {
-        return playerElements
+        val playerList = playerElements
                 .filter { it.fileType != FileType.JPG }
                 .map {
-                    it.type = if (it.bootType == DIVIDER_BOOT_TYPE) MediaObject.Type.DIVIDER else MediaObject.Type.PLAYER
-                    it.downloadable = true
+                    it.type = if (it.bootType == MediaObject.DIVIDER_BOOT_TYPE) MediaObject.Type.DIVIDER else MediaObject.Type.PLAYER
+                    it.downloadable = it.bootType != MediaObject.DIVIDER_BOOT_TYPE
                     it
                 }
-                .plus(MediaObject.getDividerInstance())
-                .plus(commonElements
-                        .map {
-                            it.type = if (it.bootType == DIVIDER_BOOT_TYPE) MediaObject.Type.DIVIDER else MediaObject.Type.COMMON
-                            it.downloadable = MediaObject.DOWNLOADABLE_BOOT_TYPE.contains(it.bootType)
-                            it
-                        })
+        val commonList = commonElements
+                .map {
+                    it.type = if (it.bootType == MediaObject.DIVIDER_BOOT_TYPE) MediaObject.Type.DIVIDER else MediaObject.Type.COMMON
+                    it.downloadable = MediaObject.DOWNLOADABLE_BOOT_TYPE.contains(it.bootType)
+                    it
+                }
+        return if (playerList.isNotEmpty() && commonList.isNotEmpty()) {
+            playerList.plus(MediaObject.getDividerInstance()).plus(commonList)
+        } else playerList.plus(commonList)
     }
 
 }
