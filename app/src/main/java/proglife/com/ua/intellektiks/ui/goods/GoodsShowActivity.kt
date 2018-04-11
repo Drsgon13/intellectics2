@@ -48,6 +48,7 @@ import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
+import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
 
 /**
@@ -263,6 +264,16 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         btnDownloadAll.text = sizeText
         btnDownloadAll.visibility = if (size > 0) View.VISIBLE else View.GONE
         presenter.initDataSource(this)
+
+        if(item.informationForPersonal.isNotBlank()) {
+            btnShowDescription.visibility = View.VISIBLE
+            btnShowDescription.setOnClickListener {
+                startActivity(Intent(this, ViewerTxtActivity::class.java)
+                        .putExtra(Constants.Field.TITLE, getString(R.string.description))
+                        .putExtra(Constants.Field.CONTENT, item.informationForPersonal))
+                withStartAnimation()
+            }
+        }
 
         mMediaObjectAdapter.show(mList)
     }
