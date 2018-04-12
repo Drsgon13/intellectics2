@@ -17,6 +17,7 @@ interface CommonApi {
     companion object {
         const val JSON = "?r=api/apps/json"
         const val HELP = "?r=api/apps/help"
+        const val REMINDER = "?r=api/apps/xdkreminder"
     }
 
     @POST(JSON)
@@ -61,5 +62,10 @@ interface CommonApi {
     fun createLessonMessage(
             @Body request: CreateLessonMessageRequest
     ): Observable<Unit>
+
+    @POST(REMINDER)
+    fun createReminder(
+            @Body request: CreateReminderRequest
+    ): Observable<ReminderResponse>
 
 }
