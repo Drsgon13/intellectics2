@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class CreateReminderRequest(
+        @SerializedName("login") val login: String,
+        @SerializedName("password") val password: String,
         @SerializedName("id_contact") val contactId: Long,
         @SerializedName("id_goods") val goodsId: Long?,
         @SerializedName("id_training_lessons") val lessonId: Long?,
