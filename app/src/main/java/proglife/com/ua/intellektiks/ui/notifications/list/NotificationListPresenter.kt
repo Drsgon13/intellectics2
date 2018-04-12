@@ -19,6 +19,17 @@ class NotificationListPresenter: BasePresenter<NotificationListView>() {
 
     init {
         injector().inject(this)
+
+        mCommonInteractor.isAuthenticated()
+                .subscribe(
+                        {
+                            if (it) loadNotification() else viewState.showNeedAuth()
+                        },
+                        {}
+                )
+    }
+
+    fun loadNotification(){
         mCommonInteractor.loadNotifications()
                 .compose(oAsync())
                 .doOnSubscribe { viewState.showLoading() }

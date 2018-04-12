@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_notification_list.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -55,15 +56,20 @@ class NotificationListActivity: BaseActivity(), NotificationListView {
         pbLoading.hide()
     }
 
+    override fun showNeedAuth() {
+        tvMessage.visibility = View.VISIBLE
+    }
+
     override fun showError(res: Int) {
         Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
     }
 
     override fun showNotifications(list: List<NotificationMessagePreview>) {
+        tvMessage.visibility = View.GONE
         mAdapter.show(list)
     }
 
-    override fun showNotification(item: NotificationMessagePreview) {
+    override fun showNotification(item: NotificationMessagePreview) {0
         startActivity(Intent(this, NotificationShowActivity::class.java)
                 .putExtra(Constants.Field.NOTIFICATION, item))
         withStartAnimation()

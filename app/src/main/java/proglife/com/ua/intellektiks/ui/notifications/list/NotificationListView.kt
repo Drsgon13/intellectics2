@@ -13,4 +13,5 @@ interface NotificationListView: BaseView {
     fun showError(res: Int)
     fun showNotifications(list: List<NotificationMessagePreview>)
     fun showNotification(item: NotificationMessagePreview)
+    fun showNeedAuth()
 }
