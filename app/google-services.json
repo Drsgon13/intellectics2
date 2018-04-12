@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "607596463699",
+    "firebase_url": "https://elite-replica-121110.firebaseio.com",
+    "project_id": "elite-replica-121110",
+    "storage_bucket": "elite-replica-121110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607596463699:android:b3501b34c7c95d2e",
+        "android_client_info": {
+          "package_name": "proglife.com.ua.intellectics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607596463699-tt12ks1rle81u6t838g3u40ki70q0p4u.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "607596463699-good1s5t6421q5vhr8m8562nd5a23bj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBertJKJTQoI8RVwJxY8FoHzrSpzJgllCU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
