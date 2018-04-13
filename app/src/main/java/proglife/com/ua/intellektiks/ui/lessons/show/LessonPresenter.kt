@@ -6,6 +6,8 @@ import android.net.Uri
 import com.arellomobile.mvp.InjectViewState
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Lesson
@@ -17,6 +19,7 @@ import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -33,6 +36,7 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
 
     private var mLesson: Lesson? = null
     private val dynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
+    private var dispose: Disposable? = null
 
     private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
         override fun onProgressChange(current: Int, total: Int, progress: Int?) {
@@ -150,6 +154,35 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
         if (list != null && list.isNotEmpty()) {
             list.forEach { viewState.startDownload(it) }
         }
+    }
+
+    fun reminder(index: Int, seconds: Long){
+        val mediaObject = mMediaStateHelper.mediaObjects!![index]
+        mCommonInteractor.createReminder(mLesson!!.idContact,null, mLesson!!.id, seconds, mediaObject.id)
+                .compose(oAsync())
+                .subscribe(
+                        {},
+                        {
+                            it.printStackTrace()
+                        }
+                )
+    }
+
+    fun startReminder() {
+        dispose = Observable.interval(5, TimeUnit.SECONDS)
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            viewState.positionLesson()
+                        },
+                        {
+                            it.printStackTrace()
+                        }
+                )
+    }
+
+    fun clearTimer(){
+        dispose?.dispose()
     }
 
 }

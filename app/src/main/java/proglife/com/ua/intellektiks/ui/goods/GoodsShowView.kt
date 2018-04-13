@@ -28,4 +28,5 @@ interface GoodsShowView: BaseView {
     fun startCommonDownload(mediaObject: MediaObject)
     fun selectItem(mediaObject: MediaObject)
     fun showError(res: Int)
+    fun positionLesson()
 }

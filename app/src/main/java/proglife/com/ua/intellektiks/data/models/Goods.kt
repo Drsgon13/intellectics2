@@ -41,4 +41,7 @@ data class Goods(
         } else playerList.plus(commonList)
     }
 
+    fun getFavorits(){
+
+    }
 }

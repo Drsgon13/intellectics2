@@ -199,12 +199,23 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
                 super.onTracksChanged(trackGroups, trackSelections)
                 presenter.checkType(exoPlay.player.currentWindowIndex)
             }
+
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                super.onPlayerStateChanged(playWhenReady, playbackState)
+                if(playWhenReady)
+                    presenter.startReminder()
+                else presenter.clearTimer()
+            }
         })
 
         player.prepare(mediaSource)
         player.seekTo(currentPosition, seekTo)
         initFullscreenDialog()
         initFullscreenButton()
+    }
+
+    override fun positionLesson() {
+        presenter.reminder(exoPlay.player.currentWindowIndex, exoPlay.player.currentPosition)
     }
 
     private fun initFullscreenDialog() {
