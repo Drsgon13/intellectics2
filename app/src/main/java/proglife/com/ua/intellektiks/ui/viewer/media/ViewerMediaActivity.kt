@@ -1,7 +1,8 @@
-package proglife.com.ua.intellektiks.ui.viewer
+package proglife.com.ua.intellektiks.ui.viewer.media
 
 import android.net.Uri
 import android.os.Bundle
+import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_viwer_media.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
@@ -9,12 +10,14 @@ import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
 
-class ViewerMediaActivity: BaseActivity(){
+class ViewerMediaActivity: BaseActivity(), ViewerMediaView {
+
+    @InjectPresenter
+    lateinit var presenter: ViewerMediaPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_viwer_media)
-        initPlayer()
     }
 
     fun checkContent(isAudio: Boolean) {
@@ -22,10 +25,10 @@ class ViewerMediaActivity: BaseActivity(){
         exoPlayer.controllerHideOnTouch = !isAudio
     }
 
-    private fun initPlayer(){
+    override fun initPlayer(authData: String?) {
         val url = intent.getStringExtra(Constants.Field.CONTENT)
         val fileType = intent.getSerializableExtra(Constants.Field.TYPE) as FileType
-        val dataSourceFactory = ExoUtils.buildDataSourceFactory(this)
+        val dataSourceFactory = ExoUtils.buildDataSourceFactory(this, authData)
         val mediaSource = ExoUtils.buildMediaSource(
                 dataSourceFactory,
                 Uri.parse(url),

@@ -55,7 +55,7 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
             R.id.nav_settings -> {
                 commonPresenter.profile()
             }
-            R.id.nav_logout -> commonPresenter.logout()
+//            R.id.nav_logout -> commonPresenter.logout()
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true

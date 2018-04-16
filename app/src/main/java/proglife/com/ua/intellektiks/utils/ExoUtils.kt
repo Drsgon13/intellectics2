@@ -19,7 +19,7 @@ class ExoUtils{
 
     companion object {
 
-        private const val USER_AGENT: String = "intellecticsandroid"
+        const val DEFAULT_USER_AGENT: String = "intellecticsandroid"
 
         fun initExoPlayerFactory(context: Context): SimpleExoPlayer {
             val bandwidthMeter = DefaultBandwidthMeter()
@@ -42,9 +42,9 @@ class ExoUtils{
             }
         }
 
-        fun buildDataSourceFactory(context: Context): DefaultDataSourceFactory {
+        fun buildDataSourceFactory(context: Context, userAgent: String? = null): DefaultDataSourceFactory {
             val bandwidthMeter = DefaultBandwidthMeter()
-            return DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(USER_AGENT, bandwidthMeter))
+            return DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(userAgent ?: DEFAULT_USER_AGENT, bandwidthMeter))
         }
 
         private fun buildHttpDataSourceFactory(userAgent: String, bandwidthMeter: DefaultBandwidthMeter): HttpDataSource.Factory {

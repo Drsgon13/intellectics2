@@ -6,6 +6,8 @@ import android.net.Uri
 import com.arellomobile.mvp.InjectViewState
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.Lesson
@@ -74,9 +76,23 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     }
 
     fun initDataSource(context: Context) {
+        mCommonInteractor.getUserAgent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            initDataSource(context, it)
+                        },
+                        {
+                            initDataSource(context, null)
+                        }
+                )
+    }
+
+    private fun initDataSource(context: Context, userAgent: String?) {
         val mediaObjects = mLesson!!.getMediaObjects()
         val media: MutableList<MediaSource> = arrayListOf()
-        val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
+        val dataSourceFactory = ExoUtils.buildDataSourceFactory(context, userAgent)
         for (i in 0 until mediaObjects.size) {
             @Suppress("SENSELESS_COMPARISON")
             if (mediaObjects[i].type == MediaObject.Type.PLAYER && (mediaObjects[i].fileType == FileType.MP3 || mediaObjects[i].fileType == FileType.MP4 || mediaObjects[i].fileType == FileType.HLS)) {
@@ -100,11 +116,25 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
         }
     }
 
-    fun checkDownload(context: Context, index: Int, currentWindowIndex: Int){
+    fun checkDownload(context: Context, index: Int, currentWindowIndex: Int) {
+        mCommonInteractor.getUserAgent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            checkDownload(context, index, currentWindowIndex, it)
+                        },
+                        {
+                            checkDownload(context, index, currentWindowIndex, null)
+                        }
+                )
+    }
+
+    private fun checkDownload(context: Context, index: Int, currentWindowIndex: Int, userAgent: String?) {
         val mediaObjects = mLesson!!.getMediaObjects()
         if(mediaObjects[index].downloadable &&
                 File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").exists()){
-            val dataSourceFactory = ExoUtils.buildDataSourceFactory(context)
+            val dataSourceFactory = ExoUtils.buildDataSourceFactory(context, userAgent)
             val mediaSource = ExoUtils.buildMediaSource(
                     dataSourceFactory,
                     Uri.parse(File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").absolutePath),
@@ -114,7 +144,6 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
                 if(currentWindowIndex == index)
                     viewState.seekTo(currentWindowIndex)
             })
-
         }
     }
 

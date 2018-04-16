@@ -263,7 +263,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         else getString(R.string.file_download_all_mb, size)
         btnDownloadAll.text = sizeText
         btnDownloadAll.visibility = if (size > 0) View.VISIBLE else View.GONE
-        presenter.initDataSource(this)
+        presenter.initDataSource(applicationContext)
 
         if(item.informationForPersonal.isNotBlank()) {
             btnShowDescription.visibility = View.VISIBLE

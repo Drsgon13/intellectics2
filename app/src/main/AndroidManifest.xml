@@ -58,7 +58,7 @@
             android:name=".ui.viewer.ViewerPdfActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.viewer.ViewerMediaActivity"
+            android:name=".ui.viewer.media.ViewerMediaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".ui.bonus.BonusActivity"

@@ -14,6 +14,7 @@ import proglife.com.ua.intellektiks.ui.notifications.show.NotificationShowPresen
 import proglife.com.ua.intellektiks.ui.settings.SettingsPresenter
 import proglife.com.ua.intellektiks.ui.splash.SplashPresenter
 import proglife.com.ua.intellektiks.ui.support.SupportPresenter
+import proglife.com.ua.intellektiks.ui.viewer.media.ViewerMediaPresenter
 
 /**
  * Created by Evhenyi Shcherbyna on 23.10.2017.
@@ -34,4 +35,5 @@ interface ActivityComponent {
     fun inject(service: DownloadService)
     fun inject(presenter: NotificationListPresenter)
     fun inject(presenter: NotificationShowPresenter)
+    fun inject(presenter: ViewerMediaPresenter)
 }

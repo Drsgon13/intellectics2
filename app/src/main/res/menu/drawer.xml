@@ -28,8 +28,8 @@
         android:id="@+id/nav_support"
         android:title="@string/nav.support"
         android:icon="@drawable/ic_support"/>
-    <item
-        android:id="@+id/nav_logout"
-        android:title="@string/nav.logout"
-        android:icon="@drawable/ic_logout"/>
+    <!--<item-->
+        <!--android:id="@+id/nav_logout"-->
+        <!--android:title="@string/nav.logout"-->
+        <!--android:icon="@drawable/ic_logout"/>-->
 </menu>

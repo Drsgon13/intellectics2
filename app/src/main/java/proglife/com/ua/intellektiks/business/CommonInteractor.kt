@@ -9,6 +9,8 @@ import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.utils.ExoUtils
+import proglife.com.ua.intellektiks.utils.Hash
 import java.io.File
 
 /**
@@ -211,6 +213,18 @@ class CommonInteractor(
             mNetworkRepository.createLessonMessage(it.first.first, it.first.second, it.second, lessonId, message)
         }
 
+    }
+
+    fun getUserAgent(): Single<String> {
+        return userData()
+                .firstOrError()
+                .map {
+                    if (it.first == null || it.second == null) {
+                        ExoUtils.DEFAULT_USER_AGENT
+                    } else {
+                        "{\"${it.second!!.id}\":\"${Hash.md5(it.first!!)}\"}"
+                    }
+                }
     }
 
 }

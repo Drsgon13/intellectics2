@@ -5,7 +5,7 @@ import android.content.Intent
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
-import proglife.com.ua.intellektiks.ui.viewer.ViewerMediaActivity
+import proglife.com.ua.intellektiks.ui.viewer.media.ViewerMediaActivity
 import proglife.com.ua.intellektiks.ui.viewer.ViewerPdfActivity
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 
