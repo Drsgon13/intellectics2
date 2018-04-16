@@ -26,4 +26,5 @@ interface LessonView: BaseView {
     fun notifyDataSetChanged()
     fun startCommonDownload(mediaObject: MediaObject)
     fun selectItem(mediaObject: MediaObject)
+    fun positionLesson()
 }

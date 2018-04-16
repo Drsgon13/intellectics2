@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class Lesson(
         @SerializedName("id_training_lessons") val id: Long,
+        @SerializedName("id_contact") val idContact: Long,
         @SerializedName("description") val description: String?,
 //        @SerializedName("common_elements") val commonElements: String,
         @SerializedName("player_elements") val playerElements: List<MediaObject>,

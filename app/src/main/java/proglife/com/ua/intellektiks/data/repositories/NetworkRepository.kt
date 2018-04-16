@@ -46,4 +46,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.createLessonMessage(CreateLessonMessageRequest(login, password, userId, lessonId, message))
     }
 
+    fun createReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, seconds: Long, mediaObjectId: Long): Observable<ReminderResponse> {
+        return commonApi.createReminder(CreateReminderRequest(login, password, contactId, goodsId, lessonId, seconds, mediaObjectId))
+    }
+
 }

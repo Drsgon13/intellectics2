@@ -6,6 +6,8 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import proglife.com.ua.intellektiks.data.models.*
+import proglife.com.ua.intellektiks.data.network.models.CreateReminderRequest
+import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
@@ -225,6 +227,18 @@ class CommonInteractor(
                         "{\"${it.second!!.id}\":\"${Hash.md5(it.first!!)}\"}"
                     }
                 }
+    }
+
+    fun createReminder( contactId: Long, goodsId: Long?, lessonId: Long?, seconds: Long, mediaObjectId: Long): Observable<ReminderResponse> {
+        return Observable.zip(
+                credentials(),
+                userData(),
+                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
+                    credentials, userData -> Pair(credentials, userData.second!!.id)
+                }
+        ).flatMap {
+            mNetworkRepository.createReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, seconds, mediaObjectId)
+        }
     }
 
 }
