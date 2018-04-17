@@ -13,7 +13,8 @@ data class Lesson(
 //        @SerializedName("common_elements") val commonElements: String,
         @SerializedName("player_elements") val playerElements: List<MediaObject>,
         @SerializedName("data_common_elements") val commonElements: List<MediaObject>,
-        @SerializedName("messages") val messages: List<LessonMessage>
+        @SerializedName("messages") val messages: List<LessonMessage>,
+        @SerializedName("toggles_massive") val togglesMassive: List<Marker>?
 ) {
     fun getMediaObjects(): List<MediaObject> {
         val playerList = playerElements

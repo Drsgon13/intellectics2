@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.lessons.show
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Lesson
 import proglife.com.ua.intellektiks.data.models.LessonPreview
+import proglife.com.ua.intellektiks.data.models.Marker
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseView
 
@@ -27,4 +28,5 @@ interface LessonView: BaseView {
     fun startCommonDownload(mediaObject: MediaObject)
     fun selectItem(mediaObject: MediaObject)
     fun positionLesson()
+    fun hideMarker(marker: Marker)
 }

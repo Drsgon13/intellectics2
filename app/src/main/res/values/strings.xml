@@ -46,5 +46,9 @@
     <string name="cache_size_gb">Размер сохраненых файлов - %.2f ГБ</string>
     <string name="show_description">Просмотреть описание</string>
     <string name="description">Описание</string>
+    <string name="delete_marker">Удалить закладку</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
+    <string name="marker_text">Воспроизвести файл %s c %s</string>
 
 </resources>

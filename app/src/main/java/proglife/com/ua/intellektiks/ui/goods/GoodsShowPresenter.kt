@@ -19,10 +19,7 @@ import io.reactivex.disposables.Disposable
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.Constants
-import proglife.com.ua.intellektiks.data.models.FileType
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
@@ -223,6 +220,25 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
 
     fun clearTimer(){
         dispose?.dispose()
+    }
+
+    fun deleteMarker(marker: Marker) {
+        mCommonInteractor.deleteReminder(mGoods!!.contactId, marker.mediaobjectid, mGoods!!.id,  null)
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            viewState.hideMarker(marker)
+                        },
+                        {
+                            it.printStackTrace()
+                        }
+                )
+    }
+
+    fun playMarker(marker: Marker) {
+        viewState.hideMarker(marker)
+        val mediaObjects = mGoods!!.getMediaObjects()
+        play(mediaObjects.first { it.id == marker.mediaobjectid })
     }
 
 }

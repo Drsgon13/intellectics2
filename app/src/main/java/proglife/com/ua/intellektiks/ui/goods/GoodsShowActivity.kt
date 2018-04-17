@@ -39,13 +39,11 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
-import proglife.com.ua.intellektiks.data.models.FileType
-import proglife.com.ua.intellektiks.data.models.Goods
-import proglife.com.ua.intellektiks.data.models.GoodsPreview
-import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
+import proglife.com.ua.intellektiks.ui.base.media.MarkerAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
@@ -62,6 +60,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
     private var mFullScreenDialog: Dialog? = null
     private lateinit var mMediaObjectAdapter: MediaObjectAdapter
+    private lateinit var mMarkerAdapter: MarkerAdapter
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
@@ -249,10 +248,32 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         mFullScreenIcon.setImageResource(R.drawable.ic_fullscreen)
     }
 
-    /**
-     *
-     */
+    override fun hideMarker(marker: Marker){
+        mMarkerAdapter.hide(marker)
+    }
+
     override fun showGoods(item: Goods, mList: List<MediaObject>) {
+
+        if(item.togglesMassive !=null && item.togglesMassive.isNotEmpty()) {
+            mMarkerAdapter = MarkerAdapter(item.togglesMassive.toMutableList(), object : MarkerAdapter.OnClickMarker {
+
+                override fun onDelete(marker: Marker) {
+                    presenter.deleteMarker(marker)
+                }
+
+                override fun onContinue(marker: Marker) {
+                    presenter.playMarker(marker)
+                }
+
+                override fun onNo(marker: Marker) {
+                    hideMarker(marker)
+                }
+
+            })
+            rvMarker.layoutManager = LinearLayoutManager(this)
+            rvMarker.adapter = mMarkerAdapter
+            rvMarker.visibility = VISIBLE
+        } else rvMarker.visibility = GONE
         // Отправляем перечень ID от MediaObject за которыми хотим следить в сервис
         val pi = createPendingResult(DownloadService.REQUEST_CODE, Intent(), 0)
         val intent = Intent(this, DownloadService::class.java)

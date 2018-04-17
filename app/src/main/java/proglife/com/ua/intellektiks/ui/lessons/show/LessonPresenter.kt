@@ -11,10 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import proglife.com.ua.intellektiks.business.CommonInteractor
-import proglife.com.ua.intellektiks.data.models.FileType
-import proglife.com.ua.intellektiks.data.models.Lesson
-import proglife.com.ua.intellektiks.data.models.LessonPreview
-import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
@@ -213,5 +210,22 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     fun clearTimer(){
         dispose?.dispose()
     }
+    fun deleteMarker(marker: Marker) {
+        mCommonInteractor.deleteReminder(mLesson!!.idContact, marker.mediaobjectid, null,  mLesson!!.id)
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            viewState.hideMarker(marker)
+                        },
+                        {
+                            it.printStackTrace()
+                        }
+                )
+    }
 
+    fun playMarker(marker: Marker) {
+        viewState.hideMarker(marker)
+        val mediaObjects = mLesson!!.getMediaObjects()
+        play(mediaObjects.first { it.id == marker.mediaobjectid })
+    }
 }

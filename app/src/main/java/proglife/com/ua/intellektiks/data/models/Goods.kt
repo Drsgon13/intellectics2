@@ -19,7 +19,8 @@ data class Goods(
         @SerializedName("data_common_elements") val commonElements: List<MediaObject>,
 //        @SerializedName("massive_elements_html") val massiveElementsHtml: String,
         @SerializedName("player_elements") val playerElements: List<MediaObject>,
-        @SerializedName("toggles_html") val togglesHtml: String
+        @SerializedName("toggles_html") val togglesHtml: String,
+        @SerializedName("toggles_massive") val togglesMassive: List<Marker>?
 ) {
 
     fun getMediaObjects(): List<MediaObject> {
@@ -41,7 +42,4 @@ data class Goods(
         } else playerList.plus(commonList)
     }
 
-    fun getFavorits(){
-
-    }
 }

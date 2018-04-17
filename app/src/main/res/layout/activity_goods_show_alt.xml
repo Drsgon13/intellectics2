@@ -44,12 +44,19 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:textColor="@color/colorTitleBlueText"
-                    android:layout_below="@+id/tvName"
+                    android:layout_below="@+id/rvMarker"
                     android:layout_marginLeft="12dp"
                     android:layout_marginBottom="5dp"
                     android:visibility="gone"
                     android:minHeight="0dp"
                     android:text="@string/show_description"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvName"
+                    android:visibility="gone"
+                    android:id="@+id/rvMarker"/>
 
                 <Button
                     android:id="@+id/btnDownloadAll"

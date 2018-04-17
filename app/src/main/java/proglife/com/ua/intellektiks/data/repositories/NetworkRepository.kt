@@ -50,4 +50,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.createReminder(CreateReminderRequest(login, password, contactId, goodsId, lessonId, seconds, mediaObjectId))
     }
 
+    fun deleteReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, mediaObjectId: Long): Observable<Unit> {
+        return commonApi.deleteReminder(DeleteReminderRequest(login, password, contactId, goodsId, lessonId, mediaObjectId))
+    }
+
 }

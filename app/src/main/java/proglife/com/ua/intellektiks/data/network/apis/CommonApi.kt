@@ -18,6 +18,7 @@ interface CommonApi {
         const val JSON = "?r=api/apps/json"
         const val HELP = "?r=api/apps/help"
         const val REMINDER = "?r=api/apps/xdkreminder"
+        const val DELETE_REMINDER = "/?r=api/apps/xdkreminderdelete"
     }
 
     @POST(JSON)
@@ -67,5 +68,10 @@ interface CommonApi {
     fun createReminder(
             @Body request: CreateReminderRequest
     ): Observable<ReminderResponse>
+
+    @POST(DELETE_REMINDER)
+    fun deleteReminder(
+            @Body request: DeleteReminderRequest
+    ): Observable<Unit>
 
 }

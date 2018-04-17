@@ -241,4 +241,16 @@ class CommonInteractor(
         }
     }
 
+    fun deleteReminder(contactId: Long, mediaObjectId: Long, goodsId: Long?, lessonId: Long?): Observable<Unit>{
+        return Observable.zip(
+                credentials(),
+                userData(),
+                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
+                    credentials, userData -> Pair(credentials, userData.second!!.id)
+                }
+        ).flatMap {
+            mNetworkRepository.deleteReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, mediaObjectId)
+        }
+    }
+
 }

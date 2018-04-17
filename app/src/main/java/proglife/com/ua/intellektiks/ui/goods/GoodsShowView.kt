@@ -4,6 +4,7 @@ import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
+import proglife.com.ua.intellektiks.data.models.Marker
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseView
 
@@ -29,4 +30,5 @@ interface GoodsShowView: BaseView {
     fun selectItem(mediaObject: MediaObject)
     fun showError(res: Int)
     fun positionLesson()
+    fun hideMarker(marker: Marker)
 }
