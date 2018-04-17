@@ -72,8 +72,6 @@ class LessonActivity : BaseActivity(), LessonView {
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout)
 
-        findViewById<View>(com.google.android.exoplayer2.ui.R.id.exo_content_frame).visibility = View.GONE
-
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
         mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
@@ -163,12 +161,6 @@ class LessonActivity : BaseActivity(), LessonView {
         exoPlay.controllerHideOnTouch = !isAudio
         mFullScreenButton.visibility = if (isAudio) View.GONE else View.VISIBLE
 
-        val view = findViewById<AspectRatioFrameLayout>(com.google.android.exoplayer2.ui.R.id.exo_content_frame)
-        view.visibility = if (isAudio) View.GONE else View.VISIBLE
-        mediaContainer.layoutParams.height = if (isAudio) ViewGroup.LayoutParams.WRAP_CONTENT
-        else resources.getDimensionPixelSize(R.dimen.height)
-        mediaContainer.requestLayout()
-        mediaContainer.invalidate()
     }
 
 
@@ -296,6 +288,8 @@ class LessonActivity : BaseActivity(), LessonView {
     override fun seekTo(position: Int) {
         exoPlay.player.seekTo(position, 0)
         rvMediaObjects.scrollToPosition(0)
+
+        exoPlay.player.playWhenReady = true
         innerAppBar.setExpanded(true, true)
     }
 

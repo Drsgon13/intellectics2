@@ -7,6 +7,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import kotlinx.android.synthetic.main.li_media_object_common.view.*
 import proglife.com.ua.intellektiks.R
+import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 
@@ -29,7 +30,10 @@ class CommonViewHolder(
             else -> R.mipmap.ic_file
         }
         ivFormat.setImageResource(formatRes)
-        tvName.text = mContext.getString(if (mediaObject.downloadable) R.string.file_download else R.string.file_open, mediaObject.title)
+        tvName.text = mContext.getString(if (mediaObject.downloadable) R.string.file_download else
+            if(mediaObject.fileType == FileType.PDF || mediaObject.fileType == FileType.DOC || mediaObject.fileType == FileType.TXT)
+                R.string.file_read
+            else R.string.file_open, mediaObject.title)
         tvInfo.text = if (mediaObject.size.isNotBlank()) mContext.getString(R.string.file_info, mediaObject.size) else ""
         val showLoading: Boolean = mediaObject.downloadableFile?.state == DownloadableFile.State.PROCESSING ||
                 mediaObject.downloadableFile?.state == DownloadableFile.State.AWAIT

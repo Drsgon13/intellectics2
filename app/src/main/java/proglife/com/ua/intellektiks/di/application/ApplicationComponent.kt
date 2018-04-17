@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.di.application
 
+import com.google.gson.Gson
 import javax.inject.Singleton
 
 import dagger.Component
@@ -14,5 +15,7 @@ import proglife.com.ua.intellektiks.di.application.modules.NetworkModule
 @Singleton
 @Component(modules = [AppModule::class, NetworkModule::class])
 interface ApplicationComponent {
+
+    fun provideGson(): Gson
     fun activityComponent(): ActivityComponent
 }

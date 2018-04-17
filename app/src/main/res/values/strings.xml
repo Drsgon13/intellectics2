@@ -26,6 +26,7 @@
 
     <string name="file_download">Скачать %s</string>
     <string name="file_open">Смотреть %s</string>
+    <string name="file_read">Читать %s</string>
     <string name="file_info">Вес файла - %s МБ</string>
     <string name="file_progress">(%1$d из %2$d успешно) Скачиваем файл - %3$d%%</string>
     <string name="file_progress_complete">(%1$d из %2$d успешно) Скачивание завершено</string>
