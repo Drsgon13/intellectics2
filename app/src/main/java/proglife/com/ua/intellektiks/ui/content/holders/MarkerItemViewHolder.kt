@@ -1,4 +1,4 @@
-package proglife.com.ua.intellektiks.ui.base.media
+package proglife.com.ua.intellektiks.ui.content.holders
 
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
@@ -9,9 +9,10 @@ import android.view.View
 import kotlinx.android.synthetic.main.view_marker.view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.Marker
+import proglife.com.ua.intellektiks.ui.content.adapters.MarkerAdapter
 import java.util.*
 
-class MarkerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class MarkerItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val context = itemView.context
     private val tvText = itemView.tvText
     private val btnContinue = itemView.btnContinue

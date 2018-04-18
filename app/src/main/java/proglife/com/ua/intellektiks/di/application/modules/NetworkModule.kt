@@ -50,10 +50,12 @@ class NetworkModule {
             val request = it.request()
             val response = it.proceed(request)
             val rawJson = response.body()!!.string()
-            val jsonObject = JSONTokener(rawJson).nextValue()
+            if (rawJson.isNotEmpty()) {
+                val jsonObject = JSONTokener(rawJson).nextValue()
                 if (jsonObject is JSONObject && jsonObject.has("error")) {
                     throw ServerException(jsonObject.getString("error"))
                 }
+            }
             response.newBuilder().body(ResponseBody.create(response.body()?.contentType(), rawJson)).build()
         }
         builder.readTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)

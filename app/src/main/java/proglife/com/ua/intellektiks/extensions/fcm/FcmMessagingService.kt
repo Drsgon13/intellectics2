@@ -31,7 +31,7 @@ class FcmMessagingService : FirebaseMessagingService() {
         val builder = with(NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)) {
 //            priority = PRIORITY_HIGH
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setSmallIcon(R.mipmap.ic_launcher)
+                setSmallIcon(R.mipmap.ic_logo)
                 color = ContextCompat.getColor(this@FcmMessagingService, R.color.colorPrimary)
             } else {
                 setSmallIcon(R.mipmap.ic_launcher)

@@ -1,4 +1,4 @@
-package proglife.com.ua.intellektiks.ui.base.media
+package proglife.com.ua.intellektiks.ui.content.media
 
 import android.content.Intent
 import android.os.Parcelable

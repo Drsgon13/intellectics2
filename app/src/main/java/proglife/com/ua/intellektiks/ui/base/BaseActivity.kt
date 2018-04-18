@@ -11,6 +11,7 @@ import proglife.com.ua.intellektiks.ui.auth.AuthActivity
 import proglife.com.ua.intellektiks.ui.common.CommonPresenter
 import proglife.com.ua.intellektiks.ui.common.CommonView
 import proglife.com.ua.intellektiks.ui.settings.SettingsActivity
+import proglife.com.ua.intellektiks.views.ProgressDialog
 
 /**
  * Created by Evhenyi Shcherbyna on 22.03.2018.
@@ -19,12 +20,14 @@ import proglife.com.ua.intellektiks.ui.settings.SettingsActivity
 abstract class BaseActivity: MvpAppCompatActivity(), CommonView {
 
     lateinit var toolbar: Toolbar
+    lateinit var progressDialog: ProgressDialog
 
     @InjectPresenter
     lateinit var commonPresenter: CommonPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        progressDialog = ProgressDialog(this)
     }
 
     fun setCustomView(layoutResID: Int, containerResID: Int = R.layout.content_main) {
@@ -57,4 +60,11 @@ abstract class BaseActivity: MvpAppCompatActivity(), CommonView {
         if (clearStack) finishAffinity()
     }
 
+    override fun showLoading() {
+        progressDialog.show()
+    }
+
+    override fun dismissLoading() {
+        progressDialog.dismiss()
+    }
 }

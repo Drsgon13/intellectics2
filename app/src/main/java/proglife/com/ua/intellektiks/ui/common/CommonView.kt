@@ -9,4 +9,6 @@ import proglife.com.ua.intellektiks.ui.base.BaseView
 interface CommonView: BaseView {
     fun showProfile()
     fun showAuth(clearStack: Boolean)
+    fun showLoading()
+    fun dismissLoading()
 }

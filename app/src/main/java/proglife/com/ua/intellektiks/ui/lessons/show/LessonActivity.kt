@@ -34,9 +34,6 @@ import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
-import proglife.com.ua.intellektiks.ui.base.media.MarkerAdapter
-import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
-import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
 
@@ -50,8 +47,8 @@ class LessonActivity : BaseActivity(), LessonView {
     lateinit var presenter: LessonPresenter
 
     private var mFullScreenDialog: Dialog? = null
-    private lateinit var mMediaObjectAdapter: MediaObjectAdapter
-    private lateinit var mMarkerAdapter: MarkerAdapter
+//    private lateinit var mMediaObjectAdapter: MediaObjectAdapter
+//    private lateinit var mMarkerAdapter: MarkerAdapter
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
@@ -72,28 +69,28 @@ class LessonActivity : BaseActivity(), LessonView {
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
-        mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
-            override fun onDownload(mediaObject: MediaObject) {
-                presenter.download(mediaObject)
-            }
-
-            override fun onSelect(mediaObject: MediaObject) {
-                if (mediaObject.type == MediaObject.Type.PLAYER) {
-                    presenter.play(mediaObject, 0)
-                } else {
-                    val intent = MediaViewer.open(this@LessonActivity, mediaObject)
-                    if (intent != null) {
-                        startActivity(intent)
-                        withStartAnimation()
-                    } else {
-                        Snackbar.make(coordinator, R.string.error_format, Snackbar.LENGTH_LONG).show()
-                    }
-                }
-            }
-        })
+//        mMediaObjectAdapter = MediaObjectAdapter(object : MediaObjectAdapter.OnSelectMediaObjectListener {
+//            override fun onDownload(mediaObject: MediaObject) {
+//                presenter.download(mediaObject)
+//            }
+//
+//            override fun onSelect(mediaObject: MediaObject) {
+//                if (mediaObject.type == MediaObject.Type.PLAYER) {
+//                    presenter.play(mediaObject, 0)
+//                } else {
+//                    val intent = MediaViewer.open(this@LessonActivity, mediaObject)
+//                    if (intent != null) {
+//                        startActivity(intent)
+//                        withStartAnimation()
+//                    } else {
+//                        Snackbar.make(coordinator, R.string.error_format, Snackbar.LENGTH_LONG).show()
+//                    }
+//                }
+//            }
+//        })
         rvMediaObjects.layoutManager = LinearLayoutManager(this)
         rvMediaObjects.addItemDecoration(divider)
-        rvMediaObjects.adapter = mMediaObjectAdapter
+//        rvMediaObjects.adapter = mMediaObjectAdapter
         (rvMediaObjects.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         btnDownloadAll.setOnClickListener {
@@ -132,7 +129,7 @@ class LessonActivity : BaseActivity(), LessonView {
     }
 
     override fun hideMarker(marker: Marker){
-        mMarkerAdapter.hide(marker)
+//        mMarkerAdapter.hide(marker)
     }
 
     override fun showInfo(lessonPreview: LessonPreview) {
@@ -271,26 +268,26 @@ class LessonActivity : BaseActivity(), LessonView {
 
     override fun showLesson(lesson: Lesson, mList: List<MediaObject>) {
 
-        if(lesson.togglesMassive !=null && lesson.togglesMassive.isNotEmpty()) {
-            mMarkerAdapter = MarkerAdapter(lesson.togglesMassive.toMutableList(), object : MarkerAdapter.OnClickMarker {
-
-                override fun onDelete(marker: Marker) {
-                    presenter.deleteMarker(marker)
-                }
-
-                override fun onContinue(marker: Marker) {
-                    presenter.playMarker(marker)
-                }
-
-                override fun onNo(marker: Marker) {
-                    hideMarker(marker)
-                }
-
-            })
-            rvMarker.layoutManager = LinearLayoutManager(this)
-            rvMarker.adapter = mMarkerAdapter
-            rvMarker.visibility = View.VISIBLE
-        } else rvMarker.visibility = View.GONE
+//        if(lesson.togglesMassive !=null && lesson.togglesMassive.isNotEmpty()) {
+//            mMarkerAdapter = MarkerAdapter(lesson.togglesMassive.toMutableList(), object : MarkerAdapter.OnClickMarker {
+//
+//                override fun onDelete(marker: Marker) {
+//                    presenter.deleteMarker(marker)
+//                }
+//
+//                override fun onContinue(marker: Marker) {
+//                    presenter.playMarker(marker)
+//                }
+//
+//                override fun onNo(marker: Marker) {
+//                    hideMarker(marker)
+//                }
+//
+//            })
+//            rvMarker.layoutManager = LinearLayoutManager(this)
+//            rvMarker.adapter = mMarkerAdapter
+//            rvMarker.visibility = View.VISIBLE
+//        } else rvMarker.visibility = View.GONE
 
         // Отправляем перечень ID от MediaObject за которыми хотим следить в сервис
         val pi = createPendingResult(DownloadService.REQUEST_CODE, Intent(), 0)
@@ -318,7 +315,7 @@ class LessonActivity : BaseActivity(), LessonView {
             }
         }
 
-        mMediaObjectAdapter.show(mList)
+//        mMediaObjectAdapter.show(mList)
     }
 
     override fun showNoData() {
@@ -347,7 +344,7 @@ class LessonActivity : BaseActivity(), LessonView {
     }
 
     override fun notifyItemChanged(index: Int) {
-        mMediaObjectAdapter.notifyItemChanged(index)
+//        mMediaObjectAdapter.notifyItemChanged(index)
         presenter.checkDownload(this, index, exoPlay.player!!.currentWindowIndex)
     }
 
@@ -360,7 +357,7 @@ class LessonActivity : BaseActivity(), LessonView {
     }
 
     override fun notifyDataSetChanged() {
-        mMediaObjectAdapter.notifyDataSetChanged()
+//        mMediaObjectAdapter.notifyDataSetChanged()
     }
 
     override fun startCommonDownload(mediaObject: MediaObject) {
@@ -374,7 +371,7 @@ class LessonActivity : BaseActivity(), LessonView {
     }
 
     override fun selectItem(mediaObject: MediaObject) {
-        mMediaObjectAdapter.selectItem(mediaObject)
+//        mMediaObjectAdapter.selectItem(mediaObject)
     }
 
     fun showError(res: Int) {

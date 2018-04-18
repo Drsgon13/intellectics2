@@ -72,6 +72,7 @@
         <activity
             android:name=".ui.notifications.show.NotificationShowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".ui.content.ContentActivity" />
 
         <service android:name=".extensions.DownloadService" />
         <service

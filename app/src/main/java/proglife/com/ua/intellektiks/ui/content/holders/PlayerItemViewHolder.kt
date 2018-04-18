@@ -1,4 +1,4 @@
-package proglife.com.ua.intellektiks.ui.base.media
+package proglife.com.ua.intellektiks.ui.content.holders
 
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
@@ -12,10 +12,11 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.ui.content.adapters.ContentAdapter
 
-class PlayerViewHolder(
+class PlayerItemViewHolder(
         itemView: View,
-        private val mOnSelectMediaObjectListener: MediaObjectAdapter.OnSelectMediaObjectListener
+        private val mOnMediaObjectAction: ContentAdapter.OnMediaObjectAction?
 ) : RecyclerView.ViewHolder(itemView) {
     private val mContext = itemView.context
     val tvName: TextView = itemView.tvName
@@ -34,7 +35,7 @@ class PlayerViewHolder(
         }
         tvName.setTextColor(ContextCompat.getColor(mContext, linkColor))
         tvName.text = mediaObject.title
-        tvName.setOnClickListener { mOnSelectMediaObjectListener.onSelect(mediaObject) }
+        tvName.setOnClickListener { mOnMediaObjectAction?.onSelect(mediaObject) }
         tvName.typeface = if (selected) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
         tvInfo.text = if (mediaObject.size.isNotBlank()) mContext.getString(R.string.file_info, mediaObject.size) else ""
         if (mediaObject.fileType == FileType.HLS) {
@@ -47,7 +48,7 @@ class PlayerViewHolder(
                     mediaObject.downloadableFile?.state == DownloadableFile.State.AWAIT
             btnDownload.visibility = if (showLoading) View.GONE else View.VISIBLE
             pbDownload.visibility = if (showLoading) View.VISIBLE else View.GONE
-            btnDownload.setOnClickListener { mOnSelectMediaObjectListener.onDownload(mediaObject) }
+            btnDownload.setOnClickListener { mOnMediaObjectAction?.onDownload(mediaObject) }
             btnDownload.setColorFilter(ContextCompat.getColor(mContext, buttonColor))
         }
     }

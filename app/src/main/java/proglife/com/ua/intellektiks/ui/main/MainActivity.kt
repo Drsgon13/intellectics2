@@ -14,6 +14,7 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.NavBaseActivity
+import proglife.com.ua.intellektiks.ui.content.ContentActivity
 import proglife.com.ua.intellektiks.ui.goods.GoodsShowActivity
 import proglife.com.ua.intellektiks.ui.lessons.list.LessonsActivity
 
@@ -61,7 +62,7 @@ class MainActivity : NavBaseActivity(), MainView {
     }
 
     override fun showGoods(item: GoodsPreview) {
-        startActivity(Intent(this, GoodsShowActivity::class.java)
+        startActivity(Intent(this, ContentActivity::class.java)
                 .putExtra(Constants.Field.GOODS_PREVIEW, item))
         withStartAnimation()
     }

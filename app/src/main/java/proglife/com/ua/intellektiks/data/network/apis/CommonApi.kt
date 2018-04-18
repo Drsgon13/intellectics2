@@ -2,8 +2,10 @@ package proglife.com.ua.intellektiks.data.network.apis
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import okhttp3.ResponseBody
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.*
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,10 +17,11 @@ import retrofit2.http.POST
 interface CommonApi {
 
     companion object {
-        const val JSON = "?r=api/apps/json"
-        const val HELP = "?r=api/apps/help"
-        const val REMINDER = "?r=api/apps/xdkreminder"
-        const val DELETE_REMINDER = "/?r=api/apps/xdkreminderdelete"
+        const val JSON              = "?r=api/apps/json"
+        const val HELP              = "?r=api/apps/help"
+        const val REMINDER          = "?r=api/apps/xdkreminder"
+        const val FCM               = "?r=api/push/xdkpushsubs"
+        const val DELETE_REMINDER   = "?r=api/apps/xdkreminderdelete"
     }
 
     @POST(JSON)
@@ -62,12 +65,17 @@ interface CommonApi {
     @POST(JSON)
     fun createLessonMessage(
             @Body request: CreateLessonMessageRequest
-    ): Observable<Unit>
+    ): Single<CreateLessonMessageResponse>
 
     @POST(REMINDER)
     fun createReminder(
             @Body request: CreateReminderRequest
     ): Observable<ReminderResponse>
+
+    @POST(FCM)
+    fun registerFcm(
+            @Body request: RegisterFcmRequest
+    ): Single<ResponseBody>
 
     @POST(DELETE_REMINDER)
     fun deleteReminder(

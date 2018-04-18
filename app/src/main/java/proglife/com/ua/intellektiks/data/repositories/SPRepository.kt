@@ -2,6 +2,7 @@ package proglife.com.ua.intellektiks.data.repositories
 
 import android.content.Context
 import com.google.gson.Gson
+import io.reactivex.Single
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.sp.Cache
 import proglife.com.ua.intellektiks.data.sp.MemoryStorage
@@ -113,5 +114,17 @@ class SPRepository(context: Context,
 
     fun getHelp(): Help {
         return if(mCache.help == null) Help(null) else mCache.help!!
+    }
+
+    fun getDraft(lessonId: Long): Single<String> {
+        return Single.just("")
+    }
+
+    fun removeDraft(lessonId: Long): Single<Unit> {
+        return Single.just(Unit)
+    }
+
+    fun setDraft(lessonId: Long, message: String): Single<Unit> {
+        return Single.just(Unit)
     }
 }

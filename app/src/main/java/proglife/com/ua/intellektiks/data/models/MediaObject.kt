@@ -22,7 +22,6 @@ data class MediaObject(
     var type: Type,
     var downloadableFile: DownloadableFile? = null
 ): Parcelable {
-
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readSerializable() as FileType,

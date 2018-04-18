@@ -43,12 +43,17 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getNotification(GetNotificationRequest(login, password, id))
     }
 
-    fun createLessonMessage(login: String, password: String, userId: Long, lessonId: Long, message: String): Observable<Unit> {
+    fun createLessonMessage(login: String, password: String, userId: Long, lessonId: Long, message: String): Single<CreateLessonMessageResponse> {
         return commonApi.createLessonMessage(CreateLessonMessageRequest(login, password, userId, lessonId, message))
     }
 
     fun createReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, seconds: Long, mediaObjectId: Long): Observable<ReminderResponse> {
         return commonApi.createReminder(CreateReminderRequest(login, password, contactId, goodsId, lessonId, seconds, mediaObjectId))
+    }
+
+    fun registerFcm(idContact: Long, token: String): Single<Unit> {
+        return commonApi.registerFcm(RegisterFcmRequest(idContact, token))
+                .map { Unit }
     }
 
     fun deleteReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, mediaObjectId: Long): Observable<Unit> {

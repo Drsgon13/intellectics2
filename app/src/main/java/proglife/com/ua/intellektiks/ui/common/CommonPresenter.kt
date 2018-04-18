@@ -33,6 +33,8 @@ class CommonPresenter: BasePresenter<CommonView>() {
     fun logout() {
         mCommonInteractor.logout()
                 .compose(sAsync())
+                .doOnSubscribe { viewState.showLoading() }
+                .doOnEvent { _, _ -> viewState.dismissLoading() }
                 .subscribe(
                         {
                             viewState.showAuth(true)

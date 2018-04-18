@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.base
 
+import android.content.Context
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.MaybeTransformer
 import io.reactivex.ObservableTransformer

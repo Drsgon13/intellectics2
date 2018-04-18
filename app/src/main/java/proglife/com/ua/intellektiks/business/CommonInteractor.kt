@@ -2,6 +2,7 @@ package proglife.com.ua.intellektiks.business
 
 import android.accounts.AuthenticatorException
 import android.content.Context
+import com.google.firebase.iid.FirebaseInstanceId
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -11,6 +12,7 @@ import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.extensions.fcm.FcmInstanceIDService
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import proglife.com.ua.intellektiks.utils.Hash
 import java.io.File
@@ -28,6 +30,10 @@ class CommonInteractor(
 
     fun signIn(login: String, password: String, remember: Boolean): Single<UserData> {
         return mNetworkRepository.getUserData(login, password)
+                .flatMap { data ->
+                    if (remember)
+                        registerFcm(data.id).map { data } else Single.just(data)
+                }
                 .doOnSuccess {
                     mSpRepository.credentials(Pair(login, password), remember)
                     mSpRepository.userData(it, remember)
@@ -36,6 +42,7 @@ class CommonInteractor(
 
     fun logout(): Single<Unit> {
         return Single.fromCallable {
+            FirebaseInstanceId.getInstance().deleteInstanceId()
             mSpRepository.credentials(Pair(null, null), true)
             mSpRepository.userData(null, true)
         }
@@ -204,17 +211,20 @@ class CommonInteractor(
                 .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
     }
 
-    fun createLessonMessage(lessonId: Long, message: String): Observable<Unit> {
-        return Observable.zip(
-                credentials(),
-                userData(),
-                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
-                    credentials, userData -> Pair(credentials, userData.second!!.id)
+    fun createLessonMessage(lessonId: Long, message: String): Single<Boolean> {
+        return Observable
+                .zip(
+                        credentials(),
+                        userData(),
+                        BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> { credentials, userData ->
+                            Pair(credentials, userData.second!!.id)
+                        }
+                )
+                .singleOrError()
+                .flatMap {
+                    mNetworkRepository.createLessonMessage(it.first.first, it.first.second, it.second, lessonId, message)
+                            .map { it.isSuccess() }
                 }
-        ).flatMap {
-            mNetworkRepository.createLessonMessage(it.first.first, it.first.second, it.second, lessonId, message)
-        }
-
     }
 
     fun getUserAgent(): Single<String> {
@@ -229,16 +239,35 @@ class CommonInteractor(
                 }
     }
 
-    fun createReminder( contactId: Long, goodsId: Long?, lessonId: Long?, seconds: Long, mediaObjectId: Long): Observable<ReminderResponse> {
-        return Observable.zip(
-                credentials(),
-                userData(),
-                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
-                    credentials, userData -> Pair(credentials, userData.second!!.id)
+    fun createReminder(contactId: Long, goodsId: Long?, lessonId: Long?, seconds: Long, mediaObjectId: Long): Observable<ReminderResponse> {
+        return Observable
+                .zip(
+                        credentials(),
+                        userData(),
+                        BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> { credentials, userData ->
+                            Pair(credentials, userData.second!!.id)
+                        }
+                )
+                .flatMap {
+                    mNetworkRepository.createReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, seconds, mediaObjectId)
                 }
-        ).flatMap {
-            mNetworkRepository.createReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, seconds, mediaObjectId)
-        }
+    }
+
+    private fun registerFcm(idContact: Long): Single<Unit> {
+        val token = FirebaseInstanceId.getInstance().token
+        return if (token == null) Single.just(Unit) else mNetworkRepository.registerFcm(idContact, token)
+    }
+
+    private fun setDraft(lessonId: Long, message: String): Single<Unit> {
+        return mSpRepository.setDraft(lessonId, message)
+    }
+
+    private fun removeDraft(lessonId: Long): Single<Unit> {
+        return mSpRepository.removeDraft(lessonId)
+    }
+
+    private fun getDraft(lessonId: Long): Single<String> {
+        return mSpRepository.getDraft(lessonId)
     }
 
     fun deleteReminder(contactId: Long, mediaObjectId: Long, goodsId: Long?, lessonId: Long?): Observable<Unit>{

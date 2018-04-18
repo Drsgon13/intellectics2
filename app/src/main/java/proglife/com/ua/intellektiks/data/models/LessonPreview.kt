@@ -14,8 +14,8 @@ data class LessonPreview(
         @SerializedName("description") val description: String,
         @SerializedName("day") val day: Int,
         @SerializedName("number") val number: Int,
-        @SerializedName("request_report") val requestReport: String,
-        @SerializedName("check_report") val checkReport: String,
+        @SerializedName("request_report") val requestReport: Int,
+        @SerializedName("check_report") val checkReport: Int,
         @SerializedName("access") val access: Boolean
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -24,8 +24,8 @@ data class LessonPreview(
             parcel.readString(),
             parcel.readInt(),
             parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readInt(),
+            parcel.readInt(),
             parcel.readByte() != 0.toByte())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -34,8 +34,8 @@ data class LessonPreview(
         parcel.writeString(description)
         parcel.writeInt(day)
         parcel.writeInt(number)
-        parcel.writeString(requestReport)
-        parcel.writeString(checkReport)
+        parcel.writeInt(requestReport)
+        parcel.writeInt(checkReport)
         parcel.writeByte(if (access) 1 else 0)
     }
 

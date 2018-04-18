@@ -15,6 +15,7 @@ import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
+import proglife.com.ua.intellektiks.ui.content.ContentActivity
 import proglife.com.ua.intellektiks.ui.lessons.show.LessonActivity
 
 /**
@@ -71,7 +72,7 @@ class LessonsActivity: BaseActivity(), LessonsView {
     }
 
     override fun showLesson(lessonPreview: LessonPreview) {
-        startActivity(Intent(this, LessonActivity::class.java)
+        startActivity(Intent(this, ContentActivity::class.java)
                 .putExtra(Constants.Field.LESSONS_PREVIEW, lessonPreview))
         withStartAnimation()
     }

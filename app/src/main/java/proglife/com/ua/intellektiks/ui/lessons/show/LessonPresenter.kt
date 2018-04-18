@@ -14,7 +14,6 @@ import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
-import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import java.io.File
 import java.io.IOException
@@ -37,20 +36,20 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     private val dynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
     private var dispose: Disposable? = null
     private var errorPlayPosition: Int? = null
-
-    private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
-        override fun onProgressChange(current: Int, total: Int, progress: Int?) {
-            viewState.showProgress(current, total, progress)
-        }
-
-        override fun onItemChange(index: Int) {
-            viewState.notifyItemChanged(index)
-        }
-
-        override fun onDataChange() {
-            viewState.notifyDataSetChanged()
-        }
-    })
+//
+//    private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
+//        override fun onProgressChange(current: Int, total: Int, progress: Int?) {
+//            viewState.showProgress(current, total, progress)
+//        }
+//
+//        override fun onItemChange(index: Int) {
+//            viewState.notifyItemChanged(index)
+//        }
+//
+//        override fun onDataChange() {
+//            viewState.notifyDataSetChanged()
+//        }
+//    })
 
     init {
         injector().inject(this)
@@ -64,7 +63,7 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
                         {
                             mLesson = it
                             val mList = it.getMediaObjects()
-                            mMediaStateHelper.mediaObjects = mList
+//                            mMediaStateHelper.mediaObjects = mList
                             viewState.showLesson(it, mList)
                             mList.firstOrNull()?.let { viewState.selectItem(it) }
                         },
@@ -156,7 +155,7 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     fun play(mediaObject: MediaObject, position: Long) {
         mLesson?.let {
             viewState.selectItem(mediaObject)
-            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject), position)
+//            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject), position)
         }
     }
 
@@ -170,29 +169,29 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     }
 
     fun onServiceCallback(code: Int, data: Intent?) {
-        mMediaStateHelper.onServiceCallback(code, data)
+//        mMediaStateHelper.onServiceCallback(code, data)
     }
 
     fun downloadAll() {
-        val list = mMediaStateHelper.mediaObjects
-                ?.filter { it.type == MediaObject.Type.PLAYER &&
-                        (it.downloadableFile?.state == null ||
-                                it.downloadableFile?.state == DownloadableFile.State.NONE) }
-        if (list != null && list.isNotEmpty()) {
-            list.forEach { viewState.startDownload(it) }
-        }
+//        val list = mMediaStateHelper.mediaObjects
+//                ?.filter { it.type == MediaObject.Type.PLAYER &&
+//                        (it.downloadableFile?.state == null ||
+//                                it.downloadableFile?.state == DownloadableFile.State.NONE) }
+//        if (list != null && list.isNotEmpty()) {
+//            list.forEach { viewState.startDownload(it) }
+//        }
     }
 
     fun reminder(index: Int, seconds: Long){
-        val mediaObject = mMediaStateHelper.mediaObjects!![index]
-        mCommonInteractor.createReminder(mLesson!!.idContact,null, mLesson!!.id, seconds, mediaObject.id)
-                .compose(oAsync())
-                .subscribe(
-                        {},
-                        {
-                            it.printStackTrace()
-                        }
-                )
+//        val mediaObject = mMediaStateHelper.mediaObjects!![index]
+//        mCommonInteractor.createReminder(mLesson!!.idContact,null, mLesson!!.id, seconds, mediaObject.id)
+//                .compose(oAsync())
+//                .subscribe(
+//                        {},
+//                        {
+//                            it.printStackTrace()
+//                        }
+//                )
     }
 
     fun startReminder() {
@@ -212,16 +211,16 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
         dispose?.dispose()
     }
     fun deleteMarker(marker: Marker) {
-        mCommonInteractor.deleteReminder(mLesson!!.idContact, marker.mediaobjectid, null,  mLesson!!.id)
-                .compose(oAsync())
-                .subscribe(
-                        {
-                            viewState.hideMarker(marker)
-                        },
-                        {
-                            it.printStackTrace()
-                        }
-                )
+//        mCommonInteractor.deleteReminder(mLesson!!.idContact, marker.mediaobjectid, null,  mLesson!!.id)
+//                .compose(oAsync())
+//                .subscribe(
+//                        {
+//                            viewState.hideMarker(marker)
+//                        },
+//                        {
+//                            it.printStackTrace()
+//                        }
+//                )
     }
 
     fun playMarker(marker: Marker) {
@@ -231,12 +230,12 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     }
 
     fun checkSource(currentWindowIndex: Int, applicationContext: Context) {
-        val mediaObject = mMediaStateHelper.mediaObjects!![currentWindowIndex]
-        if(errorPlayPosition != currentWindowIndex && mediaObject.downloadable &&
-                File("${applicationContext.filesDir}/c_${mediaObject.downloadableFile!!.name}").exists()) {
-            initDataSource(applicationContext)
-            play(mediaObject, 0)
-        }
+//        val mediaObject = mMediaStateHelper.mediaObjects!![currentWindowIndex]
+//        if(errorPlayPosition != currentWindowIndex && mediaObject.downloadable &&
+//                File("${applicationContext.filesDir}/c_${mediaObject.downloadableFile!!.name}").exists()) {
+//            initDataSource(applicationContext)
+//            play(mediaObject, 0)
+//        }
     }
 
     fun setErrorPlay(errorPlayPosition: Int) {

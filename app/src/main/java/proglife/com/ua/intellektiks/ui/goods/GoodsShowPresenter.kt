@@ -15,7 +15,7 @@ import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
-import proglife.com.ua.intellektiks.ui.base.media.MediaStateHelper
+import proglife.com.ua.intellektiks.ui.content.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import java.io.File
 import java.io.IOException

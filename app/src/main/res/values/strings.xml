@@ -47,9 +47,16 @@
     <string name="cache_size_gb">Размер сохраненых файлов - %.2f ГБ</string>
     <string name="show_description">Просмотреть описание</string>
     <string name="description">Описание</string>
+    <string name="lesson_messages">Сообщения</string>
+    <string name="report_rejected">Отчет отклонен</string>
+    <string name="report_approved">Отчен принят</string>
+    <string name="report_hint">Ваш отчет о выполнении задания пишите ниже:</string>
+    <string name="report">Отчет</string>
+    <string name="report_await_check">Ожидается проверка</string>
     <string name="delete_marker">Удалить закладку</string>
     <string name="no">Нет</string>
     <string name="yes">Да</string>
     <string name="marker_text">Воспроизвести файл %s c %s</string>
+    <string name="file_save_to">Сохранено в %s</string>
 
 </resources>

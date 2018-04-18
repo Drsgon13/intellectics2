@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/mediaContainer"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:visibility="gone">
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnDownloadAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mediaContainer"
+        android:layout_margin="12dp"
+        android:background="@null"
+        android:visibility="gone"
+        android:textColor="@color/colorTitleBlueText"
+        android:text="@string/file_download_all"/>
+
+</RelativeLayout>

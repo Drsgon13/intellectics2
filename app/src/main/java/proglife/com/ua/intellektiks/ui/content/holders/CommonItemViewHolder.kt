@@ -1,4 +1,4 @@
-package proglife.com.ua.intellektiks.ui.base.media
+package proglife.com.ua.intellektiks.ui.content.holders
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -10,10 +10,11 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.FileType
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.ui.content.adapters.ContentAdapter
 
-class CommonViewHolder(
+class CommonItemViewHolder(
         itemView: View,
-        private val onSelectMediaObjectListener: MediaObjectAdapter.OnSelectMediaObjectListener
+        private val onMediaObjectAction: ContentAdapter.OnMediaObjectAction?
 ) : RecyclerView.ViewHolder(itemView) {
     private val mContext = itemView.context
     private val ivFormat: ImageView = itemView.ivFormat
@@ -42,9 +43,9 @@ class CommonViewHolder(
         tvName.setOnClickListener {
             if (ivFormat.visibility == View.VISIBLE) {
                 if (mediaObject.downloadable) {
-                    onSelectMediaObjectListener.onDownload(mediaObject)
+                    onMediaObjectAction?.onDownload(mediaObject)
                 } else {
-                    onSelectMediaObjectListener.onSelect(mediaObject)
+                    onMediaObjectAction?.onSelect(mediaObject)
                 }
             }
         }

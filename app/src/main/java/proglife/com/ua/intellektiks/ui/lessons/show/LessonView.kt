@@ -6,6 +6,7 @@ import proglife.com.ua.intellektiks.data.models.LessonPreview
 import proglife.com.ua.intellektiks.data.models.Marker
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseView
+import proglife.com.ua.intellektiks.ui.content.models.ReportsViewModel
 
 /**
  * Created by Evhenyi Shcherbyna on 29.03.2018.
