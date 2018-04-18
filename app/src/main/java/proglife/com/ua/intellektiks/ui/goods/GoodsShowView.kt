@@ -1,6 +1,5 @@
 package proglife.com.ua.intellektiks.ui.goods
 
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Goods
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
@@ -22,7 +21,7 @@ interface GoodsShowView: BaseView {
     fun emptyList()
     fun showNoData()
     fun checkContent(isAudio: Boolean)
-    fun seekTo(position: Int)
+    fun seekTo(position: Int, seek: Long)
     fun notifyItemChanged(index: Int)
     fun startDownload(mediaObject: MediaObject)
     fun notifyDataSetChanged()

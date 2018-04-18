@@ -4,21 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.arellomobile.mvp.InjectViewState
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.upstream.*
-import com.google.android.exoplayer2.util.Util
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
-import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
@@ -45,6 +38,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
     private var mGoods: Goods? = null
     private val dynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
     private var dispose: Disposable? = null
+    private var errorPlayPosition: Int? = null
 
     private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
         override fun onProgressChange(current: Int, total: Int, progress: Int?) {
@@ -154,7 +148,7 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
             dynamicMediaSource.addMediaSource(index, mediaSource)
             dynamicMediaSource.removeMediaSource(index + 1, {
                 if(currentWindowIndex == index)
-                    viewState.seekTo(currentWindowIndex)
+                    viewState.seekTo(currentWindowIndex, 0)
             })
         }
     }
@@ -163,10 +157,10 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
         viewState.checkContent(list[index] == FileType.MP3)
     }
 
-    fun play(mediaObject: MediaObject) {
+    fun play(mediaObject: MediaObject, position: Long) {
         mGoods?.let {
             viewState.selectItem(mediaObject)
-            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject))
+            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject), position)
         }
     }
 
@@ -238,7 +232,20 @@ class GoodsShowPresenter(goodsPreview: GoodsPreview) : BasePresenter<GoodsShowVi
     fun playMarker(marker: Marker) {
         viewState.hideMarker(marker)
         val mediaObjects = mGoods!!.getMediaObjects()
-        play(mediaObjects.first { it.id == marker.mediaobjectid })
+        play(mediaObjects.first { it.id == marker.mediaobjectid }, marker.position)
+    }
+
+    fun checkSource(currentWindowIndex: Int, applicationContext: Context) {
+        val mediaObject = mMediaStateHelper.mediaObjects!![currentWindowIndex]
+        if(errorPlayPosition != currentWindowIndex && mediaObject.downloadable &&
+                File("${applicationContext.filesDir}/c_${mediaObject.downloadableFile!!.name}").exists()) {
+            initDataSource(applicationContext)
+            play(mediaObject, 0)
+        }
+    }
+
+    fun setErrorPlay(errorPlayPosition: Int) {
+        this.errorPlayPosition = errorPlayPosition
     }
 
 }

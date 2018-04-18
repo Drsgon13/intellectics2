@@ -6,17 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
-import android.os.Parcelable
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import android.view.View.GONE
@@ -26,12 +21,12 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlaybackException.TYPE_UNEXPECTED
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import kotlinx.android.synthetic.main.activity_goods_show_alt.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.view.*
@@ -41,7 +36,6 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadService
-import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.base.media.MarkerAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
@@ -89,7 +83,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
             override fun onSelect(mediaObject: MediaObject) {
                 if (mediaObject.type == MediaObject.Type.PLAYER) {
-                    presenter.play(mediaObject)
+                    presenter.play(mediaObject, 0)
                 } else {
                     val intent = MediaViewer.open(this@GoodsShowActivity, mediaObject)
                     if (intent != null) {
@@ -185,21 +179,46 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         mediaContainer.visibility = VISIBLE
         val player = ExoUtils.initExoPlayerFactory(this)
         exoPlay!!.player = player
-
         player.addListener(object : Player.DefaultEventListener() {
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                super.onTracksChanged(trackGroups, trackSelections)
                 presenter.checkType(exoPlay.player.currentWindowIndex)
             }
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                super.onPlayerStateChanged(playWhenReady, playbackState)
                 if(playWhenReady)
                     presenter.startReminder()
                 else presenter.clearTimer()
+
+                if(playbackState == Player.STATE_IDLE)
+                    presenter.checkSource(player.currentWindowIndex, applicationContext)
+
+            }
+
+            override fun onPlayerError(error: ExoPlaybackException) {
+                if(error.type == TYPE_UNEXPECTED
+                        && error.unexpectedException.stackTrace[0].fileName!!.contentEquals("MediaCodec.java"))
+                    showError(R.string.error_play)
+                presenter.setErrorPlay(player.currentWindowIndex)
+                error.printStackTrace()
+                presenter.clearTimer()
+
+                player.playWhenReady = false
+                exo_pause.visibility = GONE
+                exo_play.visibility = VISIBLE
+
             }
         })
 
+        exo_pause.setOnClickListener {
+            player.playWhenReady = false
+            it.visibility = GONE
+            exo_play.visibility = VISIBLE
+        }
+        exo_play.setOnClickListener {
+            player.playWhenReady = true
+            it.visibility = GONE
+            exo_pause.visibility = VISIBLE
+        }
         player.prepare(mediaSource)
         player.seekTo(currentPosition, seekTo)
         initFullscreenDialog()
@@ -318,10 +337,13 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
         Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun seekTo(position: Int) {
-        exoPlay.player.seekTo(position, 0)
+    override fun seekTo(position: Int, seek: Long) {
+        exoPlay.player.seekTo(position, seek)
+
         rvMediaObjects.scrollToPosition(0)
         exoPlay.player.playWhenReady = true
+        exo_play.visibility = GONE
+        exo_pause.visibility = VISIBLE
         innerAppBar.setExpanded(true, true)
     }
 

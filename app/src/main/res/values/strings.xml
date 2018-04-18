@@ -23,6 +23,7 @@
 
     <string name="error.network">Ошибка Интернет подключения</string>
     <string name="error.loading">Ошибка при загрузке</string>
+    <string name="error.play">Невозможно воспроизвести видео</string>
 
     <string name="file_download">Скачать %s</string>
     <string name="file_open">Смотреть %s</string>

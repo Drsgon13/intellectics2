@@ -19,11 +19,11 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import kotlinx.android.synthetic.main.activity_goods_show_alt.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.*
 import kotlinx.android.synthetic.main.content_bottom_sheet.view.*
@@ -39,7 +39,6 @@ import proglife.com.ua.intellektiks.ui.base.media.MediaObjectAdapter
 import proglife.com.ua.intellektiks.ui.base.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
-import proglife.com.ua.intellektiks.utils.PositionListener
 
 /**
  * Created by Evhenyi Shcherbyna on 29.03.2018.
@@ -80,7 +79,7 @@ class LessonActivity : BaseActivity(), LessonView {
 
             override fun onSelect(mediaObject: MediaObject) {
                 if (mediaObject.type == MediaObject.Type.PLAYER) {
-                    presenter.play(mediaObject)
+                    presenter.play(mediaObject, 0)
                 } else {
                     val intent = MediaViewer.open(this@LessonActivity, mediaObject)
                     if (intent != null) {
@@ -187,13 +186,40 @@ class LessonActivity : BaseActivity(), LessonView {
             }
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                super.onPlayerStateChanged(playWhenReady, playbackState)
                 if(playWhenReady)
                     presenter.startReminder()
                 else presenter.clearTimer()
+
+                if(playbackState == Player.STATE_IDLE)
+                    presenter.checkSource(player.currentWindowIndex, applicationContext)
+
             }
 
+            override fun onPlayerError(error: ExoPlaybackException) {
+                if(error.type == ExoPlaybackException.TYPE_UNEXPECTED
+                        && error.unexpectedException.stackTrace[0].fileName!!.contentEquals("MediaCodec.java"))
+                    showError(R.string.error_play)
+                presenter.setErrorPlay(player.currentWindowIndex)
+                error.printStackTrace()
+                presenter.clearTimer()
+
+                player.playWhenReady = false
+                exo_pause.visibility = View.GONE
+                exo_play.visibility = View.VISIBLE
+
+            }
         })
+
+        exo_pause.setOnClickListener {
+            player.playWhenReady = false
+            it.visibility = View.GONE
+            exo_play.visibility = View.VISIBLE
+        }
+        exo_play.setOnClickListener {
+            player.playWhenReady = true
+            it.visibility = View.GONE
+            exo_pause.visibility = View.VISIBLE
+        }
 
         player.prepare(mediaSource)
         player.seekTo(currentPosition, seekTo)
@@ -310,11 +336,13 @@ class LessonActivity : BaseActivity(), LessonView {
         }
     }
 
-    override fun seekTo(position: Int) {
-        exoPlay.player.seekTo(position, 0)
+    override fun seekTo(video: Int, position1: Long) {
+        exoPlay.player.seekTo(video, position1)
         rvMediaObjects.scrollToPosition(0)
 
         exoPlay.player.playWhenReady = true
+        exo_play.visibility = View.GONE
+        exo_pause.visibility = View.VISIBLE
         innerAppBar.setExpanded(true, true)
     }
 
@@ -347,6 +375,10 @@ class LessonActivity : BaseActivity(), LessonView {
 
     override fun selectItem(mediaObject: MediaObject) {
         mMediaObjectAdapter.selectItem(mediaObject)
+    }
+
+    fun showError(res: Int) {
+        Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
     }
 
 }

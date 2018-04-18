@@ -21,7 +21,7 @@ interface LessonView: BaseView {
     fun emptyList()
     fun showNoData()
     fun checkContent(isAudio: Boolean)
-    fun seekTo(position: Int)
+    fun seekTo(position: Int, position1: Long)
     fun notifyItemChanged(index: Int)
     fun startDownload(mediaObject: MediaObject)
     fun notifyDataSetChanged()

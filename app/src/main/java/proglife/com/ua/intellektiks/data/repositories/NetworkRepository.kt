@@ -2,6 +2,7 @@ package proglife.com.ua.intellektiks.data.repositories
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import org.json.JSONException
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.apis.CommonApi
 import proglife.com.ua.intellektiks.data.network.models.*
@@ -32,7 +33,7 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getLesson(GetLessonRequest(login, password, id))
     }
 
-    fun getHelp() : Observable<Help> = commonApi.getHelp()
+    fun getHelp(): Observable<Help> = commonApi.getHelp()
 
     fun getNotifications(login: String, password: String): Observable<List<NotificationMessagePreview>> {
         return commonApi.getNotifications(GetNotificationsRequest(login, password))
@@ -52,6 +53,10 @@ class NetworkRepository(private val commonApi: CommonApi) {
 
     fun deleteReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, mediaObjectId: Long): Observable<Unit> {
         return commonApi.deleteReminder(DeleteReminderRequest(login, password, contactId, goodsId, lessonId, mediaObjectId))
+                .onErrorReturn {
+                    if (it is JSONException) return@onErrorReturn
+                    throw Exception(it)
+                }
     }
 
 }

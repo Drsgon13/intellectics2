@@ -36,6 +36,7 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     private var mLesson: Lesson? = null
     private val dynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
     private var dispose: Disposable? = null
+    private var errorPlayPosition: Int? = null
 
     private val mMediaStateHelper = MediaStateHelper(object : MediaStateHelper.Callback {
         override fun onProgressChange(current: Int, total: Int, progress: Int?) {
@@ -143,7 +144,7 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
             dynamicMediaSource.addMediaSource(index, mediaSource)
             dynamicMediaSource.removeMediaSource(index + 1, {
                 if(currentWindowIndex == index)
-                    viewState.seekTo(currentWindowIndex)
+                    viewState.seekTo(currentWindowIndex, 0)
             })
         }
     }
@@ -152,10 +153,10 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
         viewState.checkContent(list[index] == FileType.MP3)
     }
 
-    fun play(mediaObject: MediaObject) {
+    fun play(mediaObject: MediaObject, position: Long) {
         mLesson?.let {
             viewState.selectItem(mediaObject)
-            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject))
+            viewState.seekTo(mMediaStateHelper.mediaObjects!!.indexOf(mediaObject), position)
         }
     }
 
@@ -226,6 +227,19 @@ class LessonPresenter(private val lessonPreview: LessonPreview): BasePresenter<L
     fun playMarker(marker: Marker) {
         viewState.hideMarker(marker)
         val mediaObjects = mLesson!!.getMediaObjects()
-        play(mediaObjects.first { it.id == marker.mediaobjectid })
+        play(mediaObjects.first { it.id == marker.mediaobjectid }, marker.position)
+    }
+
+    fun checkSource(currentWindowIndex: Int, applicationContext: Context) {
+        val mediaObject = mMediaStateHelper.mediaObjects!![currentWindowIndex]
+        if(errorPlayPosition != currentWindowIndex && mediaObject.downloadable &&
+                File("${applicationContext.filesDir}/c_${mediaObject.downloadableFile!!.name}").exists()) {
+            initDataSource(applicationContext)
+            play(mediaObject, 0)
+        }
+    }
+
+    fun setErrorPlay(errorPlayPosition: Int) {
+        this.errorPlayPosition = errorPlayPosition
     }
 }
