@@ -15,8 +15,11 @@ class CommonPresenter: BasePresenter<CommonView>() {
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
+    private var notificationCount: Int? = null
+
     init {
         injector().inject(this)
+        notification()
     }
 
     fun profile() {
@@ -25,6 +28,8 @@ class CommonPresenter: BasePresenter<CommonView>() {
                 .subscribe(
                         {
                             if (it) viewState.showProfile() else viewState.showAuth(false)
+                            notificationCount = 0
+                            incrementNotification()
                         },
                         {}
                 )
@@ -41,6 +46,28 @@ class CommonPresenter: BasePresenter<CommonView>() {
                         },
                         {}
                 )
+    }
+
+    private fun notification() {
+        mCommonInteractor.loadNotifications()
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            it.forEach { it.productive }
+
+                            notificationCount?.let {
+                                viewState.showNotificationCount(it)
+                            }
+                        },
+                        {}
+                )
+    }
+
+    fun incrementNotification() {
+        notificationCount?.inc()
+        notificationCount?.let {
+            viewState.showNotificationCount(it)
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.base
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.ViewStub
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -67,4 +68,8 @@ abstract class BaseActivity: MvpAppCompatActivity(), CommonView {
     override fun dismissLoading() {
         progressDialog.dismiss()
     }
+    override fun showNotificationCount(notificationCount: Int) {
+        Log.d("LOGS", "showNotificationCount")
+    }
+
 }

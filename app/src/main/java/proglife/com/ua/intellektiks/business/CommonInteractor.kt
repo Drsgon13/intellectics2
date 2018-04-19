@@ -7,12 +7,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import proglife.com.ua.intellektiks.data.models.*
-import proglife.com.ua.intellektiks.data.network.models.CreateReminderRequest
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
-import proglife.com.ua.intellektiks.extensions.fcm.FcmInstanceIDService
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import proglife.com.ua.intellektiks.utils.Hash
 import java.io.File
@@ -270,16 +268,17 @@ class CommonInteractor(
         return mSpRepository.getDraft(lessonId)
     }
 
-    fun deleteReminder(contactId: Long, mediaObjectId: Long, goodsId: Long?, lessonId: Long?): Observable<Unit>{
+    fun deleteReminder(contactId: Long, mediaObjectId: Long, goodsId: Long?, lessonId: Long?): Observable<Unit> {
         return Observable.zip(
                 credentials(),
                 userData(),
-                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> {
-                    credentials, userData -> Pair(credentials, userData.second!!.id)
+                BiFunction<Pair<String, String>, Pair<String?, UserData?>, Pair<Pair<String, String>, Long>> { credentials, userData ->
+                    Pair(credentials, userData.second!!.id)
                 }
         ).flatMap {
             mNetworkRepository.deleteReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, mediaObjectId)
         }
-    }
 
+
+    }
 }

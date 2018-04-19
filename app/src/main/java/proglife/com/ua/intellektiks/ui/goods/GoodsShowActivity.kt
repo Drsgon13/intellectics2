@@ -270,7 +270,7 @@ class GoodsShowActivity : BaseActivity(), GoodsShowView {
 
     override fun showGoods(item: Goods, mList: List<MediaObject>) {
 
-        if(item.togglesMassive !=null && item.togglesMassive.isNotEmpty()) {
+        if(item.togglesMassive !=null && item.togglesMassive!!.isNotEmpty()) {
 //            mMarkerAdapter = MarkerAdapter(item.togglesMassive.toMutableList(), object : MarkerAdapter.OnClickMarker {
 //
 //                override fun onDelete(marker: Marker) {

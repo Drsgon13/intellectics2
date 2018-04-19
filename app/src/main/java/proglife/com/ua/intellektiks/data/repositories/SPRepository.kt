@@ -81,13 +81,18 @@ class SPRepository(context: Context,
     }
 
     fun getGoods(id: Long): Goods? {
-        return mCache.goodsList[id]
+        val goods = mCache.goodsList[id]
+        goods?.let {
+            it.togglesMassive = null
+        }
+        return goods
     }
 
-    fun setGoods(id: Long, it: Goods?) {
-        mCache.goodsList[id] = it
+    fun setGoods(id: Long, goods: Goods?) {
+        mCache.goodsList[id] = goods
         saveCache()
     }
+
 
     fun getLessonPreviews(id: Long): List<LessonPreview>? {
         return mCache.lessonPreviews[id]
@@ -99,11 +104,15 @@ class SPRepository(context: Context,
     }
 
     fun getLesson(id: Long): Lesson? {
-        return mCache.lessons[id]
+        val lesson = mCache.lessons[id]
+        lesson?.let {
+            it.togglesMassive = null
+        }
+        return lesson
     }
 
-    fun setLesson(id: Long, it: Lesson?) {
-        mCache.lessons[id] = it
+    fun setLesson(id: Long, lesson: Lesson?) {
+        mCache.lessons[id] = lesson
         saveCache()
     }
 

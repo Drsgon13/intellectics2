@@ -13,18 +13,19 @@
         android:textColor="@color/colorTitleBlackText"
         android:textSize="20sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMarker"
+    <LinearLayout
+        android:id="@+id/llMarker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:orientation="vertical" />
 
     <Button
         android:id="@+id/btnShowDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rvMarker"
+        android:layout_below="@+id/llMarker"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="12dp"
         android:background="@null"

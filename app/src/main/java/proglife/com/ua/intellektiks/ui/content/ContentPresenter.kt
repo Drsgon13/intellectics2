@@ -130,6 +130,27 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
                 )
     }
 
+    fun deleteMarker(marker: Marker){
+        deleteReminder(mContent!!, marker)
+                .compose(oAsync())
+                .subscribe(
+                        {
+
+                        },
+                        {
+                            it.printStackTrace()
+                        }
+                )
+    }
+
+    private fun deleteReminder(content: Content, marker: Marker): Observable<Unit> {
+        return if (content is Lesson) {
+            mCommonInteractor.deleteReminder(content.contactId, marker.mediaobjectid,null, content.id)
+        } else {
+            mCommonInteractor.deleteReminder(content.contactId, marker.mediaobjectid, content.id, null)
+        }
+    }
+
     private fun createReminder(content: Content, mediaObjectId: Long, currentPosition: Long): Observable<ReminderResponse> {
         return if (content is Lesson) {
             mCommonInteractor.createReminder(content.contactId, null, content.id, currentPosition, mediaObjectId)
@@ -182,6 +203,15 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     //--------------------------------------------------------------------------
     // PLAYER
     //--------------------------------------------------------------------------
+
+
+    fun playMarker(marker: Marker){
+        val mediaObjects = mMediaStateHelper.mediaObjects!!
+        for (item in mediaObjects) {
+            if (item.id == marker.mediaobjectid)
+                play(item, marker.position)
+        }
+    }
 
     fun play(mediaObject: MediaObject, position: Long) {
         mContent?.let {
@@ -282,5 +312,6 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
             })
         }
     }
+
 
 }

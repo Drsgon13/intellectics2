@@ -13,6 +13,13 @@ import proglife.com.ua.intellektiks.ui.contact.ContactActivity
 import proglife.com.ua.intellektiks.ui.main.MainActivity
 import proglife.com.ua.intellektiks.ui.notifications.list.NotificationListActivity
 import proglife.com.ua.intellektiks.ui.support.SupportActivity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+import android.view.View
+import android.widget.TextView
+import proglife.com.ua.intellektiks.data.Constants
+
 
 /**
  * Created by Evhenyi Shcherbyna on 22.03.2018.
@@ -28,6 +35,18 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
+        initBroadcast()
+
+    }
+
+    private fun initBroadcast(){
+        val filter = IntentFilter(Constants.Field.NOTIFICATION_UPDATE)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                commonPresenter.incrementNotification()
+            }
+        }
+        registerReceiver(receiver, filter)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -67,6 +86,16 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun showNotificationCount(notificationCount: Int) {
+        val view = nav_view.menu.findItem(R.id.nav_notifications).actionView.findViewById<TextView>(R.id.tvCount)
+        if(notificationCount > 0){
+            view.text = notificationCount.toString()
+            view.visibility= View.VISIBLE
+        } else view.visibility = View.GONE
+
+
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

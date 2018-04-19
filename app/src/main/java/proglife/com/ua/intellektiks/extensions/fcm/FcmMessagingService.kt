@@ -11,8 +11,10 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.*
 import android.app.NotificationChannel
+import android.content.Intent
 import android.graphics.Color
 import proglife.com.ua.intellektiks.R
+import proglife.com.ua.intellektiks.data.Constants
 
 
 /**
@@ -47,6 +49,7 @@ class FcmMessagingService : FirebaseMessagingService() {
             setDefaults(Notification.DEFAULT_ALL)
         }
 
+        sendBroadcast(Intent(Constants.Field.NOTIFICATION_UPDATE))
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel(notificationManager)
         notificationManager.notify("intellectics", Random().nextInt(), builder.build())

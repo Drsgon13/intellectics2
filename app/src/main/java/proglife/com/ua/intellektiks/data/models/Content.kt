@@ -13,7 +13,8 @@ abstract class Content {
     @SerializedName("description", alternate = ["information_for_personal"]) val description: String? = null
     @SerializedName("player_elements") val playerElements: List<MediaObject> = emptyList()
     @SerializedName("data_common_elements") val commonElements: List<MediaObject> = emptyList()
-    @SerializedName("toggles_massive") val togglesMassive: List<Marker>? = emptyList()
+    @SerializedName("toggles_massive")
+    var togglesMassive: List<Marker>? = emptyList()
 
     fun getMediaObjects(): List<MediaObject> {
         val playerList = playerElements

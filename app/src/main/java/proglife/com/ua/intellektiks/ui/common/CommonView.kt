@@ -11,4 +11,5 @@ interface CommonView: BaseView {
     fun showAuth(clearStack: Boolean)
     fun showLoading()
     fun dismissLoading()
+    fun showNotificationCount(notificationCount: Int)
 }

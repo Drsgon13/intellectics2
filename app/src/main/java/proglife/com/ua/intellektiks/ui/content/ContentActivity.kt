@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -104,6 +105,12 @@ class ContentActivity : BaseActivity(), ContentView {
                                 .putExtra(Constants.Field.TITLE, getString(R.string.description))
                                 .putExtra(Constants.Field.CONTENT, content))
                         withStartAnimation()
+                    }
+
+                    override fun onClickMarker(type: Int, marker: Marker) {
+                        if(type == 0)
+                            presenter.playMarker(marker)
+                        else presenter.deleteMarker(marker)
                     }
                 },
                 onAdditionalAction = object : PlayerViewHolder.OnAdditionalAction {
@@ -322,7 +329,7 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun seekTo(index: Int, position: Long) {
         rvContent.scrollToPosition(mContentAdapter.getPlayerPosition())
-        exoPlayerView.player.seekTo(index, 0)
+        exoPlayerView.player.seekTo(index, position)
         exoPlayerView.player.playWhenReady = true
 
         exoPlayerView.exo_play.visibility = GONE
