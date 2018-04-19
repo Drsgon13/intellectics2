@@ -40,6 +40,7 @@ import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.content.adapters.ContentAdapter
 import proglife.com.ua.intellektiks.ui.content.holders.HeaderViewHolder
 import proglife.com.ua.intellektiks.ui.content.holders.PlayerViewHolder
+import proglife.com.ua.intellektiks.ui.content.holders.ReportsViewHolder
 import proglife.com.ua.intellektiks.ui.content.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
@@ -117,6 +118,15 @@ class ContentActivity : BaseActivity(), ContentView {
                     override fun onDownloadAll() {
                         presenter.downloadAll()
                     }
+                },
+                onReportAction = object : ReportsViewHolder.OnReportAction {
+                    override fun send(message: String) {
+                        presenter.sendReport(message)
+                    }
+
+                    override fun typed(message: String) {
+                        presenter.onTypedReport(message)
+                    }
                 }
         )
         rvContent.layoutManager = LinearLayoutManager(this)
@@ -165,14 +175,6 @@ class ContentActivity : BaseActivity(), ContentView {
         }
     }
 
-    override fun showLoading() {
-        pbLoading.show()
-    }
-
-    override fun dismissLoading() {
-        pbLoading.hide()
-    }
-
     override fun showContent(content: Content, list: List<MediaObject>) {
         // Отправляем перечень ID от MediaObject за которыми хотим следить в сервис
         val pi = createPendingResult(DownloadService.REQUEST_CODE, Intent(), 0)
@@ -196,10 +198,6 @@ class ContentActivity : BaseActivity(), ContentView {
 
     }
 
-    override fun showReports(show: Boolean, messages: List<ReportMessage>) {
-        mContentAdapter.showReports(show, messages)
-    }
-
     override fun selectItem(mediaObject: MediaObject) {
         mContentAdapter.selectItem(mediaObject)
     }
@@ -210,6 +208,14 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun showError(res: Int) {
         Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+    }
+
+    //--------------------------------------------------------------------------
+    // REPORTS
+    //--------------------------------------------------------------------------
+
+    override fun showReports(show: Boolean, messages: List<ReportMessage>, draft: String) {
+        mContentAdapter.showReports(show, messages, draft)
     }
 
     //--------------------------------------------------------------------------

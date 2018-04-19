@@ -7,5 +7,5 @@ import com.google.gson.annotations.SerializedName
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class Lesson(
-        @SerializedName("messages") val messages: List<ReportMessage>
+        @SerializedName("messages") var messages: List<ReportMessage>
 ): Content()

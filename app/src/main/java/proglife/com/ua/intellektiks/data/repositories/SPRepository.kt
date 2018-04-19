@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import io.reactivex.Single
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.sp.Cache
+import proglife.com.ua.intellektiks.data.sp.Drafts
 import proglife.com.ua.intellektiks.data.sp.MemoryStorage
 import proglife.com.ua.intellektiks.data.sp.PersistentStorage
 import proglife.com.ua.intellektiks.utils.AESCrypt
@@ -21,10 +22,12 @@ class SPRepository(context: Context,
     private val mPersistentStorage = PersistentStorage(context)
     private val mMemoryStorage = MemoryStorage()
     private var mCache = Cache()
+    private var mDrafts = Drafts()
     private val mKey = "b36dB${mPersistentStorage.mKey}ls9Nd0"
 
     init {
         mCache = mPersistentStorage.mCache?.let { mGson.fromJson(mAesCrypt.decrypt(mKey, it), Cache::class.java) } ?: Cache()
+        mDrafts = mPersistentStorage.mDrafts?.let { mGson.fromJson(it, Drafts::class.java) } ?: Drafts()
     }
 
     fun credentials(pair: Pair<String?, String?>, save: Boolean) {
@@ -80,6 +83,11 @@ class SPRepository(context: Context,
         mPersistentStorage.save()
     }
 
+    private fun saveDrafts() {
+        mPersistentStorage.mDrafts = mGson.toJson(mDrafts)
+        mPersistentStorage.save()
+    }
+
     fun getGoods(id: Long): Goods? {
         val goods = mCache.goodsList[id]
         goods?.let {
@@ -116,24 +124,30 @@ class SPRepository(context: Context,
         saveCache()
     }
 
-    fun setHelp(help: Help){
+    fun setHelp(help: Help) {
         mCache.help = help
         saveCache()
     }
 
     fun getHelp(): Help {
-        return if(mCache.help == null) Help(null) else mCache.help!!
+        return if (mCache.help == null) Help(null) else mCache.help!!
     }
 
     fun getDraft(lessonId: Long): Single<String> {
-        return Single.just("")
+        return Single.fromCallable { mDrafts[lessonId] ?: "" }
     }
 
-    fun removeDraft(lessonId: Long): Single<Unit> {
-        return Single.just(Unit)
-    }
-
-    fun setDraft(lessonId: Long, message: String): Single<Unit> {
-        return Single.just(Unit)
+    fun setDraft(lessonId: Long, message: String?): Single<Boolean> {
+        return Single.fromCallable {
+            if (message.isNullOrBlank()) {
+                mDrafts.remove(lessonId)
+                saveDrafts()
+                true
+            } else {
+                mDrafts[lessonId] = message!!
+                saveDrafts()
+                false
+            }
+        }
     }
 }

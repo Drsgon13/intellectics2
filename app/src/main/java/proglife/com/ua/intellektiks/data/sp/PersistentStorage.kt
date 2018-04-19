@@ -17,6 +17,7 @@ class PersistentStorage(context: Context) {
     var mKey: String? = null
     var mUserData: String? = null
     var mCache: String? = null
+    var mDrafts: String? = null
 
     init {
         this.sp = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
@@ -33,6 +34,7 @@ class PersistentStorage(context: Context) {
         mKey = sp.getString(KEY, null)
         mUserData = sp.getString(USER_DATA, null)
         mCache = sp.getString(CACHE, null)
+        mDrafts = sp.getString(DRAFTS, null)
     }
 
     fun save() {
@@ -42,6 +44,7 @@ class PersistentStorage(context: Context) {
         edit.putString(KEY, mKey)
         edit.putString(USER_DATA, mUserData)
         edit.putString(CACHE, mCache)
+        edit.putString(DRAFTS, mDrafts)
         edit.apply()
     }
 
@@ -53,6 +56,7 @@ class PersistentStorage(context: Context) {
         private const val KEY = "003"
         private const val USER_DATA = "004"
         private const val CACHE = "005"
+        private const val DRAFTS = "006"
     }
 
 }

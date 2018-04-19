@@ -94,10 +94,11 @@ class ContentAdapter(
         notifyItemChanged(getHeaderPosition())
     }
 
-    fun showReports(show: Boolean, messages: List<ReportMessage>) {
-        val reportsViewModel = ReportsViewModel(show, messages)
-        val needRecount = mReportsViewModel.show != reportsViewModel.show
-        mReportsViewModel = reportsViewModel
+    fun showReports(show: Boolean, messages: List<ReportMessage>, draft: String) {
+        val needRecount = mReportsViewModel.show != show
+        mReportsViewModel.show = show
+        mReportsViewModel.messages = messages
+        mReportsViewModel.draft = draft
         if (needRecount) notifyDataSetChanged() else notifyItemChanged(getFooterPosition())
     }
 

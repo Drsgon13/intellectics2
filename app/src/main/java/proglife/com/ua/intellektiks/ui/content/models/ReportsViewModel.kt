@@ -7,8 +7,9 @@ import proglife.com.ua.intellektiks.data.models.ReportMessage
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class ReportsViewModel(
-        val show: Boolean = false,
-        val messages: List<ReportMessage> = emptyList()
+        var show: Boolean = false,
+        var messages: List<ReportMessage> = emptyList(),
+        var draft: String = ""
 ) {
     fun getStatus(): ReportMessage.Status? {
         return when {

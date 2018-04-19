@@ -126,16 +126,23 @@ class CommonInteractor(
                 }
     }
 
-    fun getLesson(id: Long): Observable<Lesson> {
+    fun getLesson(id: Long, ignoreCache: Boolean = false): Observable<Lesson> {
         return credentials()
                 .flatMap {
-                    Observable.mergeDelayError(
-                            Observable.fromCallable { mSpRepository.getLesson(id) ?: Unit },
-                            mNetworkRepository.getLesson(it.first, it.second, id)
-                                    .doOnNext {
-                                        mSpRepository.setLesson(id, it)
-                                    }
-                    )
+                    if (ignoreCache) {
+                        mNetworkRepository.getLesson(it.first, it.second, id)
+                                .doOnNext {
+                                    mSpRepository.setLesson(id, it)
+                                }
+                    } else {
+                        Observable.mergeDelayError(
+                                Observable.fromCallable { mSpRepository.getLesson(id) ?: Unit },
+                                mNetworkRepository.getLesson(it.first, it.second, id)
+                                        .doOnNext {
+                                            mSpRepository.setLesson(id, it)
+                                        }
+                        )
+                    }
                 }
                 .filter { it is Lesson }
                 .cast(Lesson::class.java)
@@ -256,15 +263,11 @@ class CommonInteractor(
         return if (token == null) Single.just(Unit) else mNetworkRepository.registerFcm(idContact, token)
     }
 
-    private fun setDraft(lessonId: Long, message: String): Single<Unit> {
+    fun setDraft(lessonId: Long, message: String?): Single<Boolean> {
         return mSpRepository.setDraft(lessonId, message)
     }
 
-    private fun removeDraft(lessonId: Long): Single<Unit> {
-        return mSpRepository.removeDraft(lessonId)
-    }
-
-    private fun getDraft(lessonId: Long): Single<String> {
+    fun getDraft(lessonId: Long): Single<String> {
         return mSpRepository.getDraft(lessonId)
     }
 

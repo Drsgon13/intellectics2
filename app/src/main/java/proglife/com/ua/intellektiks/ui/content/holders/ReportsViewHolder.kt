@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -29,7 +31,26 @@ class ReportsViewHolder(itemView: View, private val onReportAction: OnReportActi
     private val etReportText: EditText = itemView.etReportText
     private val sendReportContainer: ViewGroup = itemView.sendReportContainer
 
+    private var actualReportsViewModel: ReportsViewModel? = null
+
+    init {
+        etReportText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                actualReportsViewModel?.let { it.draft = s.toString() }
+                onReportAction?.typed(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
     fun bind(reportsViewModel: ReportsViewModel?) {
+        actualReportsViewModel = reportsViewModel
         if (reportsViewModel == null) return
         messagesContainer.removeAllViews()
         reportsViewModel.messages.forEach {
@@ -54,6 +75,8 @@ class ReportsViewHolder(itemView: View, private val onReportAction: OnReportActi
 
         tvReportStatus.setTextColor(statusColor)
         btnSendReport.setOnClickListener { onReportAction?.send(etReportText.text.toString()) }
+
+        etReportText.setText(reportsViewModel.draft)
     }
 
     private fun getMessageView(parent: ViewGroup, message: ReportMessage): View {

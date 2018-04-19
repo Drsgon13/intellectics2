@@ -26,7 +26,7 @@ interface ContentView: BaseView {
     fun seekTo(index: Int, position: Long)
     fun startDownload(mediaObject: MediaObject)
     fun startCommonDownload(mediaObject: MediaObject)
-    fun showReports(show: Boolean, messages: List<ReportMessage>)
+    fun showReports(show: Boolean, messages: List<ReportMessage>, draft: String)
     fun checkContent(isAudio: Boolean)
     fun requestPlayerPosition()
 }

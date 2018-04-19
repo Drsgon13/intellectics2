@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
@@ -40,6 +41,11 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     private var mReminderDispose: Disposable? = null
 
     //--------------------------------------------------------------------------
+    // REPORTS
+    //--------------------------------------------------------------------------
+    private var mTypedReportEmitter = PublishSubject.create<String>()
+
+    //--------------------------------------------------------------------------
     // PLAYER
     //--------------------------------------------------------------------------
     private val mDynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
@@ -51,6 +57,10 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
         viewState.showPreview(goodsPreview ?: lessonPreview)
         if (goodsPreview != null) loadGoods(goodsPreview)
         else if (lessonPreview != null) loadLesson(lessonPreview)
+
+        mTypedReportEmitter.debounce(500, TimeUnit.MILLISECONDS)
+                .flatMap { mCommonInteractor.setDraft(mContent!!.id, it).toObservable() }
+                .subscribe()
     }
 
     private fun loadGoods(goodsPreview: GoodsPreview) {
@@ -74,9 +84,7 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
                 .subscribe(
                         {
                             processSuccess(it)
-                            if (lessonPreview.requestReport == 1) {
-                                viewState.showReports(true, it.messages)
-                            }
+                            if (lessonPreview.requestReport == 1) prepareReports(it)
                         },
                         { processError(it) }
                 )
@@ -311,6 +319,49 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
                     viewState.seekTo(currentWindowIndex, 0)
             })
         }
+    }
+
+    //--------------------------------------------------------------------------
+    // REPORTS
+    //--------------------------------------------------------------------------
+
+    private fun prepareReports(lesson: Lesson) {
+        mCommonInteractor.getDraft(lesson.id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            viewState.showReports(true, lesson.messages, it)
+                        },
+                        {
+
+                        }
+                )
+    }
+
+    fun onTypedReport(message: String) {
+        mTypedReportEmitter.onNext(message)
+    }
+
+    fun sendReport(message: String) {
+        mCommonInteractor.createLessonMessage(mContent!!.id, message)
+                .flatMap {
+                    if (it) mCommonInteractor.getLesson(mContent!!.id, true).singleOrError()
+                    else throw IllegalArgumentException()
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showLoading() }
+                .doOnEvent { _, _ -> viewState.dismissLoading() }
+                .subscribe(
+                        {
+                            (mContent as Lesson).messages = it.messages
+                            viewState.showReports(true, it.messages, "")
+                        },
+                        {
+
+                        }
+                )
     }
 
 
