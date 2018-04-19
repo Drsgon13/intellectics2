@@ -267,13 +267,14 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
 
     private fun checkDownload(context: Context, index: Int, currentWindowIndex: Int, userAgent: String?) {
         val mediaObjects = mMediaStateHelper.mediaObjects!!
-        if(mediaObjects[index].downloadable &&
-                File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").exists()){
+        val mediaObject = mediaObjects[index]
+        if(mediaObject.downloadable && mediaObject.type == MediaObject.Type.PLAYER &&
+                File("${context.filesDir}/c_${mediaObject.downloadableFile!!.name}").exists()){
             val dataSourceFactory = ExoUtils.buildDataSourceFactory(context, userAgent)
             val mediaSource = ExoUtils.buildMediaSource(
                     dataSourceFactory,
-                    Uri.parse(File("${context.filesDir}/c_${mediaObjects[index].downloadableFile!!.name}").absolutePath),
-                    mediaObjects[index].fileType!!)
+                    Uri.parse(File("${context.filesDir}/c_${mediaObject.downloadableFile!!.name}").absolutePath),
+                    mediaObject.fileType!!)
             mDynamicMediaSource.addMediaSource(index, mediaSource)
             mDynamicMediaSource.removeMediaSource(index + 1, {
                 if(currentWindowIndex == index)

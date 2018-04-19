@@ -38,6 +38,7 @@ import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.content.adapters.ContentAdapter
 import proglife.com.ua.intellektiks.ui.content.holders.HeaderViewHolder
+import proglife.com.ua.intellektiks.ui.content.holders.PlayerViewHolder
 import proglife.com.ua.intellektiks.ui.content.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
@@ -103,6 +104,11 @@ class ContentActivity : BaseActivity(), ContentView {
                                 .putExtra(Constants.Field.TITLE, getString(R.string.description))
                                 .putExtra(Constants.Field.CONTENT, content))
                         withStartAnimation()
+                    }
+                },
+                onAdditionalAction = object : PlayerViewHolder.OnAdditionalAction {
+                    override fun onDownloadAll() {
+                        presenter.downloadAll()
                     }
                 }
         )
@@ -170,7 +176,15 @@ class ContentActivity : BaseActivity(), ContentView {
 
         presenter.initDataSource(applicationContext)
 
-        mContentAdapter.showHeader { description = content.description }
+        val playerList = list.filter { it.type == MediaObject.Type.PLAYER && it.fileType != FileType.HLS }
+        val size = playerList.fold(0f, { acc, mediaObject -> acc +
+                if (mediaObject.size.isBlank()) 0f else mediaObject.size.replace(",",".").toFloat() })
+        mContentAdapter.setDownloadAllSize(size)
+
+        mContentAdapter.showHeader {
+            description = content.description
+            markers = content.togglesMassive
+        }
         mContentAdapter.showMedia(list)
 
     }

@@ -3,7 +3,6 @@ package proglife.com.ua.intellektiks.ui.content.adapters
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.MediaObject
@@ -21,7 +20,8 @@ import proglife.com.ua.intellektiks.utils.inflate
 class ContentAdapter(
         private val onHeaderAction: HeaderViewHolder.OnHeaderAction? = null,
         private val onReportAction: ReportsViewHolder.OnReportAction? = null,
-        private val onMediaObjectAction: OnMediaObjectAction? = null
+        private val onMediaObjectAction: OnMediaObjectAction? = null,
+        private val onAdditionalAction: PlayerViewHolder.OnAdditionalAction? = null
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mContext: Context
@@ -34,6 +34,7 @@ class ContentAdapter(
     companion object {
         private const val HEADER = 6000
         private const val PLAYER = 6200
+        private const val ADDITIONAL = 6300
         private const val REPORTS = 7000
     }
 
@@ -63,7 +64,7 @@ class ContentAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             HEADER -> HeaderViewHolder(parent.inflate(R.layout.li_media_header), onHeaderAction)
-            PLAYER -> PlayerViewHolder(parent.inflate(R.layout.li_player))
+            PLAYER -> PlayerViewHolder(parent.inflate(R.layout.li_player), onAdditionalAction)
             REPORTS -> ReportsViewHolder(parent.inflate(R.layout.li_lesson_footer), onReportAction)
             MediaObject.Type.COMMON.ordinal -> CommonItemViewHolder(parent.inflate(R.layout.li_media_object_common), onMediaObjectAction)
             MediaObject.Type.PLAYER.ordinal -> PlayerItemViewHolder(parent.inflate(R.layout.li_media_object_player), onMediaObjectAction)
@@ -136,6 +137,10 @@ class ContentAdapter(
     fun removePlayerView() {
         mPlayerViewModel.playerView = null
         notifyItemChanged(getPlayerPosition())
+    }
+
+    fun setDownloadAllSize(size: Float) {
+        mPlayerViewModel.downloadSize = size
     }
 
 }

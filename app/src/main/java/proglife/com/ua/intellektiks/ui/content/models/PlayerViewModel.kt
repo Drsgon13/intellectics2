@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.content.models
 
+import android.widget.Button
 import com.google.android.exoplayer2.ui.PlayerView
 
 /**
@@ -8,5 +9,6 @@ import com.google.android.exoplayer2.ui.PlayerView
  */
 data class PlayerViewModel(
         var show: Boolean = false,
-        var playerView: PlayerView? = null
+        var playerView: PlayerView? = null,
+        var downloadSize: Float = 0f
 )
