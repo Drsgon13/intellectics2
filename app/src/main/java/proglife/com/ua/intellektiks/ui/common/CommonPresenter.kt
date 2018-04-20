@@ -15,7 +15,7 @@ class CommonPresenter: BasePresenter<CommonView>() {
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
-    private var notificationCount: Int? = null
+    private var notificationCount: Int = 0
 
     init {
         injector().inject(this)
@@ -49,25 +49,26 @@ class CommonPresenter: BasePresenter<CommonView>() {
     }
 
     private fun notification() {
-        mCommonInteractor.loadNotifications()
-                .compose(oAsync())
+        mCommonInteractor.unreadNotifications()
+                .compose(sAsync())
                 .subscribe(
                         {
-                            it.forEach { it.productive }
 
-                            notificationCount?.let {
+
+                            notificationCount.let {
+                                notificationCount =+ it
                                 viewState.showNotificationCount(it)
                             }
                         },
-                        {}
+                        {
+                            it.printStackTrace()
+                        }
                 )
     }
 
     fun incrementNotification() {
-        notificationCount?.inc()
-        notificationCount?.let {
-            viewState.showNotificationCount(it)
-        }
+        notificationCount = notificationCount.inc()
+        viewState.showNotificationCount(notificationCount)
     }
 
 }
