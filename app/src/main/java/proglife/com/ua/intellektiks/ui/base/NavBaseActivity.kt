@@ -27,6 +27,12 @@ import proglife.com.ua.intellektiks.data.Constants
  */
 abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavigationItemSelectedListener {
 
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            commonPresenter.incrementNotification()
+        }
+    }
+
     fun setCustomView(layoutResID: Int) {
         super.setCustomView(layoutResID, R.layout.content_navigation)
 
@@ -41,12 +47,12 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
 
     private fun initBroadcast(){
         val filter = IntentFilter(Constants.Field.NOTIFICATION_UPDATE)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                commonPresenter.incrementNotification()
-            }
-        }
         registerReceiver(receiver, filter)
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(receiver)
+        super.onDestroy()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

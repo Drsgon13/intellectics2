@@ -51,17 +51,28 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.createReminder(CreateReminderRequest(login, password, contactId, goodsId, lessonId, seconds, mediaObjectId))
     }
 
-    fun registerFcm(idContact: Long, token: String): Single<Unit> {
-        return commonApi.registerFcm(RegisterFcmRequest(idContact, token))
-                .map { Unit }
-    }
-
     fun deleteReminder(login: String, password: String, contactId: Long, goodsId: Long?, lessonId: Long?, mediaObjectId: Long): Observable<Unit> {
         return commonApi.deleteReminder(DeleteReminderRequest(login, password, contactId, goodsId, lessonId, mediaObjectId))
                 .onErrorReturn {
                     if (it is JSONException) return@onErrorReturn
                     throw Exception(it)
                 }
+    }
+
+    fun subsFcm(deviceId: String, contactId: Long, token: String): Single<Unit> {
+        return commonApi.subsFcm(SubsFcmRequest(deviceId, contactId, token))
+                .map { Unit }
+    }
+
+    fun unSubsFcm(deviceId: String): Single<Unit> {
+        return commonApi.unSubsFcm(UnSubsFcmRequest(deviceId))
+                .map { Unit }
+    }
+
+    fun unreadNotifications(deviceId: String): Single<Int> {
+        return commonApi.unreadNotifications(UnReadNotificationsRequest(deviceId))
+                // TODO
+                .map { 0 }
     }
 
 }

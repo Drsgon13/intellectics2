@@ -5,7 +5,6 @@ import io.reactivex.Single
 import okhttp3.ResponseBody
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.*
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -17,11 +16,7 @@ import retrofit2.http.POST
 interface CommonApi {
 
     companion object {
-        const val JSON              = "?r=api/apps/json"
-        const val HELP              = "?r=api/apps/help"
-        const val REMINDER          = "?r=api/apps/xdkreminder"
-        const val FCM               = "?r=api/push/xdkpushsubs"
-        const val DELETE_REMINDER   = "?r=api/apps/xdkreminderdelete"
+        const val JSON = "?r=api/apps/json"
     }
 
     @POST(JSON)
@@ -49,8 +44,41 @@ interface CommonApi {
             @Body body: GetLessonRequest
     ): Observable<Lesson>
 
-    @GET(HELP)
+    @GET("?r=api/apps/help")
     fun getHelp(): Observable<Help>
+
+    @POST(JSON)
+    fun createLessonMessage(
+            @Body request: CreateLessonMessageRequest
+    ): Single<CreateLessonMessageResponse>
+
+    @POST("?r=api/apps/xdkreminder")
+    fun createReminder(
+            @Body request: CreateReminderRequest
+    ): Observable<ReminderResponse>
+
+    @POST("?r=api/apps/xdkreminderdelete")
+    fun deleteReminder(
+            @Body request: DeleteReminderRequest
+    ): Observable<Unit>
+
+    // Подписка на push уведомления
+    @POST("?r=api/push/xdkpushsubs")
+    fun subsFcm(
+            @Body request: SubsFcmRequest
+    ): Single<ResponseBody>
+
+    // Отписка от push уведомлений
+    @POST("?r=api/push/xdkpushunsubs")
+    fun unSubsFcm(
+            @Body request: UnSubsFcmRequest
+    ): Single<ResponseBody>
+
+    // Количество непрочитанных сообщений
+    @POST("?r=api/push/xdkpushunread)")
+    fun unreadNotifications(
+            @Body request: UnReadNotificationsRequest
+    ): Single<UnReadNotificationsResponse>
 
     @POST(JSON)
     fun getNotifications(
@@ -61,25 +89,5 @@ interface CommonApi {
     fun getNotification(
             @Body body: GetNotificationRequest
     ): Observable<NotificationMessage>
-
-    @POST(JSON)
-    fun createLessonMessage(
-            @Body request: CreateLessonMessageRequest
-    ): Single<CreateLessonMessageResponse>
-
-    @POST(REMINDER)
-    fun createReminder(
-            @Body request: CreateReminderRequest
-    ): Observable<ReminderResponse>
-
-    @POST(FCM)
-    fun registerFcm(
-            @Body request: RegisterFcmRequest
-    ): Single<ResponseBody>
-
-    @POST(DELETE_REMINDER)
-    fun deleteReminder(
-            @Body request: DeleteReminderRequest
-    ): Observable<Unit>
 
 }

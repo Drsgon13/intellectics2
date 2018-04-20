@@ -1,11 +1,14 @@
 package proglife.com.ua.intellektiks.business
 
 import android.accounts.AuthenticatorException
+import android.annotation.SuppressLint
 import android.content.Context
+import android.provider.Settings
 import com.google.firebase.iid.FirebaseInstanceId
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
@@ -30,7 +33,7 @@ class CommonInteractor(
         return mNetworkRepository.getUserData(login, password)
                 .flatMap { data ->
                     if (remember)
-                        registerFcm(data.id).map { data } else Single.just(data)
+                        subsFcm(data.id).map { data } else Single.just(data)
                 }
                 .doOnSuccess {
                     mSpRepository.credentials(Pair(login, password), remember)
@@ -40,6 +43,7 @@ class CommonInteractor(
 
     fun logout(): Single<Unit> {
         return Single.fromCallable {
+            unSubsFcm().subscribeOn(Schedulers.io()).subscribe({}, {})
             FirebaseInstanceId.getInstance().deleteInstanceId()
             mSpRepository.credentials(Pair(null, null), true)
             mSpRepository.userData(null, true)
@@ -258,9 +262,23 @@ class CommonInteractor(
                 }
     }
 
-    private fun registerFcm(idContact: Long): Single<Unit> {
+    private fun subsFcm(idContact: Long): Single<Unit> {
         val token = FirebaseInstanceId.getInstance().token
-        return if (token == null) Single.just(Unit) else mNetworkRepository.registerFcm(idContact, token)
+        return if (token == null) Single.just(Unit) else mNetworkRepository.subsFcm(getDeviceId(), idContact, token)
+    }
+
+    private fun unSubsFcm(): Single<Unit> {
+        val token = FirebaseInstanceId.getInstance().token
+        return if (token == null) Single.just(Unit) else mNetworkRepository.unSubsFcm(getDeviceId())
+    }
+
+    @SuppressLint("HardwareIds")
+    private fun getDeviceId(): String {
+        return Settings.Secure.getString(mContext.contentResolver, Settings.Secure.ANDROID_ID)
+    }
+
+    fun unreadNotifications(): Single<Int> {
+        return mNetworkRepository.unreadNotifications(getDeviceId())
     }
 
     fun setDraft(lessonId: Long, message: String?): Single<Boolean> {
@@ -281,7 +299,5 @@ class CommonInteractor(
         ).flatMap {
             mNetworkRepository.deleteReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, mediaObjectId)
         }
-
-
     }
 }

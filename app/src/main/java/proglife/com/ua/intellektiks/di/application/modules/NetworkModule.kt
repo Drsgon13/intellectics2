@@ -53,7 +53,13 @@ class NetworkModule {
             if (rawJson.isNotEmpty()) {
                 val jsonObject = JSONTokener(rawJson).nextValue()
                 if (jsonObject is JSONObject && jsonObject.has("error")) {
-                    throw ServerException(jsonObject.getString("error"))
+                    try {
+                        if (jsonObject.getInt("error") != 0) {
+                            throw ServerException(jsonObject.getString("error"))
+                        }
+                    } catch (e: JSONException) {
+                        throw ServerException(jsonObject.getString("error"))
+                    }
                 }
             }
             response.newBuilder().body(ResponseBody.create(response.body()?.contentType(), rawJson)).build()
