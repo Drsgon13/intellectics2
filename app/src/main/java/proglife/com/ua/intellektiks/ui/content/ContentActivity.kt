@@ -193,8 +193,11 @@ class ContentActivity : BaseActivity(), ContentView {
         mContentAdapter.setDownloadAllSize(size)
 
         mContentAdapter.showHeader {
-//            description = content.description
             markers = content.togglesMassive
+        }
+        mContentAdapter.showFooter {
+            show = !content.description.isNullOrBlank()
+            description = content.description
         }
         mContentAdapter.showMedia(list)
 

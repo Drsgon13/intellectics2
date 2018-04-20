@@ -89,7 +89,7 @@ class ContentAdapter(
         }
     }
 
-    private fun getFooterPosition() = itemCount - 1
+    private fun getFooterPosition() = itemCount - if (mReportsViewModel.show) 2 else 1
 
     private fun getReportsPosition() = itemCount - 1
 
@@ -100,6 +100,11 @@ class ContentAdapter(
     fun showHeader(init: HeaderViewModel.() -> Unit) {
         init(mHeaderViewModel)
         notifyItemChanged(getHeaderPosition())
+    }
+
+    fun showFooter(init: FooterViewModel.() -> Unit) {
+        init(mFooterViewModel)
+        notifyDataSetChanged()
     }
 
     fun showReports(show: Boolean, messages: List<ReportMessage>, draft: String) {

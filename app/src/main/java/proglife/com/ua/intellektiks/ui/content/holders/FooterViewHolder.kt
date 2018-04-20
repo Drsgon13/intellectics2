@@ -16,7 +16,6 @@ class FooterViewHolder(itemView: View, private val onFooterAction: OnFooterActio
 
     fun bind(footerViewModel: FooterViewModel) {
         if (!footerViewModel.description.isNullOrBlank()) {
-            btnShowDescription.visibility = View.VISIBLE
             btnShowDescription.setOnClickListener { onFooterAction?.showDescription(footerViewModel.description!!) }
         }
     }
