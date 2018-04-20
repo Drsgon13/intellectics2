@@ -38,6 +38,7 @@ import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.content.adapters.ContentAdapter
+import proglife.com.ua.intellektiks.ui.content.holders.FooterViewHolder
 import proglife.com.ua.intellektiks.ui.content.holders.HeaderViewHolder
 import proglife.com.ua.intellektiks.ui.content.holders.PlayerViewHolder
 import proglife.com.ua.intellektiks.ui.content.holders.ReportsViewHolder
@@ -101,13 +102,6 @@ class ContentActivity : BaseActivity(), ContentView {
                     }
                 },
                 onHeaderAction = object : HeaderViewHolder.OnHeaderAction {
-                    override fun showDescription(content: String) {
-                        startActivity(Intent(this@ContentActivity, ViewerTxtActivity::class.java)
-                                .putExtra(Constants.Field.TITLE, getString(R.string.description))
-                                .putExtra(Constants.Field.CONTENT, content))
-                        withStartAnimation()
-                    }
-
                     override fun onClickMarker(type: Int, marker: Marker) {
                         if(type == 0)
                             presenter.playMarker(marker)
@@ -126,6 +120,14 @@ class ContentActivity : BaseActivity(), ContentView {
 
                     override fun typed(message: String) {
                         presenter.onTypedReport(message)
+                    }
+                },
+                onFooterAction = object : FooterViewHolder.OnFooterAction {
+                    override fun showDescription(content: String) {
+                        startActivity(Intent(this@ContentActivity, ViewerTxtActivity::class.java)
+                                .putExtra(Constants.Field.TITLE, getString(R.string.description))
+                                .putExtra(Constants.Field.CONTENT, content))
+                        withStartAnimation()
                     }
                 }
         )
@@ -191,7 +193,7 @@ class ContentActivity : BaseActivity(), ContentView {
         mContentAdapter.setDownloadAllSize(size)
 
         mContentAdapter.showHeader {
-            description = content.description
+//            description = content.description
             markers = content.togglesMassive
         }
         mContentAdapter.showMedia(list)

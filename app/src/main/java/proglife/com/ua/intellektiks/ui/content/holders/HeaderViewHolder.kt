@@ -21,16 +21,9 @@ class HeaderViewHolder(itemView: View, private val onHeaderAction: OnHeaderActio
 
     private val tvName: TextView = itemView.tvName
     private val llMarker: LinearLayout = itemView.llMarker
-    private val btnShowDescription: Button = itemView.btnShowDescription
 
     fun bind(headerViewModel: HeaderViewModel) {
         tvName.text = headerViewModel.title
-        if (!headerViewModel.description.isNullOrBlank()) {
-            btnShowDescription.visibility = View.VISIBLE
-            btnShowDescription.setOnClickListener { onHeaderAction?.showDescription(headerViewModel.description!!) }
-        }
-
-
         if (headerViewModel.markers != null && headerViewModel.markers!!.isNotEmpty()) {
             val markers = headerViewModel.markers!!
             if (llMarker.childCount == markers.size) return
@@ -66,7 +59,6 @@ class HeaderViewHolder(itemView: View, private val onHeaderAction: OnHeaderActio
     }
 
     interface OnHeaderAction {
-        fun showDescription(content: String)
         fun onClickMarker(type: Int, marker: Marker)
     }
 }

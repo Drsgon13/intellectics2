@@ -8,6 +8,7 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.data.models.ReportMessage
 import proglife.com.ua.intellektiks.ui.content.holders.*
+import proglife.com.ua.intellektiks.ui.content.models.FooterViewModel
 import proglife.com.ua.intellektiks.ui.content.models.HeaderViewModel
 import proglife.com.ua.intellektiks.ui.content.models.PlayerViewModel
 import proglife.com.ua.intellektiks.ui.content.models.ReportsViewModel
@@ -21,20 +22,22 @@ class ContentAdapter(
         private val onHeaderAction: HeaderViewHolder.OnHeaderAction? = null,
         private val onReportAction: ReportsViewHolder.OnReportAction? = null,
         private val onMediaObjectAction: OnMediaObjectAction? = null,
-        private val onAdditionalAction: PlayerViewHolder.OnAdditionalAction? = null
+        private val onAdditionalAction: PlayerViewHolder.OnAdditionalAction? = null,
+        private val onFooterAction: FooterViewHolder.OnFooterAction? = null
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mContext: Context
     private var mHeaderViewModel = HeaderViewModel()
     private var mPlayerViewModel = PlayerViewModel()
     private var mReportsViewModel = ReportsViewModel()
+    private var mFooterViewModel = FooterViewModel()
     private var mList: List<MediaObject> = emptyList()
     private var mSelectedItem: MediaObject? = null
 
     companion object {
         private const val HEADER = 6000
         private const val PLAYER = 6200
-        private const val ADDITIONAL = 6300
+        private const val FOOTER = 6300
         private const val REPORTS = 7000
     }
 
@@ -50,13 +53,14 @@ class ContentAdapter(
     // +1 заголовок отображается всегда
     private fun getHeaderSize() = if (mPlayerViewModel.show) 2 else 1
 
-    private fun getFooterSize() = if (mReportsViewModel.show) 1 else 0
+    private fun getFooterSize() = (if (mFooterViewModel.show) 1 else 0) + (if (mReportsViewModel.show) 1 else 0)
 
     override fun getItemViewType(position: Int): Int {
         return when {
             position == getHeaderPosition() -> HEADER
             mPlayerViewModel.show && position == getPlayerPosition() -> PLAYER
-            mReportsViewModel.show && position == getFooterPosition() -> REPORTS
+            mFooterViewModel.show && position == getFooterPosition() -> FOOTER
+            mReportsViewModel.show && position == getReportsPosition() -> REPORTS
             else -> mList[position - getHeaderSize()].type.ordinal
         }
     }
@@ -66,6 +70,7 @@ class ContentAdapter(
             HEADER -> HeaderViewHolder(parent.inflate(R.layout.li_media_header), onHeaderAction)
             PLAYER -> PlayerViewHolder(parent.inflate(R.layout.li_player), onAdditionalAction)
             REPORTS -> ReportsViewHolder(parent.inflate(R.layout.li_lesson_footer), onReportAction)
+            FOOTER -> FooterViewHolder(parent.inflate(R.layout.li_footer), onFooterAction)
             MediaObject.Type.COMMON.ordinal -> CommonItemViewHolder(parent.inflate(R.layout.li_media_object_common), onMediaObjectAction)
             MediaObject.Type.PLAYER.ordinal -> PlayerItemViewHolder(parent.inflate(R.layout.li_media_object_player), onMediaObjectAction)
             MediaObject.Type.DIVIDER.ordinal -> DividerViewHolder(parent.inflate(R.layout.li_media_object_divider))
@@ -78,12 +83,15 @@ class ContentAdapter(
             is ReportsViewHolder -> holder.bind(mReportsViewModel)
             is HeaderViewHolder -> holder.bind(mHeaderViewModel)
             is PlayerViewHolder -> holder.bind(mPlayerViewModel)
+            is FooterViewHolder -> holder.bind(mFooterViewModel)
             is PlayerItemViewHolder -> holder.bind(mList[position - getHeaderSize()], mList[position - getHeaderSize()] == mSelectedItem)
             is CommonItemViewHolder -> holder.bind(mList[position - getHeaderSize()])
         }
     }
 
     private fun getFooterPosition() = itemCount - 1
+
+    private fun getReportsPosition() = itemCount - 1
 
     private fun getHeaderPosition() = 0
 
@@ -99,7 +107,7 @@ class ContentAdapter(
         mReportsViewModel.show = show
         mReportsViewModel.messages = messages
         mReportsViewModel.draft = draft
-        if (needRecount) notifyDataSetChanged() else notifyItemChanged(getFooterPosition())
+        if (needRecount) notifyDataSetChanged() else notifyItemChanged(getReportsPosition())
     }
 
     interface OnMediaObjectAction {
