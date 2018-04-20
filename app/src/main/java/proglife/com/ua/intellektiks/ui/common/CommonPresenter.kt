@@ -56,12 +56,13 @@ class CommonPresenter: BasePresenter<CommonView>() {
 
 
                             notificationCount.let {
-                                notificationCount =+ it
-                                viewState.showNotificationCount(it)
+                                notificationCount = it
+                                viewState.showNotificationCount(notificationCount)
                             }
                         },
                         {
-                            it.printStackTrace()
+                            notificationCount = 0
+                            viewState.showNotificationCount(notificationCount)
                         }
                 )
     }
