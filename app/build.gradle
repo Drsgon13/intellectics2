@@ -7,7 +7,7 @@ def server = '"https://sheremetev.aoserver.ru/"'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
-def versionBuild = 11
+def versionBuild = 13
 
 android {
     compileSdkVersion 27
