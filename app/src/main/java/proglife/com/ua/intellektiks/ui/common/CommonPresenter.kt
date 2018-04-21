@@ -28,8 +28,6 @@ class CommonPresenter: BasePresenter<CommonView>() {
                 .subscribe(
                         {
                             if (it) viewState.showProfile() else viewState.showAuth(false)
-                            notificationCount = 0
-                            incrementNotification()
                         },
                         {}
                 )
@@ -68,8 +66,7 @@ class CommonPresenter: BasePresenter<CommonView>() {
     }
 
     fun incrementNotification() {
-        notificationCount = notificationCount.inc()
-        viewState.showNotificationCount(notificationCount)
+        notification()
     }
 
 }

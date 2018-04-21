@@ -146,13 +146,6 @@ class ContentActivity : BaseActivity(), ContentView {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (exoPlayerView.player != null && exoPlayerView.player.playWhenReady) {
-            exoPlayerView.player.playWhenReady = false
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         exoPlayerView.player?.release()
@@ -167,6 +160,7 @@ class ContentActivity : BaseActivity(), ContentView {
     }
 
     override fun onBackPressed() {
+        exoPlayerView.player?.release()
         super.onBackPressed()
         withBackAnimation()
     }
