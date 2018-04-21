@@ -141,11 +141,15 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun onPause() {
         super.onPause()
-        if (exoPlayerView.player != null && exoPlayerView.player.playWhenReady) {
-            exoPlayerView.player.playWhenReady = false
-        }
         mFullScreenDialog?.let {
             if (it.isShowing) it.dismiss()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (exoPlayerView.player != null && exoPlayerView.player.playWhenReady) {
+            exoPlayerView.player.playWhenReady = false
         }
     }
 

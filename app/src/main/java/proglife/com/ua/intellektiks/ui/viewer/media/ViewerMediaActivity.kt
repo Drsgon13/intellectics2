@@ -41,8 +41,8 @@ class ViewerMediaActivity: BaseActivity(), ViewerMediaView {
         checkContent(fileType == FileType.MP3)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         if(exoPlayer.player!=null)
             exoPlayer.player.playWhenReady = false
     }
