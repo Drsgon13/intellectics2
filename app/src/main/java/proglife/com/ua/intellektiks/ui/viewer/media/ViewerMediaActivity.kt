@@ -41,19 +41,13 @@ class ViewerMediaActivity: BaseActivity(), ViewerMediaView {
         checkContent(fileType == FileType.MP3)
     }
 
-    override fun onStop() {
-        super.onStop()
-        if(exoPlayer.player!=null)
-            exoPlayer.player.playWhenReady = false
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        if(exoPlayer.player!=null)
-            exoPlayer.player.release()
+        exoPlayer.player?.release()
     }
 
     override fun onBackPressed() {
+        exoPlayer.player?.release()
         super.onBackPressed()
         withBackAnimation()
     }
