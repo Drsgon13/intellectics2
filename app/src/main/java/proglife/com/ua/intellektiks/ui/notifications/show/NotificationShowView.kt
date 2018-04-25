@@ -14,4 +14,5 @@ interface NotificationShowView: BaseView {
     fun showError(res: Int)
     fun showContent(it: NotificationMessagePreview, item: NotificationMessage)
     fun showItem(item: NotificationMessagePreview)
+    fun showURL(url: String)
 }

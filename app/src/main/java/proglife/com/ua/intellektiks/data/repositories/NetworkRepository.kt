@@ -42,6 +42,9 @@ class NetworkRepository(private val commonApi: CommonApi) {
     fun getNotification(login: String, password: String, id: Long): Observable<NotificationMessage> {
         return commonApi.getNotification(GetNotificationRequest(login, password, id))
     }
+    fun getNotificationUrl( id: Long): Observable<NotificationURL> {
+        return commonApi.getNotificationUrl(GetNotificationURLRequest( id))
+    }
 
     fun createLessonMessage(login: String, password: String, userId: Long, lessonId: Long, message: String): Single<CreateLessonMessageResponse> {
         return commonApi.createLessonMessage(CreateLessonMessageRequest(login, password, userId, lessonId, message))

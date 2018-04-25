@@ -90,4 +90,9 @@ interface CommonApi {
             @Body body: GetNotificationRequest
     ): Observable<NotificationMessage>
 
+    @POST("?r=api/push/xdkgetpushdata")
+    fun getNotificationUrl(
+            @Body body: GetNotificationURLRequest
+    ): Observable<NotificationURL>
+
 }

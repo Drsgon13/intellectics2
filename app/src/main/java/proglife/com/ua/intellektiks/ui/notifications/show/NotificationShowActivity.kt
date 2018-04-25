@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.notifications.show
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.webkit.WebViewClient
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_notification_show.*
@@ -13,6 +14,11 @@ import proglife.com.ua.intellektiks.data.models.NotificationMessage
 import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import java.text.SimpleDateFormat
+import android.content.Intent
+import android.net.Uri
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+
 
 /**
  * Created by Evhenyi Shcherbyna on 07.04.2018.
@@ -28,7 +34,9 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
 
     @ProvidePresenter
     fun providePresenter(): NotificationShowPresenter {
-        return NotificationShowPresenter(intent.getParcelableExtra(Constants.Field.NOTIFICATION))
+        return NotificationShowPresenter(intent.getParcelableExtra(Constants.Field.NOTIFICATION),
+                intent.getStringExtra(Constants.Field.ID_MESSAAGE),
+                intent.getStringExtra(Constants.Field.TYPE))
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -56,6 +64,14 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
 
     override fun showError(res: Int) {
         Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun showURL(url: String) {
+        webView.settings.javaScriptEnabled = true
+
+        webView.webViewClient = WebViewClient()
+        webView.loadUrl(url)
     }
 
     override fun showContent(it: NotificationMessagePreview, item: NotificationMessage) {

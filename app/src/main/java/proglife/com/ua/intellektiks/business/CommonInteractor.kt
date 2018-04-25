@@ -10,6 +10,7 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import proglife.com.ua.intellektiks.data.models.*
+import proglife.com.ua.intellektiks.data.network.models.GetNotificationURLRequest
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
@@ -218,6 +219,10 @@ class CommonInteractor(
     fun loadNotification(id: Long): Observable<NotificationMessage> {
         return credentials()
                 .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
+    }
+
+    fun getNotificationUrl( id: Long): Observable<NotificationURL> {
+        return mNetworkRepository.getNotificationUrl(id)
     }
 
     fun createLessonMessage(lessonId: Long, message: String): Single<Boolean> {

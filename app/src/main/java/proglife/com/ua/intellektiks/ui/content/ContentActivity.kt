@@ -258,6 +258,7 @@ class ContentActivity : BaseActivity(), ContentView {
             }
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+
                 if (playWhenReady)
                     presenter.startReminder()
                 else presenter.clearTimer()

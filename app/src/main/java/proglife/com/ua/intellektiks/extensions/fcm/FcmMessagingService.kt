@@ -11,10 +11,13 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.*
 import android.app.NotificationChannel
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
+import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
+import proglife.com.ua.intellektiks.ui.notifications.show.NotificationShowActivity
 
 
 /**
@@ -42,10 +45,11 @@ class FcmMessagingService : FirebaseMessagingService() {
             setContentTitle(remoteMessage.notification?.title)
             setContentText(remoteMessage.notification?.body)
             setAutoCancel(true)
-//            val intent = Intent(this@FcmMessagingService, SplashActivity::class.java)
-//            remoteMessage.data.entries.forEach { intent.putExtra(it.key, it.value) }
-//            val resultPendingIntent = PendingIntent.getActivity(applicationContext, remoteMessage.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT)
-//            setContentIntent(resultPendingIntent)
+
+            val intent = Intent(this@FcmMessagingService, NotificationShowActivity::class.java)
+            remoteMessage.data.entries.forEach { intent.putExtra(it.key, it.value) }
+            val resultPendingIntent = PendingIntent.getActivity(applicationContext, remoteMessage.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT)
+            setContentIntent(resultPendingIntent)
             setDefaults(Notification.DEFAULT_ALL)
         }
 

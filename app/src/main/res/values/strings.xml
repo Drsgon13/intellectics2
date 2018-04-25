@@ -18,7 +18,7 @@
     <string name="nav.profile">Мой аккаунт</string>
     <string name="nav.notifications">Уведомления</string>
     <string name="nav.settings">Настройки</string>
-    <string name="nav.support">Помощь</string>
+    <string name="nav.support">Подсказки</string>
     <string name="nav.logout">Выход</string>
 
     <string name="error.network">Ошибка Интернет подключения</string>
