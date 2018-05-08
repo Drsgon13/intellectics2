@@ -12,11 +12,11 @@ def versionBuild = 13
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "proglife.com.ua.intellectics"
+        applicationId "intellectics.arnion"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 15
+        versionName "3.0"
         buildConfigField "String", "SERVER", server
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
