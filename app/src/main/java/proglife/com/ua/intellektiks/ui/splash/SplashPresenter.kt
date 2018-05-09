@@ -16,8 +16,7 @@ import javax.inject.Inject
 @InjectViewState
 class SplashPresenter: BasePresenter<SplashView>() {
 
-    @Inject
-    lateinit var mCommonInteractor: CommonInteractor
+    @Inject lateinit var mCommonInteractor: CommonInteractor
 
     companion object {
         const val DELAY = 1200L

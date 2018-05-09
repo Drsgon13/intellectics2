@@ -7,6 +7,7 @@ import proglife.com.ua.intellektiks.ui.base.BaseView
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 interface SplashView: BaseView {
+
     fun showAuth()
     fun showMain()
     fun openBrowser(url: String)
