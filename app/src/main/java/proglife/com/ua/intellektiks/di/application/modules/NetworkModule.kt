@@ -12,7 +12,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -38,14 +37,14 @@ class NetworkModule {
     @Provides
     internal fun provideOkHttpClient(context: Context): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        val loggingInterceptor = HttpLoggingInterceptor()
-        if (BuildConfig.DEBUG) {
+        //val loggingInterceptor = HttpLoggingInterceptor()
+        /*if (BuildConfig.DEBUG) {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         } else {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
-        }
+        }*/
         builder.retryOnConnectionFailure(true)
-        builder.addInterceptor(loggingInterceptor)
+       // builder.addInterceptor(loggingInterceptor)
         builder.addInterceptor {
             val request = it.request()
             val response = it.proceed(request)
