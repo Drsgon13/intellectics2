@@ -9,4 +9,6 @@ import proglife.com.ua.intellektiks.ui.base.BaseView
 interface SplashView: BaseView {
     fun showAuth()
     fun showMain()
+    fun openBrowser(url: String)
+    fun showNotification(id: String)
 }

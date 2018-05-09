@@ -68,10 +68,9 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun showURL(url: String) {
-        webView.settings.javaScriptEnabled = true
-
-        webView.webViewClient = WebViewClient()
-        webView.loadUrl(url)
+        val notificationIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(notificationIntent)
+        finish()
     }
 
     override fun showContent(it: NotificationMessagePreview, item: NotificationMessage) {
