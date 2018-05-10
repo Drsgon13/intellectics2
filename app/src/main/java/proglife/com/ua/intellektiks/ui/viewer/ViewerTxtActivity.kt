@@ -25,7 +25,7 @@ class ViewerTxtActivity: BaseActivity() {
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         supportActionBar?.title = title
-        wvContent.loadData(content, "text/html", "UTF-8")
+        wvContent.loadData(content, "text/html; charset=utf-8", "UTF-8")
 //        wvContent.settings.useWideViewPort = true
         wvContent.settings.javaScriptEnabled = true
 //        wvContent.settings.loadWithOverviewMode = true
