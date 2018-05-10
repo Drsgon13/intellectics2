@@ -74,7 +74,7 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
     }
 
     override fun showContent(it: NotificationMessagePreview, item: NotificationMessage) {
-        webView.loadData("<p>${it.subject}</p>" + item.text, "text/html", "UTF-8")
+        webView.loadData("<p>${it.subject}</p>" + item.text, "text/html; charset=utf-8", "UTF-8")
     }
 
     override fun showItem(item: NotificationMessagePreview) {
