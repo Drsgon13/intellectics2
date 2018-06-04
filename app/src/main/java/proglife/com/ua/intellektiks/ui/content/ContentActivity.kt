@@ -2,7 +2,10 @@ package proglife.com.ua.intellektiks.ui.content
 
 import android.Manifest
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
@@ -34,6 +37,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
+import proglife.com.ua.intellektiks.data.Constants.Field.EXTRA_STATE
+import proglife.com.ua.intellektiks.data.Constants.Field.MEDIA_NOTIFICATION
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
@@ -45,6 +50,7 @@ import proglife.com.ua.intellektiks.ui.content.holders.ReportsViewHolder
 import proglife.com.ua.intellektiks.ui.content.media.MediaViewer
 import proglife.com.ua.intellektiks.ui.viewer.ViewerTxtActivity
 import proglife.com.ua.intellektiks.utils.ExoUtils
+import proglife.com.ua.intellektiks.utils.Notification
 
 /**
  * Created by Evhenyi Shcherbyna on 18.04.2018.
@@ -66,13 +72,13 @@ class ContentActivity : BaseActivity(), ContentView {
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
     private lateinit var exoPlayerView: PlayerView
+    private  var notification: Notification? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setCustomView(R.layout.activity_content)
 
         exoPlayerView = PlayerView(this)
-
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.user_goods)
@@ -137,6 +143,30 @@ class ContentActivity : BaseActivity(), ContentView {
         (rvContent.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+
+        val broadcastReceiver = object : BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent) {
+                val state =intent.getStringExtra(EXTRA_STATE)
+                Log.d("LOGS", "onReceive: "+intent.getStringExtra(EXTRA_STATE))
+                if(state == Constants.Field.STATE_PLAY) {
+                    val play = exoPlayerView.player.playWhenReady
+                    notification?.show(if(!play) R.drawable.ic_pause else R.drawable.ic_play)
+                    exoPlayerView.player.playWhenReady = !play
+
+                } else {
+                    notification?.destroy()
+                }
+            }
+
+        }
+        registerReceiver(broadcastReceiver, IntentFilter(MEDIA_NOTIFICATION))
+    }
+
+    private fun mediaNotification(){
+        notification = Notification(this)
+
+
     }
 
     override fun onPause() {
@@ -148,6 +178,8 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        notification?.destroy()
         exoPlayerView.player?.release()
     }
 
@@ -161,6 +193,8 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun onBackPressed() {
         exoPlayerView.player?.release()
+
+        notification?.destroy()
         super.onBackPressed()
         withBackAnimation()
     }
@@ -259,10 +293,14 @@ class ContentActivity : BaseActivity(), ContentView {
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
 
-                if (playWhenReady)
+                if (playWhenReady) {
                     presenter.startReminder()
-                else presenter.clearTimer()
-
+                } else {
+                    presenter.clearTimer()
+                }
+                if(notification==null)
+                    mediaNotification()
+                notification?.show(if(playWhenReady) R.drawable.ic_pause else R.drawable.ic_play)
                 if(playbackState == Player.STATE_IDLE)
                     presenter.checkSource(player.currentWindowIndex, applicationContext)
             }

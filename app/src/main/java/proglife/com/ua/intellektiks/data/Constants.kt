@@ -15,5 +15,10 @@ object Constants {
         const val ID_MESSAAGE: String = "id_message"
         const val NOTIFICATION: String = "notification"
         const val NOTIFICATION_UPDATE: String = "notification_update"
+        const val NOTIFICATION_MEDIA = "notification_media"
+        const val EXTRA_STATE = "extra_state"
+        const val STATE_DELETE = "state_delete"
+        const val STATE_PLAY = "state_play"
+        const val MEDIA_NOTIFICATION = "state_play"
     }
 }

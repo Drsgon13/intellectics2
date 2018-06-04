@@ -71,4 +71,8 @@
     <string name="rating_later">Напомнить позже</string>
     <string name="rating_done">Спасибо за оценку!</string>
 
+
+
+    <string name="channel_name">media _intellectics</string>
+    <string name="channel_description">intellectics_play</string>
 </resources>
