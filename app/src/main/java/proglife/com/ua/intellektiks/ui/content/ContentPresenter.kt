@@ -48,7 +48,7 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     //--------------------------------------------------------------------------
     // PLAYER
     //--------------------------------------------------------------------------
-    private val mDynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
+    private var mDynamicMediaSource: DynamicConcatenatingMediaSource = DynamicConcatenatingMediaSource()
     private var mFileTypes = arrayListOf<FileType>()
     private var mErrorPlayPosition: Int? = null
 
@@ -216,8 +216,9 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     fun playMarker(marker: Marker){
         val mediaObjects = mMediaStateHelper.mediaObjects!!
         for (item in mediaObjects) {
-            if (item.id == marker.mediaobjectid)
+            if (item.id == marker.mediaobjectid &&  (item.fileType == FileType.MP3 ||item.fileType == FileType.MP4 ||item.fileType == FileType.HLS)) {
                 play(item, marker.position)
+            } else   deleteMarker(marker)
         }
     }
 
@@ -244,6 +245,7 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     }
 
     private fun initDataSource(context: Context, userAgent: String?) {
+
         val mediaObjects = mMediaStateHelper.mediaObjects!!
         val media: MutableList<MediaSource> = arrayListOf()
         val dataSourceFactory = ExoUtils.buildDataSourceFactory(context, userAgent)
@@ -265,13 +267,21 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
         if (media.isEmpty())
             viewState.onEmptyMediaList()
         else {
+            if(mDynamicMediaSource.size == media.size){
+                mDynamicMediaSource.releaseSource()
+                mDynamicMediaSource = DynamicConcatenatingMediaSource()
+            }
+
             mDynamicMediaSource.addMediaSources(media)
             viewState.showVideo(mDynamicMediaSource)
         }
     }
 
     fun playNextOrPrev(currentWindowIndex: Int) {
+        if(mMediaStateHelper.mediaObjects!=null
+                && currentWindowIndex >= mMediaStateHelper.mediaObjects!!.filter { it.fileType == FileType.MP3 || it.fileType == FileType.MP4|| it.fileType == FileType.HLS }.size) return
         viewState.checkContent(mFileTypes[currentWindowIndex] == FileType.MP3)
+
         val selectedMediaObject = mMediaStateHelper.mediaObjects?.get(currentWindowIndex)
         selectedMediaObject?.let { viewState.selectItem(it) }
     }

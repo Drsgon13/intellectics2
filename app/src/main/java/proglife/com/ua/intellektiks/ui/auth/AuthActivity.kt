@@ -27,12 +27,12 @@ class AuthActivity: BaseActivity(), AuthView {
         super.onCreate(savedInstanceState)
         setCustomView(R.layout.activity_auth)
 
-       /* if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
 //            etLogin.setText("info@sheremetev.info")
 //            etPassword.setText("bc3f6f2")
             etLogin.setText("mail@sheremetev.info")
             etPassword.setText("a83b534")
-        }*/
+        }
 
         supportActionBar?.setTitle(R.string.auth_title)
         btnSignIn.setOnClickListener {

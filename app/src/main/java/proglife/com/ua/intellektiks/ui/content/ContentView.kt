@@ -1,5 +1,7 @@
 package proglife.com.ua.intellektiks.ui.content
 
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Content
 import proglife.com.ua.intellektiks.data.models.ReportMessage
@@ -28,5 +30,6 @@ interface ContentView: BaseView {
     fun startCommonDownload(mediaObject: MediaObject)
     fun showReports(show: Boolean, messages: List<ReportMessage>, draft: String)
     fun checkContent(isAudio: Boolean)
+    @StateStrategyType(SingleStateStrategy::class)
     fun requestPlayerPosition()
 }
