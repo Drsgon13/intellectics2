@@ -338,7 +338,9 @@ class ContentActivity : BaseActivity(), ContentView {
     }
 
     override fun seekTo(index: Int, position: Long) {
+        if( index > exoPlayerView.player.currentTimeline.windowCount) return
         rvContent.scrollToPosition(mContentAdapter.getPlayerPosition())
+
         exoPlayerView.player.seekTo(index, position)
         exoPlayerView.player.playWhenReady = true
 
