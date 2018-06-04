@@ -8,10 +8,10 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.android.synthetic.main.content_main.*
-import proglife.com.ua.intellektiks.BuildConfig
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.main.MainActivity
+import proglife.com.ua.intellektiks.ui.remember.ForgotActivity
 
 /**
  * Created by Evhenyi Shcherbyna on 27.03.2018.
@@ -39,6 +39,7 @@ class AuthActivity: BaseActivity(), AuthView {
             presenter.signIn(etLogin.text.toString(), etPassword.text.toString(), cbRemember.isChecked)
         }
         btnSkip.setOnClickListener { showNext() }
+        btnForgot.setOnClickListener { showForgotScreen() }
     }
 
     override fun showError(message: String?) {
@@ -66,6 +67,11 @@ class AuthActivity: BaseActivity(), AuthView {
         startActivity(Intent(this, MainActivity::class.java))
         withStartAnimation()
         finishAffinity()
+    }
+
+    private fun showForgotScreen() {
+        startActivity(Intent(this, ForgotActivity::class.java))
+        withStartAnimation()
     }
 
 }

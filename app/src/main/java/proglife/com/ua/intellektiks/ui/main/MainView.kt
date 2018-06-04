@@ -1,5 +1,7 @@
 package proglife.com.ua.intellektiks.ui.main
 
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.BaseView
 
@@ -16,4 +18,6 @@ interface MainView: BaseView {
     fun showGoods(item: GoodsPreview)
     fun showLessons(item: GoodsPreview)
     fun showNoData()
+    @StateStrategyType(SingleStateStrategy::class)
+    fun showRateRequest()
 }

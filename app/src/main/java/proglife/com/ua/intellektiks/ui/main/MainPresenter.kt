@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 @InjectViewState
-class MainPresenter: BasePresenter<MainView>() {
+class MainPresenter: BasePresenter<MainView>(), RateDialog.Action {
 
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
@@ -22,13 +22,32 @@ class MainPresenter: BasePresenter<MainView>() {
 
     init {
         injector().inject(this)
-
+        checkRatingRequest()
         mCommonInteractor.isAuthenticated()
+                .compose(sAsync())
                 .subscribe(
                         {
-                            if (it) loadGoods() else viewState.showNeedAuth()
+                            if (it) {
+                                loadGoods()
+                            } else {
+                                viewState.showNeedAuth()
+                            }
                         },
                         {}
+                )
+
+    }
+
+    private fun checkRatingRequest() {
+        mCommonInteractor.needRatingRequest()
+                .compose(sAsync())
+                .subscribe(
+                        {
+                            if (it) viewState.showRateRequest()
+                        },
+                        {
+                            it.printStackTrace()
+                        }
                 )
     }
 
@@ -60,6 +79,27 @@ class MainPresenter: BasePresenter<MainView>() {
         } else {
             viewState.showLessons(goods)
         }
+    }
+
+    override fun onRatingDenied() {
+        blockRatingRequest(false)
+    }
+
+    override fun onRatingAccepted() {
+        blockRatingRequest(false)
+    }
+
+    override fun onRatingDeferred() {
+        blockRatingRequest(true)
+    }
+
+    private fun blockRatingRequest(temporary: Boolean) {
+        mCommonInteractor.blockRatingRequest(temporary)
+                .compose(sAsync())
+                .subscribe(
+                        {},
+                        {it.printStackTrace()}
+                )
     }
 
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="proglife.com.ua.intellektiks">
+          package="proglife.com.ua.intellektiks">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".App"
@@ -18,64 +18,67 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.auth.AuthActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop"
-            android:noHistory="true" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.goods.GoodsShowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.support.SupportActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.lessons.list.LessonsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.lessons.show.LessonActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.viewer.ViewerTxtActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.viewer.ViewerPdfActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.viewer.media.ViewerMediaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.bonus.BonusActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.contact.ContactActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.notifications.list.NotificationListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.notifications.show.NotificationShowActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".ui.content.ContentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".ui.content.ContentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".ui.remember.ForgotActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <service android:name=".extensions.DownloadService" />
+        <service android:name=".extensions.DownloadService"/>
         <service
             android:name=".extensions.fcm.FcmMessagingService"
             android:exported="false">

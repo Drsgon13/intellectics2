@@ -78,4 +78,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
                 .map { 0 }
     }
 
+    fun recoveryPassword(email: String): Single<Unit> {
+        return commonApi.recoveryPassword(email)
+    }
+
 }

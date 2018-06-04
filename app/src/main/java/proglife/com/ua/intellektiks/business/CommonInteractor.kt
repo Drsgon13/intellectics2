@@ -18,6 +18,8 @@ import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import proglife.com.ua.intellektiks.utils.Hash
 import java.io.File
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Evhenyi Shcherbyna on 27.03.2018.
@@ -40,6 +42,10 @@ class CommonInteractor(
                     mSpRepository.credentials(Pair(login, password), remember)
                     mSpRepository.userData(it, remember)
                 }
+    }
+
+    fun recoveryPassword(email: String): Single<Unit> {
+        return mNetworkRepository.recoveryPassword(email)
     }
 
     fun logout(): Single<Unit> {
@@ -305,4 +311,26 @@ class CommonInteractor(
             mNetworkRepository.deleteReminder(it.first.first, it.first.second, contactId, goodsId, lessonId, mediaObjectId)
         }
     }
+
+    fun blockRatingRequest(temporary: Boolean): Single<Long> {
+        val timestamp = if (temporary) Date().time else Long.MAX_VALUE
+        return mSpRepository.markRatingRequest(timestamp)
+    }
+
+    fun needRatingRequest(): Single<Boolean> {
+        return mSpRepository.getRatingRequestTimestamp()
+                .flatMap {
+                    if (it == 0L) blockRatingRequest(true)
+                    else Single.just(it)
+                }
+                .map {
+                    val now = Date().time
+                    it != Long.MAX_VALUE && it + RATING_REQUEST_PERIOD < now
+                }
+    }
+
+    companion object {
+        val RATING_REQUEST_PERIOD = TimeUnit.DAYS.toMillis(7)
+    }
+
 }

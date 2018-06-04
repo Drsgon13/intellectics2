@@ -12,6 +12,7 @@ import proglife.com.ua.intellektiks.ui.lessons.show.LessonPresenter
 import proglife.com.ua.intellektiks.ui.main.MainPresenter
 import proglife.com.ua.intellektiks.ui.notifications.list.NotificationListPresenter
 import proglife.com.ua.intellektiks.ui.notifications.show.NotificationShowPresenter
+import proglife.com.ua.intellektiks.ui.remember.ForgotPresenter
 import proglife.com.ua.intellektiks.ui.settings.SettingsPresenter
 import proglife.com.ua.intellektiks.ui.splash.SplashPresenter
 import proglife.com.ua.intellektiks.ui.support.SupportPresenter
@@ -38,4 +39,5 @@ interface ActivityComponent {
     fun inject(presenter: NotificationShowPresenter)
     fun inject(presenter: ViewerMediaPresenter)
     fun inject(presenter: ContentPresenter)
+    fun inject(presenter: ForgotPresenter)
 }

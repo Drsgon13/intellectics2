@@ -150,4 +150,18 @@ class SPRepository(context: Context,
             }
         }
     }
+
+    fun markRatingRequest(timestamp: Long): Single<Long> {
+        return Single.fromCallable {
+            mPersistentStorage.mRatingRequestTimestamp = timestamp
+            mPersistentStorage.save()
+            timestamp
+        }
+    }
+
+    fun getRatingRequestTimestamp(): Single<Long> {
+        return Single.fromCallable {
+            mPersistentStorage.mRatingRequestTimestamp
+        }
+    }
 }

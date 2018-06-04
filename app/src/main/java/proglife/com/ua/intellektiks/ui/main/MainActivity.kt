@@ -15,7 +15,6 @@ import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.NavBaseActivity
 import proglife.com.ua.intellektiks.ui.content.ContentActivity
-import proglife.com.ua.intellektiks.ui.goods.GoodsShowActivity
 import proglife.com.ua.intellektiks.ui.lessons.list.LessonsActivity
 
 class MainActivity : NavBaseActivity(), MainView {
@@ -77,4 +76,9 @@ class MainActivity : NavBaseActivity(), MainView {
         Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
     }
 
+    override fun showRateRequest() {
+        RateDialog().apply {
+            action = presenter
+        }.show(supportFragmentManager, "RateDialog")
+    }
 }

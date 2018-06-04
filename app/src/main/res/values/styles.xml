@@ -13,6 +13,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="RateDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/holo_orange_light</item>
+        <item name="colorControlActivated">@android:color/holo_orange_light</item>
+    </style>
 
 </resources>

@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.data.sp
 import android.content.Context
 import android.content.SharedPreferences
 import proglife.com.ua.intellektiks.utils.Generator
+import java.util.*
 
 /**
  * Created by Evhenyi Shcherbyna on 31.10.2017.
@@ -18,6 +19,7 @@ class PersistentStorage(context: Context) {
     var mUserData: String? = null
     var mCache: String? = null
     var mDrafts: String? = null
+    var mRatingRequestTimestamp: Long = 0
 
     init {
         this.sp = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
@@ -35,6 +37,7 @@ class PersistentStorage(context: Context) {
         mUserData = sp.getString(USER_DATA, null)
         mCache = sp.getString(CACHE, null)
         mDrafts = sp.getString(DRAFTS, null)
+        mRatingRequestTimestamp = sp.getLong(RATING_REQUEST, 0)
     }
 
     fun save() {
@@ -45,6 +48,7 @@ class PersistentStorage(context: Context) {
         edit.putString(USER_DATA, mUserData)
         edit.putString(CACHE, mCache)
         edit.putString(DRAFTS, mDrafts)
+        edit.putLong(RATING_REQUEST, mRatingRequestTimestamp)
         edit.apply()
     }
 
@@ -57,6 +61,7 @@ class PersistentStorage(context: Context) {
         private const val USER_DATA = "004"
         private const val CACHE = "005"
         private const val DRAFTS = "006"
+        private const val RATING_REQUEST = "007"
     }
 
 }

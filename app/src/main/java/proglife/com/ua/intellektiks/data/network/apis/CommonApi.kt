@@ -95,4 +95,6 @@ interface CommonApi {
             @Body body: GetNotificationURLRequest
     ): Observable<NotificationURL>
 
+    fun recoveryPassword(email: String): Single<Unit>
+
 }

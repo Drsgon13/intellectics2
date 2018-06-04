@@ -59,5 +59,16 @@
     <string name="yes">Да</string>
     <string name="marker_text">Воспроизвести файл %s c %s</string>
     <string name="file_save_to">Сохранено в %s</string>
+    <string name="forgot">Забыли пароль?</string>
+    <string name="recovery_password">Восстановить пароль</string>
+    <string name="auth_email">E-mail</string>
+    <string name="forgot_hint">Введите e-mail, который вы использовали для оформления заказов в в магазине Интеллектикс</string>
+    <string name="recovery_password_success">На email %s отправлено письмо</string>
+    <string name="rating_title">Оцените приложение</string>
+    <string name="rating_description">Если вам нравится Интеллектикс, не могли бы его оценить? Это займет лишь минуту. Благодарим за поддержку!</string>
+    <string name="rating_now">Оценить Интеллектикс</string>
+    <string name="rating_denied">Нет, спасибо</string>
+    <string name="rating_later">Напомнить позже</string>
+    <string name="rating_done">Спасибо за оценку!</string>
 
 </resources>
