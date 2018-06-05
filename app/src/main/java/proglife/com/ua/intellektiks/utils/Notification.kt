@@ -82,7 +82,13 @@ class Notification(private val context: Context){
     }
 
     fun setText(text: String){
-        //remoteViews.setTextViewText(R.id.tvDescription, text)
+        remoteViews.setTextViewText(R.id.tvDescription, text)
+        val notification = builder.build()
+
+        notification.icon = R.mipmap.ic_launcher
+
+        notification.flags = notification.flags or Notification.FLAG_ONGOING_EVENT
+        mNotificationManager.notify(548853,notification)
     }
 
     fun setImage(res: Int): Notification{

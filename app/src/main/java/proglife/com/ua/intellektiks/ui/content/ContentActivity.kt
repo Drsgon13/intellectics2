@@ -296,12 +296,15 @@ class ContentActivity : BaseActivity(), ContentView {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
 
                 if (playWhenReady) {
+                    if(notification==null)
+                        mediaNotification()
+                    presenter.showName(player.currentWindowIndex)
                     presenter.startReminder()
+
                 } else {
                     presenter.clearTimer()
                 }
-                if(notification==null)
-                    mediaNotification()
+
                 notification?.show(if(playWhenReady) R.drawable.ic_pause else R.drawable.ic_play)
                 if(playbackState == Player.STATE_IDLE)
                     presenter.checkSource(player.currentWindowIndex, applicationContext)
@@ -337,6 +340,10 @@ class ContentActivity : BaseActivity(), ContentView {
         player.seekTo(currentPosition, seekTo)
         initFullscreenDialog()
         initFullscreenButton()
+    }
+
+    override fun showNameNotification(title: String) {
+        notification?.setText(title)
     }
 
     private fun initFullscreenDialog() {
@@ -378,7 +385,7 @@ class ContentActivity : BaseActivity(), ContentView {
     }
 
     override fun seekTo(index: Int, position: Long) {
-        if( index > exoPlayerView.player.currentTimeline.windowCount) return
+        if( exoPlayerView.player!=null && index > exoPlayerView.player.currentTimeline.windowCount) return
         rvContent.scrollToPosition(mContentAdapter.getPlayerPosition())
 
         exoPlayerView.player.seekTo(index, position)

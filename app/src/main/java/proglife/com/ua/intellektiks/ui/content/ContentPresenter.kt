@@ -109,6 +109,11 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
     // REMINDER
     //--------------------------------------------------------------------------
 
+    fun showName(currentWindowIndex: Int){
+        val mediaObject = mMediaStateHelper.mediaObjects!![currentWindowIndex]
+        viewState.showNameNotification(mediaObject.title)
+    }
+
     fun startReminder() {
         mReminderDispose = Observable.interval(5, TimeUnit.SECONDS)
                 .compose(oAsync())

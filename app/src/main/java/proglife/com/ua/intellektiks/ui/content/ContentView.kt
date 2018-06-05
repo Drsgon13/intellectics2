@@ -32,4 +32,6 @@ interface ContentView: BaseView {
     fun checkContent(isAudio: Boolean)
     @StateStrategyType(SingleStateStrategy::class)
     fun requestPlayerPosition()
+
+    fun showNameNotification(title: String)
 }
