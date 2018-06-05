@@ -6,6 +6,7 @@ import proglife.com.ua.intellektiks.extensions.DownloadService
 import proglife.com.ua.intellektiks.ui.auth.AuthPresenter
 import proglife.com.ua.intellektiks.ui.common.CommonPresenter
 import proglife.com.ua.intellektiks.ui.content.ContentPresenter
+import proglife.com.ua.intellektiks.ui.favorites.FavoritesPresenter
 import proglife.com.ua.intellektiks.ui.goods.GoodsShowPresenter
 import proglife.com.ua.intellektiks.ui.lessons.list.LessonsPresenter
 import proglife.com.ua.intellektiks.ui.lessons.show.LessonPresenter
@@ -40,4 +41,5 @@ interface ActivityComponent {
     fun inject(presenter: ViewerMediaPresenter)
     fun inject(presenter: ContentPresenter)
     fun inject(presenter: ForgotPresenter)
+    fun inject(presenter: FavoritesPresenter)
 }

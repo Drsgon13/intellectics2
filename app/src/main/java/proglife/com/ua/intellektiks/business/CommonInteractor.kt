@@ -231,6 +231,11 @@ class CommonInteractor(
         return mNetworkRepository.getNotificationUrl(id)
     }
 
+    fun getFavorites(): Observable<List<Favorite>> {
+        return credentials()
+                .flatMap {mNetworkRepository.getFavorites(it.first, it.second)}
+    }
+
     fun createLessonMessage(lessonId: Long, message: String): Single<Boolean> {
         return Observable
                 .zip(

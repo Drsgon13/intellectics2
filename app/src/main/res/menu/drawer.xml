@@ -23,6 +23,11 @@
         app:actionLayout="@layout/view_counter"
         android:icon="@drawable/ic_notifications"/>
     <item
+        android:id="@+id/nav_favorites"
+        android:title="@string/nav.favorites"
+        app:actionLayout="@layout/view_counter"
+        android:icon="@drawable/ic_bonus"/>
+    <item
         android:id="@+id/nav_settings"
         android:title="@string/nav.settings"
         android:icon="@drawable/ic_settings"/>

@@ -18,6 +18,7 @@ import android.content.IntentFilter
 import android.view.View
 import android.widget.TextView
 import proglife.com.ua.intellektiks.data.Constants
+import proglife.com.ua.intellektiks.ui.favorites.FavoritesActivity
 
 
 /**
@@ -66,6 +67,10 @@ abstract class NavBaseActivity : BaseActivity(), BaseView, NavigationView.OnNavi
             }
             R.id.nav_notifications -> {
                 startActivity(Intent(this, NotificationListActivity::class.java))
+                withStartAnimation()
+            }
+            R.id.nav_favorites -> {
+                startActivity(Intent(this, FavoritesActivity::class.java))
                 withStartAnimation()
             }
             R.id.nav_contacts -> {

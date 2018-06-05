@@ -90,6 +90,11 @@ interface CommonApi {
             @Body body: GetNotificationRequest
     ): Observable<NotificationMessage>
 
+    @POST(JSON)
+    fun getFavorites(
+            @Body body: GetFavoritesRequest
+    ): Observable<List<Favorite>>
+
     @POST("?r=api/push/xdkgetpushdata")
     fun getNotificationUrl(
             @Body body: GetNotificationURLRequest

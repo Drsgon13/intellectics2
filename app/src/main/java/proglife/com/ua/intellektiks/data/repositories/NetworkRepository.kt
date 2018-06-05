@@ -42,8 +42,9 @@ class NetworkRepository(private val commonApi: CommonApi) {
     fun getNotification(login: String, password: String, id: Long): Observable<NotificationMessage> {
         return commonApi.getNotification(GetNotificationRequest(login, password, id))
     }
-    fun getNotificationUrl( id: Long): Observable<NotificationURL> {
-        return commonApi.getNotificationUrl(GetNotificationURLRequest( id))
+
+    fun getNotificationUrl(id: Long): Observable<NotificationURL> {
+        return commonApi.getNotificationUrl(GetNotificationURLRequest(id))
     }
 
     fun createLessonMessage(login: String, password: String, userId: Long, lessonId: Long, message: String): Single<CreateLessonMessageResponse> {
@@ -60,6 +61,10 @@ class NetworkRepository(private val commonApi: CommonApi) {
                     if (it is JSONException) return@onErrorReturn
                     throw Exception(it)
                 }
+    }
+
+    fun getFavorites(login: String, password: String): Observable<List<Favorite>> {
+        return commonApi.getFavorites(GetFavoritesRequest(login, password))
     }
 
     fun subsFcm(deviceId: String, contactId: Long, token: String): Single<Unit> {

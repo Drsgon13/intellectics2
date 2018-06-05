@@ -16,6 +16,7 @@
     <string name="nav.contacts">Контакты</string>
     <string name="nav.profile">Мой аккаунт</string>
     <string name="nav.notifications">Уведомления</string>
+    <string name="nav.favorites">Избранное</string>
     <string name="nav.settings">Настройки</string>
     <string name="nav.support">Справка</string>
     <string name="nav.logout">Выход</string>
