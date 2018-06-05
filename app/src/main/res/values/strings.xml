@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Интеллектикс</string>
+    <string name="app_name">Test</string>
     <string name="auth_title">Авторизация</string>
     <string name="auth_without_enter">Запуск без авторизации</string>
     <string name="auth_enter">Войти</string>

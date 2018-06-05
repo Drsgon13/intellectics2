@@ -29,10 +29,8 @@ class AuthActivity: BaseActivity(), AuthView {
         setCustomView(R.layout.activity_auth)
 
         if (BuildConfig.DEBUG) {
-//            etLogin.setText("info@sheremetev.info")
-//            etPassword.setText("bc3f6f2")
-            etLogin.setText("mail@sheremetev.info")
-            etPassword.setText("a83b534")
+            etLogin.setText(BuildConfig.TEST_LOGIN)
+            etPassword.setText(BuildConfig.TEST_PASSWORD)
         }
 
         supportActionBar?.setTitle(R.string.auth_title)

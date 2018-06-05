@@ -3,7 +3,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def server = '"https://sheremetev.aoserver.ru/"'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
@@ -12,12 +11,10 @@ def versionBuild = 13
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "intellectics.arnion"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 15
         versionName "3.0"
-        buildConfigField "String", "SERVER", server
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         setProperty("archivesBaseName", "intellectics" + "-v" + versionCode + "(" + versionName + ")")
@@ -27,6 +24,26 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+
+        }
+    }
+    flavorDimensions "content"
+    productFlavors {
+        sheremetev {
+            applicationId "intellectics.arnion"
+            dimension "content"
+            buildConfigField "String", "SERVER", '"https://sheremetev.aoserver.ru/"'
+            buildConfigField "String", "TEST_LOGIN", '"mail@sheremetev.info"'
+            buildConfigField "String", "TEST_PASSWORD", '"a83b534"'
+        }
+        arsamandi {
+            applicationId "intellectics.arnion.arsamandi"
+            dimension "content"
+            buildConfigField "String", "SERVER", '"https://arsamandi.aoserver.ru/"'
+            buildConfigField "String", "TEST_LOGIN", '"rs@sheremetev.info"'
+            buildConfigField "String", "TEST_PASSWORD", '"73c2698"'
         }
     }
 }
