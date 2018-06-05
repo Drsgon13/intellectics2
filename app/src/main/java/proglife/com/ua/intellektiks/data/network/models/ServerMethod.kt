@@ -17,6 +17,8 @@ import com.google.gson.annotations.SerializedName
  * getNotifications - Сообщения в лк updateNotification - Простановка статуса открыто (дополнительно передается параметр id_message)
  * getNotification - Конкретное сообщение (дополнительно передается параметр id_message)
  * getHelp - Инструкция для пользователя приложения  Еще передается параметр platform, необязательный и непонятно в каком формате. Передается в метод сбора статистики, но в бд колонка пустая.
+ * getCard - Возвращает массив привязанных банковских карт
+ * setCard - Деактивирует привязанную карту. Дополнительно передается параметр id_card - id карты
  */
 enum class ServerMethod {
     @SerializedName("getUserData") GET_USER_DATA,
@@ -27,5 +29,7 @@ enum class ServerMethod {
     @SerializedName("getNotifications") GET_NOTIFICATIONS,
     @SerializedName("getNotification") GET_NOTIFICATION,
     @SerializedName("createLessonMessage") CREATE_LESSON_MESSAGE,
+    @SerializedName("getCard") GET_CARDS,
+    @SerializedName("setCard") SET_CARD,
     @SerializedName("getFavorites") GET_FAVORITES
 }

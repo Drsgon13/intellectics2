@@ -334,6 +334,19 @@ class CommonInteractor(
                 }
     }
 
+    fun getCards(): Single<List<Card>> {
+        return credentials()
+                .singleOrError()
+                .flatMap { mNetworkRepository.getCards(it.first, it.second) }
+                .map { it.filter { it.isUsed() } }
+    }
+
+    fun removeCard(card: Card): Single<Unit> {
+        return credentials()
+                .singleOrError()
+                .flatMap { mNetworkRepository.removeCard(it.first, it.second, card.id) }
+    }
+
     companion object {
         val RATING_REQUEST_PERIOD = TimeUnit.DAYS.toMillis(7)
     }

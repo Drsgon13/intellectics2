@@ -44,6 +44,16 @@ interface CommonApi {
             @Body body: GetLessonRequest
     ): Observable<Lesson>
 
+    @POST(JSON)
+    fun getCards(
+            @Body body: GetCardsRequest
+    ): Single<List<Card>>
+
+    @POST(JSON)
+    fun removeCard(
+            @Body body: RemoveCardRequest
+    ): Single<Unit>
+
     @GET("?r=api/apps/help")
     fun getHelp(): Observable<Help>
 
