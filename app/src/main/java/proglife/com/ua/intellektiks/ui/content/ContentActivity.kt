@@ -72,7 +72,8 @@ class ContentActivity : BaseActivity(), ContentView {
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
     private lateinit var exoPlayerView: PlayerView
-    private  var notification: Notification? = null
+    private var notification: Notification? = null
+    private var broadcastReceiver : BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,16 +146,17 @@ class ContentActivity : BaseActivity(), ContentView {
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
 
-        val broadcastReceiver = object : BroadcastReceiver(){
+        broadcastReceiver = object : BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent) {
                 val state =intent.getStringExtra(EXTRA_STATE)
                 Log.d("LOGS", "onReceive: "+intent.getStringExtra(EXTRA_STATE))
                 if(state == Constants.Field.STATE_PLAY) {
                     val play = exoPlayerView.player.playWhenReady
-                    notification?.show(if(!play) R.drawable.ic_pause else R.drawable.ic_play)
+                   // notification?.show(if(!play) R.drawable.ic_pause else R.drawable.ic_play)
                     exoPlayerView.player.playWhenReady = !play
 
                 } else {
+                    exoPlayerView.player.playWhenReady = false
                     notification?.destroy()
                 }
             }
@@ -178,7 +180,7 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun onDestroy() {
         super.onDestroy()
-
+        unregisterReceiver(broadcastReceiver)
         notification?.destroy()
         exoPlayerView.player?.release()
     }

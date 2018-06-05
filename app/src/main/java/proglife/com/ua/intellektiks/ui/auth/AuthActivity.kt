@@ -8,6 +8,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.android.synthetic.main.content_main.*
+import proglife.com.ua.intellektiks.BuildConfig
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.main.MainActivity
