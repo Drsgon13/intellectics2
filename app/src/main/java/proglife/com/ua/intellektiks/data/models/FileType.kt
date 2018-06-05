@@ -9,9 +9,9 @@ import proglife.com.ua.intellektiks.R
  */
 enum class FileType(val icon: Int, val dlIcon: Int) {
     @SerializedName("UNKNOWN") UNKNOWN(R.mipmap.ic_file, R.mipmap.ic_file_dl),
-    @SerializedName("HLS") HLS(R.mipmap.ic_file, R.mipmap.ic_file_dl),
-    @SerializedName("MP4") MP4(R.mipmap.ic_mp4, R.mipmap.ic_mp4_dl),
-    @SerializedName("MP3") MP3(R.mipmap.ic_mp3, R.mipmap.ic_mp3_dl),
+    @SerializedName("HLS", alternate = ["hls"]) HLS(R.mipmap.ic_file, R.mipmap.ic_file_dl),
+    @SerializedName("MP4", alternate = ["mp4"]) MP4(R.mipmap.ic_mp4, R.mipmap.ic_mp4_dl),
+    @SerializedName("MP3", alternate = ["mp3"]) MP3(R.mipmap.ic_mp3, R.mipmap.ic_mp3_dl),
     @SerializedName("PDF") PDF(R.mipmap.ic_pdf, R.mipmap.ic_pdf_dl),
     @SerializedName("DOC") DOC(R.mipmap.ic_doc, R.mipmap.ic_doc_dl),
     @SerializedName("FB2") FB2(R.mipmap.ic_fb2, R.mipmap.ic_fb2_dl),
