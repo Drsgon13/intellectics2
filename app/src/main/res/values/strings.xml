@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Test</string>
     <string name="auth_title">Авторизация</string>
     <string name="auth_without_enter">Запуск без авторизации</string>
     <string name="auth_enter">Войти</string>
@@ -63,7 +62,7 @@
     <string name="recovery_password">Восстановить пароль</string>
     <string name="auth_email">E-mail</string>
     <string name="forgot_hint">Введите e-mail, который вы использовали для оформления заказов в в магазине Интеллектикс</string>
-    <string name="recovery_password_success">На email %s отправлено письмо</string>
+    <string name="recovery_password_success">Письмо с новым паролем отправлено на %s</string>
     <string name="rating_title">Оцените приложение</string>
     <string name="rating_description">Если вам нравится Интеллектикс, не могли бы его оценить? Это займет лишь минуту. Благодарим за поддержку!</string>
     <string name="rating_now">Оценить Интеллектикс</string>

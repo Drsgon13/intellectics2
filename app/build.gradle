@@ -36,7 +36,7 @@ android {
             dimension "content"
             buildConfigField "String", "SERVER", '"https://sheremetev.aoserver.ru/"'
             buildConfigField "String", "TEST_LOGIN", '"mail@sheremetev.info"'
-            buildConfigField "String", "TEST_PASSWORD", '"a83b534"'
+            buildConfigField "String", "TEST_PASSWORD", '"168ffe9"'
         }
         arsamandi {
             applicationId "intellectics.arnion.arsamandi"

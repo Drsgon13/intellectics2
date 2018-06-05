@@ -59,6 +59,7 @@ class AuthActivity: BaseActivity(), AuthView {
         etPassword.isEnabled = show.not()
         btnSignIn.visibility = if (show) View.GONE else View.VISIBLE
         btnSkip.visibility = if (show) View.GONE else View.VISIBLE
+        btnForgot.visibility = if (show) View.GONE else View.VISIBLE
         pbLoading.visibility = if (show) View.VISIBLE else View.GONE
     }
 

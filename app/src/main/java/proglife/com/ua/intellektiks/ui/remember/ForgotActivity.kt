@@ -30,6 +30,11 @@ class ForgotActivity: BaseActivity(), ForgotView {
         btnRecovery.setOnClickListener { presenter.recoveryPassword(etEmail.text.toString()) }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
+    }
+
     override fun showLoading() {
         showUiLoading(true)
     }
@@ -51,5 +56,6 @@ class ForgotActivity: BaseActivity(), ForgotView {
 
     override fun showSuccess(email: String) {
         Toast.makeText(this, getString(R.string.recovery_password_success, email), Toast.LENGTH_LONG).show()
+        onBackPressed()
     }
 }
