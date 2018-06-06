@@ -133,6 +133,10 @@ class SPRepository(context: Context,
         return if (mCache.help == null) Help(null) else mCache.help!!
     }
 
+    fun getFavorite(): List<Favorite>{
+        return mCache.favorites?: arrayListOf()
+    }
+
     fun getDraft(lessonId: Long): Single<String> {
         return Single.fromCallable { mDrafts[lessonId] ?: "" }
     }
@@ -163,5 +167,10 @@ class SPRepository(context: Context,
         return Single.fromCallable {
             mPersistentStorage.mRatingRequestTimestamp
         }
+    }
+
+    fun userFavorites(favorites: List<Favorite>) {
+        mCache.favorites = favorites
+        saveCache()
     }
 }

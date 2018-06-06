@@ -4,6 +4,7 @@ import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import proglife.com.ua.intellektiks.data.models.Content
+import proglife.com.ua.intellektiks.data.models.Favorite
 import proglife.com.ua.intellektiks.data.models.ReportMessage
 import proglife.com.ua.intellektiks.data.models.MediaObject
 import proglife.com.ua.intellektiks.ui.base.BaseView
@@ -34,4 +35,5 @@ interface ContentView: BaseView {
     fun requestPlayerPosition()
 
     fun showNameNotification(title: String)
+    fun favoriteState(favorite: Boolean)
 }

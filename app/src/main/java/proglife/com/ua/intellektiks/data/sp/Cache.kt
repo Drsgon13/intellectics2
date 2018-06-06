@@ -11,5 +11,6 @@ data class Cache(
         var goodsList: MutableMap<Long, Goods?> = mutableMapOf(),
         var lessonPreviews: MutableMap<Long, List<LessonPreview>?> = mutableMapOf(),
         var lessons: MutableMap<Long, Lesson?> = mutableMapOf(),
-        var help: Help? = null
+        var help: Help? = null,
+        var favorites: List<Favorite>? = null
 )

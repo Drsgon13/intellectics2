@@ -11,9 +11,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
+import proglife.com.ua.intellektiks.data.network.models.SetFavoritesRequest
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import proglife.com.ua.intellektiks.ui.content.media.MediaStateHelper
@@ -28,7 +30,7 @@ import javax.inject.Inject
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 @InjectViewState
-class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview?) : BasePresenter<ContentView>() {
+class ContentPresenter(private val goodsPreview: GoodsPreview?, lessonPreview: LessonPreview?) : BasePresenter<ContentView>() {
 
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
@@ -170,6 +172,26 @@ class ContentPresenter(goodsPreview: GoodsPreview?, lessonPreview: LessonPreview
         } else {
             mCommonInteractor.createReminder(content.contactId, content.id, null, currentPosition, mediaObjectId)
         }
+    }
+
+    fun favorite(boolean: Boolean){
+        var goods :String? = null
+        var bookmark :String? = null
+
+        if(boolean)
+            goods = goodsPreview!!.id.toString()
+        else bookmark = "1378"
+        mCommonInteractor.changeFavorite(if(boolean) SetFavoritesRequest.ADD else SetFavoritesRequest.DELETE, goods, bookmark)
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            viewState.favoriteState(boolean)
+                        },
+                        {
+                            viewState.showError(R.string.error_network)
+                            it.printStackTrace()
+                        }
+                )
     }
 
     //--------------------------------------------------------------------------

@@ -6,6 +6,7 @@ import org.json.JSONException
 import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.data.network.apis.CommonApi
 import proglife.com.ua.intellektiks.data.network.models.*
+import java.io.EOFException
 
 /**
  * Created by Evhenyi Shcherbyna on 27.03.2018.
@@ -65,6 +66,13 @@ class NetworkRepository(private val commonApi: CommonApi) {
 
     fun getFavorites(login: String, password: String): Observable<List<Favorite>> {
         return commonApi.getFavorites(GetFavoritesRequest(login, password))
+    }
+    fun changeFavorite(login: String, password: String, action: String, id: String?, id_bookmark: String?): Observable<Unit> {
+        return commonApi.changeFavorite(SetFavoritesRequest(login, password, action, id, id_bookmark))
+                .onErrorReturn {
+                    if (it is JSONException || it is EOFException) return@onErrorReturn
+                    throw Exception(it)
+                }
     }
 
     fun subsFcm(deviceId: String, contactId: Long, token: String): Single<Unit> {

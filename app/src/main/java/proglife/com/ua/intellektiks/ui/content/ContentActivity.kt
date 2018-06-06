@@ -17,6 +17,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -171,6 +173,14 @@ class ContentActivity : BaseActivity(), ContentView {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        if( intent.getParcelableExtra(Constants.Field.GOODS_PREVIEW) as GoodsPreview? !=null)
+        menuInflater.inflate(R.menu.favorites, menu)
+        menu.findItem(R.id.action_favorite).setChecked(true);
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onPause() {
         super.onPause()
         mFullScreenDialog?.let {
@@ -201,11 +211,30 @@ class ContentActivity : BaseActivity(), ContentView {
         withBackAnimation()
     }
 
+    override fun favoriteState(favorite: Boolean) {
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.isChecked = !item.isChecked
+        if(item.isChecked){
+            item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star)
+            presenter.favorite(true)
+        } else {
+            item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star_border)
+            presenter.favorite(false)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun showPreview(previewModel: Any?) {
         mContentAdapter.showHeader {
             title = when (previewModel) {
                 is LessonPreview -> previewModel.name
-                is GoodsPreview -> previewModel.name
+                is GoodsPreview -> {
+
+                    previewModel.name
+                }
                 else -> "Unknown"
             }
         }

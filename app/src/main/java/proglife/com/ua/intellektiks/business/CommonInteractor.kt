@@ -234,6 +234,19 @@ class CommonInteractor(
     fun getFavorites(): Observable<List<Favorite>> {
         return credentials()
                 .flatMap {mNetworkRepository.getFavorites(it.first, it.second)}
+                .doOnNext {
+                    mSpRepository.userFavorites(it)
+                }
+    }
+
+    fun getFavoritesCash(): Single<List<Favorite>> {
+        return  Single.fromCallable { mSpRepository.getFavorite()}
+    }
+
+    fun changeFavorite(action: String, id: String?, id_bookmark:String?): Observable<Unit> {
+        return credentials()
+                .flatMap {mNetworkRepository.changeFavorite(it.first, it.second, action, id, id_bookmark)}
+
     }
 
     fun createLessonMessage(lessonId: Long, message: String): Single<Boolean> {

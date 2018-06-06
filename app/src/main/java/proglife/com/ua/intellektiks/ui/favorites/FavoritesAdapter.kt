@@ -1,15 +1,14 @@
 package proglife.com.ua.intellektiks.ui.favorites
 
 import android.support.v7.widget.RecyclerView
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import kotlinx.android.synthetic.main.li_favorite.view.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.Favorite
 import proglife.com.ua.intellektiks.utils.inflate
 
-class FavoritesAdapter(private val list: List<Favorite>): RecyclerView.Adapter<FavoritesAdapter.ItemHolder>(){
+class FavoritesAdapter(private val list: MutableList<Favorite>, private val presenter: FavoritesPresenter): RecyclerView.Adapter<FavoritesAdapter.ItemHolder>(){
     override fun getItemCount(): Int {
         return list.size
     }
@@ -17,7 +16,10 @@ class FavoritesAdapter(private val list: List<Favorite>): RecyclerView.Adapter<F
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.tvTitle.text = list[position].name
 
-        holder.itemView.setOnClickListener { it.isSelected = !it.isSelected }
+        holder.btnFavorite.setOnClickListener {
+            presenter.showConfirm(list[position])
+        }
+        holder.itemView.setOnClickListener { presenter.openItem(list[position]) }
     }
 
     override fun getItemId(position: Int): Long {
@@ -28,7 +30,13 @@ class FavoritesAdapter(private val list: List<Favorite>): RecyclerView.Adapter<F
        return ItemHolder(parent.inflate(R.layout.li_favorite))
     }
 
+    fun removeItem(favorite: Favorite) {
+        list.remove(favorite)
+        notifyDataSetChanged()
+    }
+
     class ItemHolder(itemView:View): RecyclerView.ViewHolder(itemView){
-        val tvTitle = itemView as TextView
+        val btnFavorite = itemView.btnFavorite!!
+        val tvTitle = itemView.tvTitle!!
     }
 }
