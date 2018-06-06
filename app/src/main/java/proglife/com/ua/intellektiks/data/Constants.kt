@@ -6,6 +6,8 @@ package proglife.com.ua.intellektiks.data
  */
 object Constants {
 
+    const val REQUEST_RESULT = 6521
+
     object Field {
         const val GOODS_PREVIEW = "goodsPreview"
         const val LESSONS_PREVIEW = "lessonsPreview"

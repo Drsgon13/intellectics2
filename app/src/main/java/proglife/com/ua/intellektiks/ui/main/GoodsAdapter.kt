@@ -56,4 +56,12 @@ class GoodsAdapter(private val mPresenter: MainPresenter): RecyclerView.Adapter<
         notifyDataSetChanged()
     }
 
+
+    fun changeItem(item: GoodsPreview){
+        val pos = mList.indexOfFirst { it.id == item.id }
+        val list: MutableList<GoodsPreview> = mList.toMutableList()
+        list[pos] = item
+        mList = list.toList()
+        notifyDataSetChanged()
+    }
 }

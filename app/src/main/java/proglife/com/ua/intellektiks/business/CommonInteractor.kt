@@ -243,7 +243,7 @@ class CommonInteractor(
         return  Single.fromCallable { mSpRepository.getFavorite()}
     }
 
-    fun changeFavorite(action: String, id: String?, id_bookmark:String?): Observable<Unit> {
+    fun changeFavorite(action: String, id: String?, id_bookmark:String?): Observable<ResponseFavorite> {
         return credentials()
                 .flatMap {mNetworkRepository.changeFavorite(it.first, it.second, action, id, id_bookmark)}
 

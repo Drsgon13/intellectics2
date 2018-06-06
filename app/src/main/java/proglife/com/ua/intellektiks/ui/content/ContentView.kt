@@ -3,10 +3,7 @@ package proglife.com.ua.intellektiks.ui.content
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
-import proglife.com.ua.intellektiks.data.models.Content
-import proglife.com.ua.intellektiks.data.models.Favorite
-import proglife.com.ua.intellektiks.data.models.ReportMessage
-import proglife.com.ua.intellektiks.data.models.MediaObject
+import proglife.com.ua.intellektiks.data.models.*
 import proglife.com.ua.intellektiks.ui.base.BaseView
 
 /**
@@ -24,6 +21,7 @@ interface ContentView: BaseView {
     fun selectItem(mediaObject: MediaObject)
     fun showNoData()
     fun showError(res: Int)
+    fun showError(message: String)
     fun onEmptyMediaList()
     fun showVideo(dynamicMediaSource: DynamicConcatenatingMediaSource)
     fun seekTo(index: Int, position: Long)
@@ -36,4 +34,5 @@ interface ContentView: BaseView {
 
     fun showNameNotification(title: String)
     fun favoriteState(favorite: Boolean)
+    fun result(goodsPreview: GoodsPreview?)
 }

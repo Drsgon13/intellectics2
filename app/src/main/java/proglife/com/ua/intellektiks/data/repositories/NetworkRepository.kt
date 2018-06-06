@@ -67,12 +67,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
     fun getFavorites(login: String, password: String): Observable<List<Favorite>> {
         return commonApi.getFavorites(GetFavoritesRequest(login, password))
     }
-    fun changeFavorite(login: String, password: String, action: String, id: String?, id_bookmark: String?): Observable<Unit> {
+    fun changeFavorite(login: String, password: String, action: String, id: String?, id_bookmark: String?): Observable<ResponseFavorite> {
         return commonApi.changeFavorite(SetFavoritesRequest(login, password, action, id, id_bookmark))
-                .onErrorReturn {
-                    if (it is JSONException || it is EOFException) return@onErrorReturn
-                    throw Exception(it)
-                }
     }
 
     fun subsFcm(deviceId: String, contactId: Long, token: String): Single<Unit> {

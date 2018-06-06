@@ -51,7 +51,7 @@ class MainPresenter: BasePresenter<MainView>(), RateDialog.Action {
                 )
     }
 
-    private fun loadGoods() {
+    fun loadGoods() {
         mCommonInteractor.loadData()
                 .compose(oAsync())
                 .doOnSubscribe { viewState.showLoading() }

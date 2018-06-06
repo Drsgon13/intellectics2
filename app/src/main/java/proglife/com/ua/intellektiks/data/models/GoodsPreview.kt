@@ -14,14 +14,17 @@ data class GoodsPreview(
         @SerializedName("goods") val name: String,
         @SerializedName("creation_date") val creationDate: Date,
         @SerializedName("image") val image: String,
-        @SerializedName("id_training") val trainingId: Long?
-): Parcelable {
+        @SerializedName("id_training") val trainingId: Long?,
+        @SerializedName("id_favorite") var idFavorite: String?
+) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readString(),
             Date(parcel.readLong()),
             parcel.readString(),
-            parcel.readValue(Long::class.java.classLoader) as? Long)
+            parcel.readValue(Long::class.java.classLoader) as? Long,
+            parcel.readString()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
@@ -29,6 +32,7 @@ data class GoodsPreview(
         parcel.writeLong(creationDate.time)
         parcel.writeString(image)
         parcel.writeValue(trainingId)
+        parcel.writeString(idFavorite)
     }
 
     override fun describeContents(): Int {

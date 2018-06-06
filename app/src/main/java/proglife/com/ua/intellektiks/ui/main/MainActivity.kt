@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -39,12 +40,24 @@ class MainActivity : NavBaseActivity(), MainView {
         rvGoods.adapter = mAdapter
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(rvGoods.childCount > 0)
+            presenter.loadGoods()
+    }
+
     override fun showLoading() {
         pbLoading.show()
     }
 
     override fun dismissLoading() {
         pbLoading.hide()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == Constants.REQUEST_RESULT && resultCode == Activity.RESULT_OK)
+            mAdapter.changeItem(data!!.getParcelableExtra(Constants.Field.GOODS_PREVIEW))
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun showError(message: String?) {
@@ -61,8 +74,8 @@ class MainActivity : NavBaseActivity(), MainView {
     }
 
     override fun showGoods(item: GoodsPreview) {
-        startActivity(Intent(this, ContentActivity::class.java)
-                .putExtra(Constants.Field.GOODS_PREVIEW, item))
+        startActivityForResult(Intent(this, ContentActivity::class.java)
+                .putExtra(Constants.Field.GOODS_PREVIEW, item), Constants.REQUEST_RESULT)
         withStartAnimation()
     }
 

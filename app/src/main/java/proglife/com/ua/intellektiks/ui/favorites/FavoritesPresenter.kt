@@ -7,6 +7,7 @@ import proglife.com.ua.intellektiks.data.models.Favorite
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.data.network.models.SetFavoritesRequest
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
+import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
 
@@ -59,13 +60,14 @@ class FavoritesPresenter : BasePresenter<FavoritesView>() {
                             viewState.removeItem(favorite)
                         },
                         {
-                            viewState.showError(R.string.error_network)
+                            if(it is UnknownHostException)
+                                viewState.showError(R.string.error_network)
                             it.printStackTrace()
                         }
                 )
     }
 
     fun openItem(favorite: Favorite) {
-        viewState.openGoods(GoodsPreview(favorite.idGoods.toLong(), favorite.name, Date(), "", null))
+        viewState.openGoods(GoodsPreview(favorite.idGoods.toLong(), favorite.name, Date(), "", null, favorite.id))
     }
 }

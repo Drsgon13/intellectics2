@@ -1,6 +1,7 @@
 package proglife.com.ua.intellektiks.ui.content
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -76,6 +77,7 @@ class ContentActivity : BaseActivity(), ContentView {
     private lateinit var exoPlayerView: PlayerView
     private var notification: Notification? = null
     private var broadcastReceiver : BroadcastReceiver? = null
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,15 +171,14 @@ class ContentActivity : BaseActivity(), ContentView {
 
     private fun mediaNotification(){
         notification = Notification(this)
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
         if( intent.getParcelableExtra(Constants.Field.GOODS_PREVIEW) as GoodsPreview? !=null)
         menuInflater.inflate(R.menu.favorites, menu)
-        menu.findItem(R.id.action_favorite).setChecked(true);
+        menu.findItem(R.id.action_favorite).isChecked = isFavorite
+        setStateMenuItem( menu.findItem(R.id.action_favorite))
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -204,6 +205,7 @@ class ContentActivity : BaseActivity(), ContentView {
     }
 
     override fun onBackPressed() {
+        presenter.back()
         exoPlayerView.player?.release()
 
         notification?.destroy()
@@ -211,19 +213,31 @@ class ContentActivity : BaseActivity(), ContentView {
         withBackAnimation()
     }
 
+    override fun result(goodsPreview: GoodsPreview?) {
+        if(goodsPreview != null)
+        setResult(Activity.RESULT_OK, Intent().putExtra(Constants.Field.GOODS_PREVIEW, goodsPreview))
+        else setResult(Activity.RESULT_CANCELED)
+    }
+
     override fun favoriteState(favorite: Boolean) {
+        isFavorite = favorite
+        invalidateOptionsMenu()
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        item.isChecked = !item.isChecked
+    fun setStateMenuItem(item: MenuItem){
         if(item.isChecked){
             item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star)
-            presenter.favorite(true)
         } else {
             item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star_border)
-            presenter.favorite(false)
         }
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.isChecked = !item.isChecked
+        setStateMenuItem( item)
+        presenter.favorite(item.isChecked)
         return super.onOptionsItemSelected(item)
     }
 
@@ -276,6 +290,11 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun showError(res: Int) {
         Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+    }
+
+
+    override fun showError(message: String) {
+        Snackbar.make(coordinator, message, Snackbar.LENGTH_LONG).show()
     }
 
     //--------------------------------------------------------------------------

@@ -27,7 +27,7 @@
         android:paddingEnd="7dp"
         android:id="@+id/btnFavorite"
         android:paddingStart="7dp"
-        android:src="@drawable/selector_favorite"
+        android:src="@drawable/ic_star"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

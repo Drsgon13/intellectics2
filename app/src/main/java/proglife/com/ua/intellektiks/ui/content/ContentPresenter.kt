@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.content
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
 import proglife.com.ua.intellektiks.data.models.*
+import proglife.com.ua.intellektiks.data.network.ServerException
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.network.models.SetFavoritesRequest
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
@@ -22,6 +24,7 @@ import proglife.com.ua.intellektiks.ui.content.media.MediaStateHelper
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import java.io.File
 import java.io.IOException
+import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -66,6 +69,7 @@ class ContentPresenter(private val goodsPreview: GoodsPreview?, lessonPreview: L
     }
 
     private fun loadGoods(goodsPreview: GoodsPreview) {
+        viewState.favoriteState(!(goodsPreview.idFavorite!!.isBlank() || goodsPreview.idFavorite!! == "0"))
         mCommonInteractor.getGoods(goodsPreview.id)
                 .flatMap { mCommonInteractor.existsFiles(it) }
                 .compose(oAsync())
@@ -180,15 +184,25 @@ class ContentPresenter(private val goodsPreview: GoodsPreview?, lessonPreview: L
 
         if(boolean)
             goods = goodsPreview!!.id.toString()
-        else bookmark = "1378"
+        else bookmark = goodsPreview!!.idFavorite
+        if(bookmark == "0" && !boolean) return
         mCommonInteractor.changeFavorite(if(boolean) SetFavoritesRequest.ADD else SetFavoritesRequest.DELETE, goods, bookmark)
                 .compose(oAsync())
                 .subscribe(
                         {
+                            if(boolean)
+                                goodsPreview.idFavorite = it.id.toString()
+                            else goodsPreview.idFavorite = "0"
                             viewState.favoriteState(boolean)
+
                         },
                         {
-                            viewState.showError(R.string.error_network)
+                            if(it is ServerException && it.message!=null)
+                                viewState.showError(it.message!!)
+                            if(it is UnknownHostException)
+                                viewState.showError(R.string.error_network)
+
+                            viewState.favoriteState(!boolean)
                             it.printStackTrace()
                         }
                 )
@@ -399,6 +413,11 @@ class ContentPresenter(private val goodsPreview: GoodsPreview?, lessonPreview: L
 
                         }
                 )
+    }
+
+    fun back() {
+            viewState.result(goodsPreview)
+
     }
 
 

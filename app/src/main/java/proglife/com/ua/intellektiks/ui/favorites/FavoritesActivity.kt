@@ -26,6 +26,11 @@ class FavoritesActivity: BaseActivity(), FavoritesView {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.nav_favorites)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         presenter.loadCash()
     }
 
