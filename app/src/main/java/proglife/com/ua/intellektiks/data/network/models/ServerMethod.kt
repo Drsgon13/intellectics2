@@ -28,5 +28,7 @@ enum class ServerMethod {
     @SerializedName("getNotification") GET_NOTIFICATION,
     @SerializedName("createLessonMessage") CREATE_LESSON_MESSAGE,
     @SerializedName("getFavorites") GET_FAVORITES,
-    @SerializedName("setFavorites") SET_FAVORITES
+    @SerializedName("setFavorites") SET_FAVORITES,
+    @SerializedName("getCard") GET_CARDS,
+    @SerializedName("setCard") SET_CARD,
 }

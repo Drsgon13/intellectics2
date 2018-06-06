@@ -3,7 +3,9 @@ package proglife.com.ua.intellektiks.ui.settings
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
+import proglife.com.ua.intellektiks.data.models.Card
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import javax.inject.Inject
 
@@ -30,21 +32,32 @@ class SettingsPresenter: BasePresenter<SettingsView>() {
                         }
                 )
         mCommonInteractor.getMediaCacheSize()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(sAsync())
                 .subscribe(
                         {
                             viewState.showCacheSize(it)
                         },
                         {}
                 )
+
+        mCommonInteractor.getCards()
+                .compose(sAsync())
+                .doOnSubscribe { viewState.showCardsLoading() }
+                .doFinally { viewState.dismissCardsLoading() }
+                .subscribe(
+                        {
+                            viewState.showCards(it)
+                        },
+                        {
+                            viewState.showCardsError(it.message)
+                        }
+                )
     }
 
     fun clearCache() {
         mCommonInteractor.clearMediaCache()
                 .flatMap { mCommonInteractor.getMediaCacheSize() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(sAsync())
                 .doOnSubscribe { viewState.showClearCacheLoading() }
                 .doOnEvent { _, _ -> viewState.dismissClearCacheLoading() }
                 .subscribe(
@@ -53,6 +66,21 @@ class SettingsPresenter: BasePresenter<SettingsView>() {
                         },
                         {
 
+                        }
+                )
+    }
+
+    fun removeCard(card: Card) {
+        mCommonInteractor.removeCard(card)
+                .compose(sAsync())
+                .doOnSubscribe { viewState.showRemoveCardLoading() }
+                .doFinally { viewState.dismissRemoveCardLoading() }
+                .subscribe(
+                        {
+                            viewState.showCards(emptyList())
+                        },
+                        {
+                            viewState.showError(R.string.cards_remove_error)
                         }
                 )
     }

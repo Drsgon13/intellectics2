@@ -95,4 +95,12 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.recoveryPassword(RecoveryPasswordRequest(email))
     }
 
+    fun getCards(login: String, password: String): Single<List<Card>> {
+        return commonApi.getCards(GetCardsRequest(login, password))
+    }
+
+    fun removeCard(login: String, password: String, id: Long): Single<Unit> {
+        return commonApi.removeCard(RemoveCardRequest(login, password, id))
+    }
+
 }

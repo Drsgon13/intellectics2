@@ -1,11 +1,17 @@
 package proglife.com.ua.intellektiks.ui.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.view.LayoutInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.li_card.view.*
 import proglife.com.ua.intellektiks.R
+import proglife.com.ua.intellektiks.data.models.Card
 import proglife.com.ua.intellektiks.data.models.UserData
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 
@@ -62,4 +68,44 @@ class SettingsActivity: BaseActivity(), SettingsView {
         btnClear.visibility = View.VISIBLE
         pbLoading.visibility = View.GONE
     }
+
+    override fun showCardsLoading() {
+        pbCardsLoading.visibility = View.VISIBLE
+    }
+
+    override fun dismissCardsLoading() {
+        pbCardsLoading.visibility = View.GONE
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun showCards(cards: List<Card>) {
+        cardsContainer.removeAllViews()
+        if (cards.isEmpty()) {
+            tvCardsMessage.text = getString(R.string.cards_empty)
+        }
+        cards.forEach { card ->
+            val view = LayoutInflater.from(this).inflate(R.layout.li_card, cardsContainer, false)
+            view.tvCardType.text = card.type
+            view.tvCardNumber.text = "**** **** **** ${card.mask}"
+            view.btnRemoveCard.setOnClickListener { presenter.removeCard(card) }
+            cardsContainer.addView(view)
+        }
+    }
+
+    override fun showCardsError(message: String?) {
+        tvCardsMessage.text = getString(R.string.cards_error)
+    }
+
+    override fun showError(res: Int) {
+        Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showRemoveCardLoading() {
+        progressDialog.show()
+    }
+
+    override fun dismissRemoveCardLoading() {
+        progressDialog.dismiss()
+    }
+
 }
