@@ -62,6 +62,11 @@ interface CommonApi {
             @Body request: CreateLessonMessageRequest
     ): Single<CreateLessonMessageResponse>
 
+    @POST(JSON)
+    fun callPayment(
+            @Body request: CallPaymentRequest
+    ): Single<CallPaymentResponse>
+
     @POST("?r=api/apps/xdkreminder")
     fun createReminder(
             @Body request: CreateReminderRequest

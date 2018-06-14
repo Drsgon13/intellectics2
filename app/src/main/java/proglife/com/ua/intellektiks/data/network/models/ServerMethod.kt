@@ -17,6 +17,7 @@ import com.google.gson.annotations.SerializedName
  * getNotifications - Сообщения в лк updateNotification - Простановка статуса открыто (дополнительно передается параметр id_message)
  * getNotification - Конкретное сообщение (дополнительно передается параметр id_message)
  * getHelp - Инструкция для пользователя приложения  Еще передается параметр platform, необязательный и непонятно в каком формате. Передается в метод сбора статистики, но в бд колонка пустая.
+ * callPayment - Создание счета и оплата в один клик. action => 1 -  Создает счет и производит оплату по криптограмме при наличии привязанной карты 2 - Создает счет и возвращает ссылку на страницу выбора платежной системы
  */
 enum class ServerMethod {
     @SerializedName("getUserData") GET_USER_DATA,
@@ -31,4 +32,5 @@ enum class ServerMethod {
     @SerializedName("setFavorites") SET_FAVORITES,
     @SerializedName("getCard") GET_CARDS,
     @SerializedName("setCard") SET_CARD,
+    @SerializedName("callPayment") CALL_PAYMENT
 }

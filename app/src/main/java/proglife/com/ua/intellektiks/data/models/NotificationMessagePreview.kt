@@ -15,7 +15,8 @@ data class NotificationMessagePreview(
         @SerializedName("message_text") val text: String,
         @SerializedName("creation_date") val creationDate: Date,
         @SerializedName("sent_date") val sentDate: Date,
-        @SerializedName("productive") val productive: String
+        @SerializedName("productive") val productive: String,
+        @SerializedName("id_offer") val offerId : Long?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
@@ -23,7 +24,8 @@ data class NotificationMessagePreview(
             parcel.readString(),
             Date(parcel.readLong()),
             Date(parcel.readLong()),
-            parcel.readString())
+            parcel.readString(),
+            parcel.readValue(Long::class.java.classLoader) as Long?)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
@@ -32,6 +34,7 @@ data class NotificationMessagePreview(
         parcel.writeLong(creationDate.time)
         parcel.writeLong(sentDate.time)
         parcel.writeString(productive)
+        parcel.writeValue(offerId)
     }
 
     override fun describeContents(): Int {

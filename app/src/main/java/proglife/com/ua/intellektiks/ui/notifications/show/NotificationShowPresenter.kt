@@ -13,13 +13,14 @@ import javax.inject.Inject
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 @InjectViewState
-class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: String?, type: String?) : BasePresenter<NotificationShowView>() {
+class NotificationShowPresenter(private val item: NotificationMessagePreview?, idMessage: String?, type: String?) : BasePresenter<NotificationShowView>() {
 
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
     init {
         injector().inject(this)
+        if (item?.offerId != null) viewState.showCanOrder()
         //viewState.showItem(item)
         when(type) {
             "1" -> loadNotificationURL(idMessage!!)
@@ -29,8 +30,8 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                     "",
                     Date(),
                     Date(),
-                    ""
-
+                    "",
+                    null
             ))
             else -> loadNotification(item!!)
         }
@@ -69,4 +70,22 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                         {}
                 )
     }
+
+    fun makeOrder() {
+        if (item?.offerId == null) return
+        mCommonInteractor.callPayment(item.offerId)
+                .compose(sAsync())
+                .doOnSubscribe { viewState.showOrderLoading() }
+                .doFinally { viewState.dismissOrderLoading() }
+                .subscribe(
+                        {
+
+                        },
+                        {
+                            viewState.showError(R.string.error_network)
+                            it.printStackTrace()
+                        }
+                )
+    }
+
 }

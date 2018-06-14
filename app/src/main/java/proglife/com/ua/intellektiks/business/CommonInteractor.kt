@@ -10,6 +10,7 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import proglife.com.ua.intellektiks.data.models.*
+import proglife.com.ua.intellektiks.data.network.models.CallPaymentResponse
 import proglife.com.ua.intellektiks.data.network.models.GetNotificationURLRequest
 import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
@@ -358,6 +359,12 @@ class CommonInteractor(
         return credentials()
                 .singleOrError()
                 .flatMap { mNetworkRepository.removeCard(it.first, it.second, card.id) }
+    }
+
+    fun callPayment(offerId: Long): Single<CallPaymentResponse> {
+        return getCards().map { if (it.isEmpty()) 2 else 1 }
+                .flatMap { action -> credentials().singleOrError().map { Pair(it, action) } }
+                .flatMap { mNetworkRepository.callPayment(it.first.first, it.first.second, offerId, it.second) }
     }
 
     companion object {

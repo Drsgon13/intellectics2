@@ -16,6 +16,7 @@ import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 
@@ -44,9 +45,14 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
         super.onCreate(savedInstanceState)
         setCustomView(R.layout.activity_notification_show)
 
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.nav_notifications)
+
+        fabBuy.setOnClickListener {
+            mPresenter.makeOrder()
+        }
     }
 
     override fun onBackPressed() {
@@ -63,7 +69,7 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
     }
 
     override fun showError(res: Int) {
-        Snackbar.make(coordinator, res, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(innerCoordinator, res, Snackbar.LENGTH_LONG).show()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -80,4 +86,17 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
     override fun showItem(item: NotificationMessagePreview) {
     }
 
+    override fun showCanOrder() {
+        fabBuy.visibility = View.VISIBLE
+    }
+
+    override fun showOrderLoading() {
+        pbLoading.show()
+        fabBuy.visibility = View.GONE
+    }
+
+    override fun dismissOrderLoading() {
+        pbLoading.hide()
+        fabBuy.visibility = View.VISIBLE
+    }
 }
