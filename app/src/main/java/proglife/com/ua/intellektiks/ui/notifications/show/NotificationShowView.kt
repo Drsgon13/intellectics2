@@ -15,7 +15,7 @@ interface NotificationShowView: BaseView {
     fun showContent(it: NotificationMessagePreview, item: NotificationMessage)
     fun showItem(item: NotificationMessagePreview)
     fun showURL(url: String)
-    fun showCanOrder()
-    fun showOrderLoading()
-    fun dismissOrderLoading()
+    fun showOrderWeb(link: String)
+    fun showOrderSuccess(message: String)
+    fun changeCanOrderState(can: Boolean)
 }

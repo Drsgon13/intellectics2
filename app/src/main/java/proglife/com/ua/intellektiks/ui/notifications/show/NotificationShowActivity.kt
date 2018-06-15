@@ -45,7 +45,6 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
         super.onCreate(savedInstanceState)
         setCustomView(R.layout.activity_notification_show)
 
-
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.nav_notifications)
@@ -86,17 +85,18 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
     override fun showItem(item: NotificationMessagePreview) {
     }
 
-    override fun showCanOrder() {
-        fabBuy.visibility = View.VISIBLE
+    override fun showOrderWeb(link: String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(link)
+        startActivity(i)
     }
 
-    override fun showOrderLoading() {
-        pbLoading.show()
-        fabBuy.visibility = View.GONE
+    override fun showOrderSuccess(message: String) {
+        Snackbar.make(innerCoordinator, message, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun dismissOrderLoading() {
-        pbLoading.hide()
-        fabBuy.visibility = View.VISIBLE
+    override fun changeCanOrderState(can: Boolean) {
+        fabBuy.visibility = if (can) View.VISIBLE else View.GONE
     }
+
 }

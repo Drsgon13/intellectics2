@@ -7,5 +7,6 @@ import com.google.gson.annotations.SerializedName
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class NotificationMessage(
-        @SerializedName("message_text") val text: String
+        @SerializedName("message_text") val text: String,
+        @SerializedName("id_offer") val offerId: Long?
 )

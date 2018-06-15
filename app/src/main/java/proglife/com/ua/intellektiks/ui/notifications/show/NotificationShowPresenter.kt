@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.notifications.show
 import com.arellomobile.mvp.InjectViewState
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
+import proglife.com.ua.intellektiks.data.models.NotificationMessage
 import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
 import java.util.*
@@ -13,14 +14,15 @@ import javax.inject.Inject
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 @InjectViewState
-class NotificationShowPresenter(private val item: NotificationMessagePreview?, idMessage: String?, type: String?) : BasePresenter<NotificationShowView>() {
+class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: String?, type: String?) : BasePresenter<NotificationShowView>() {
 
     @Inject
     lateinit var mCommonInteractor: CommonInteractor
 
+    var mNotificationMessage: NotificationMessage? = null
+
     init {
         injector().inject(this)
-        if (item?.offerId != null) viewState.showCanOrder()
         //viewState.showItem(item)
         when(type) {
             "1" -> loadNotificationURL(idMessage!!)
@@ -61,6 +63,8 @@ class NotificationShowPresenter(private val item: NotificationMessagePreview?, i
                 .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
+                            mNotificationMessage = it
+                            if (it?.offerId != null) viewState.changeCanOrderState(true)
                             viewState.showContent(item, it)
                         },
                         {
@@ -72,16 +76,25 @@ class NotificationShowPresenter(private val item: NotificationMessagePreview?, i
     }
 
     fun makeOrder() {
-        if (item?.offerId == null) return
-        mCommonInteractor.callPayment(item.offerId)
+        if (mNotificationMessage?.offerId == null) return
+        mCommonInteractor.callPayment(mNotificationMessage!!.offerId!!)
                 .compose(sAsync())
-                .doOnSubscribe { viewState.showOrderLoading() }
-                .doFinally { viewState.dismissOrderLoading() }
+                .doOnSubscribe {
+                    viewState.changeCanOrderState(false)
+                    viewState.showLoading()
+                }
+                .doFinally { viewState.dismissLoading() }
                 .subscribe(
                         {
 
+                            if (it.link != null) {
+                                viewState.showOrderWeb(it.link)
+                            } else if (it.success != null) {
+                                viewState.showOrderSuccess(it.success)
+                            }
                         },
                         {
+                            viewState.changeCanOrderState(true)
                             viewState.showError(R.string.error_network)
                             it.printStackTrace()
                         }
