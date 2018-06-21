@@ -370,7 +370,7 @@ class CommonInteractor(
                 .map { it.filter { it.isUsed() } }
     }
 
-    fun removeCard(card: Card): Single<Unit> {
+    fun removeCard(card: Card): Single<String> {
         return credentials()
                 .singleOrError()
                 .flatMap { mNetworkRepository.removeCard(it.first, it.second, card.id) }

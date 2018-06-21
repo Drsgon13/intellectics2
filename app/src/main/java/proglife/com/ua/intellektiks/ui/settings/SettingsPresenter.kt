@@ -78,6 +78,7 @@ class SettingsPresenter: BasePresenter<SettingsView>() {
                 .subscribe(
                         {
                             viewState.showCards(emptyList())
+                            viewState.showMessage(it)
                         },
                         {
                             viewState.showError(R.string.cards_remove_error)

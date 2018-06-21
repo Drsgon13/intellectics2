@@ -52,7 +52,7 @@ interface CommonApi {
     @POST(JSON)
     fun removeCard(
             @Body body: RemoveCardRequest
-    ): Single<Unit>
+    ): Single<RemoveCardResponse>
 
     @GET("?r=api/apps/help")
     fun getHelp(): Observable<Help>
