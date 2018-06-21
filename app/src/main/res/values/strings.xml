@@ -83,7 +83,6 @@
     <string name="favorite.empty_end">справа вверху, находясь\nвнутри товара</string>
     <string name="cards_remove">Отключить</string>
     <string name="cards_remove_cancel">Отмена</string>
-    <string name="cards_remove_hint">Вы уверены, что хотите отключить привязку карты?\\nВключить обратно её можно будет только из личного кабинета в браузере</string>
     <string name="dialog_delete_favorite">Потвердите удаление из избраного</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
