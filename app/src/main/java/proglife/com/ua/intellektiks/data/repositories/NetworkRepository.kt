@@ -95,8 +95,9 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getCards(GetCardsRequest(login, password))
     }
 
-    fun removeCard(login: String, password: String, id: Long): Single<Unit> {
+    fun removeCard(login: String, password: String, id: Long): Single<String> {
         return commonApi.removeCard(RemoveCardRequest(login, password, id))
+                .map { it.message }
     }
 
     fun callPayment(login: String, password: String, offerId: Long, action: Int): Single<CallPaymentResponse> {

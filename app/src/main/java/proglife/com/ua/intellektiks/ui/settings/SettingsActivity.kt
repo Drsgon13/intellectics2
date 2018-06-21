@@ -118,4 +118,7 @@ class SettingsActivity : BaseActivity(), SettingsView {
         progressDialog.dismiss()
     }
 
+    override fun showMessage(message: String) {
+        Snackbar.make(coordinator, message, Snackbar.LENGTH_LONG).show()
+    }
 }

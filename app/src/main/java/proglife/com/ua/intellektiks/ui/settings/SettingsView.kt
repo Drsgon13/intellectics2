@@ -20,4 +20,5 @@ interface SettingsView: BaseView {
     fun showError(res: Int)
     fun showRemoveCardLoading()
     fun dismissRemoveCardLoading()
+    fun showMessage(message: String)
 }
