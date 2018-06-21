@@ -227,6 +227,10 @@ class CommonInteractor(
         return credentials()
                 .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
     }
+    fun updateNotification(id: Long): Observable<Unit> {
+        return credentials()
+                .flatMap { mNetworkRepository.updateNotification(it.first, it.second, id) }
+    }
 
     fun getNotificationUrl( id: Long): Observable<NotificationURL> {
         return mNetworkRepository.getNotificationUrl(id)
@@ -234,10 +238,18 @@ class CommonInteractor(
 
     fun getFavorites(): Observable<List<Favorite>> {
         return credentials()
-                .flatMap {mNetworkRepository.getFavorites(it.first, it.second)}
-                .doOnNext {
-                    mSpRepository.userFavorites(it)
+                    .flatMap {
+                    Observable.mergeDelayError(
+                            Observable.fromCallable {
+                                mSpRepository.getFavorite()
+                            },
+                            mNetworkRepository.getFavorites(it.first, it.second)
+                                    .doOnNext {
+                                        mSpRepository.userFavorites(it)
+                                    }
+                    )
                 }
+
     }
 
     fun getFavoritesCash(): Single<List<Favorite>> {
@@ -247,6 +259,9 @@ class CommonInteractor(
     fun changeFavorite(action: String, id: String?, id_bookmark:String?): Observable<ResponseFavorite> {
         return credentials()
                 .flatMap {mNetworkRepository.changeFavorite(it.first, it.second, action, id, id_bookmark)}
+                .doOnComplete {
+                    mSpRepository.deleteFavorite(id, id_bookmark)
+                }
 
     }
 

@@ -46,7 +46,10 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                 .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
+
+
                             viewState.showURL(it.notification.url)
+                            updateNotification(id.toLong())
                         },
                         {
                             viewState.showError(R.string.error_network)
@@ -63,9 +66,24 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                 .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
+                            updateNotification(item.id)
                             mNotificationMessage = it
                             if (it?.offerId != null) viewState.changeCanOrderState(true)
                             viewState.showContent(item, it)
+                        },
+                        {
+                            viewState.showError(R.string.error_network)
+                            it.printStackTrace()
+                        },
+                        {}
+                )
+    }
+    private fun updateNotification(item: Long){
+        mCommonInteractor.updateNotification(item)
+                .compose(oAsync())
+                .subscribe(
+                        {
+                            viewState.updateNotif()
                         },
                         {
                             viewState.showError(R.string.error_network)

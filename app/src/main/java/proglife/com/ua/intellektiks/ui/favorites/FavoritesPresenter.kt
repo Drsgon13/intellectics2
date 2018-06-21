@@ -21,20 +21,6 @@ class FavoritesPresenter : BasePresenter<FavoritesView>() {
         injector().inject(this)
     }
 
-    fun loadCash(){
-        mCommonInteractor.getFavoritesCash()
-                .compose(sAsync())
-                .subscribe(
-                        {
-                            viewState.showFavorites(it)
-                            loadFavorites()
-                        },
-                        {
-                            it.printStackTrace()
-                        }
-                )
-    }
-
     fun loadFavorites() {
         mCommonInteractor.getFavorites()
                 .compose(oAsync())
@@ -43,6 +29,8 @@ class FavoritesPresenter : BasePresenter<FavoritesView>() {
                             viewState.showFavorites(it)
                         },
                         {
+                            if(it is UnknownHostException)
+                                viewState.showError(R.string.error_network)
                             it.printStackTrace()
                         }
                 )

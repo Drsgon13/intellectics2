@@ -1,6 +1,5 @@
 package proglife.com.ua.intellektiks.ui.favorites
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -31,7 +30,12 @@ class FavoritesActivity : BaseActivity(), FavoritesView {
 
     override fun onResume() {
         super.onResume()
-        presenter.loadCash()
+        presenter.loadFavorites()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        withBackAnimation()
     }
 
     override fun showFavorites(it: List<Favorite>) {
@@ -51,9 +55,9 @@ class FavoritesActivity : BaseActivity(), FavoritesView {
 
     override fun showConfirmRemove(favorite: Favorite) {
         AlertDialog.Builder(this)
-                .setMessage("Потвердите удаление из избраного")
-                .setPositiveButton("Удалить") { dialog, which -> presenter.delete(favorite) }
-                .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
+                .setMessage(getString(R.string.dialog_delete_favorite))
+                .setPositiveButton(getString(R.string.delete)) { _, _ -> presenter.delete(favorite) }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
                 .show()
     }
 

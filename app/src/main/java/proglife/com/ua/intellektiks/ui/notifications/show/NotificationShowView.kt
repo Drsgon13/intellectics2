@@ -18,4 +18,5 @@ interface NotificationShowView: BaseView {
     fun showOrderWeb(link: String)
     fun showOrderSuccess(message: String)
     fun changeCanOrderState(can: Boolean)
+    fun updateNotif()
 }

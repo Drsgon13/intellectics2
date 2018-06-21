@@ -170,7 +170,14 @@ class SPRepository(context: Context,
     }
 
     fun userFavorites(favorites: List<Favorite>) {
-        mCache.favorites = favorites
+        mCache.favorites = favorites.toMutableList()
         saveCache()
+    }
+
+    fun deleteFavorite(id: String?, id_bookmark: String?) {
+        mCache.favorites?.forEach {
+            if(it.id == id || it.id == id_bookmark)
+                mCache.favorites!!.remove(it)
+        }
     }
 }

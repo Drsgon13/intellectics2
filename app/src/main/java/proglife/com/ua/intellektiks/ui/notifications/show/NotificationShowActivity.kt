@@ -52,6 +52,12 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
         fabBuy.setOnClickListener {
             mPresenter.makeOrder()
         }
+
+
+    }
+
+    override fun updateNotif() {
+        sendBroadcast(Intent(Constants.Field.NOTIFICATION_UPDATE))
     }
 
     override fun onBackPressed() {

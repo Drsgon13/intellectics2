@@ -109,6 +109,7 @@ class ContentPresenter(private val goodsPreview: GoodsPreview?, lessonPreview: L
             viewState.showNoData()
         }
         throwable.printStackTrace()
+        viewState.dismissLoading()
     }
 
     //--------------------------------------------------------------------------

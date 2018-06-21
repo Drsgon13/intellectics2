@@ -7,5 +7,6 @@ import com.google.gson.annotations.SerializedName
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class UnReadNotificationsResponse(
-        @SerializedName("error") val error: Int
+        @SerializedName("error") val error: Int,
+        @SerializedName("count") val count: Int
 )

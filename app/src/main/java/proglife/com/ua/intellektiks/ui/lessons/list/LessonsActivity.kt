@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_lessons.*
@@ -28,6 +30,7 @@ class LessonsActivity: BaseActivity(), LessonsView {
     lateinit var mPresenter: LessonsPresenter
 
     private lateinit var mAdapter: LessonsAdapter
+    private var isFavorite: Boolean = false
 
     @ProvidePresenter
     fun providePresenter(): LessonsPresenter {
@@ -55,6 +58,38 @@ class LessonsActivity: BaseActivity(), LessonsView {
         withBackAnimation()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        if( intent.getParcelableExtra(Constants.Field.GOODS_PREVIEW) as GoodsPreview? !=null ) {
+            menuInflater.inflate(R.menu.favorites, menu)
+            menu.findItem(R.id.action_favorite).isChecked = isFavorite
+            setStateMenuItem(menu.findItem(R.id.action_favorite))
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.isChecked = !item.isChecked
+        setStateMenuItem( item)
+        mPresenter.favorite(item.isChecked)
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun setStateMenuItem(item: MenuItem){
+        if(item.isChecked){
+            item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star)
+        } else {
+            item.icon = ContextCompat.getDrawable(this, R.drawable.ic_star_border)
+        }
+    }
+
+
+    override fun favoriteState(favorite: Boolean) {
+        isFavorite = favorite
+        invalidateOptionsMenu()
+
+    }
+
     override fun showInfo(goodsPreview: GoodsPreview) {
         tvTitle.text = goodsPreview.name
     }
@@ -79,5 +114,13 @@ class LessonsActivity: BaseActivity(), LessonsView {
 
     override fun showNoData() {
         Snackbar.make(coordinator, R.string.error_network, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showError(message: String) {
+
+    }
+
+    override fun showError(res: Int) {
+
     }
 }

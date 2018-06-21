@@ -10,6 +10,11 @@ import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
 import proglife.com.ua.intellektiks.utils.inflate
 import java.text.SimpleDateFormat
+import android.text.Spannable
+import android.icu.lang.UProperty.INT_START
+import android.text.SpannableStringBuilder
+
+
 
 /**
  * Created by Evhenyi Shcherbyna on 07.04.2018.
@@ -32,8 +37,16 @@ class NotificationPreviewsAdapter(private val presenter: NotificationListPresent
         val item = mList[position]
         if (holder is NotificationPreviewViewHolder) {
             holder.tvDate.text = mSDF.format(item.sentDate)
-            holder.tvTitle.text = item.subject
-            holder.itemView.setOnClickListener { presenter.openNotification(item) }
+
+            val str = SpannableStringBuilder(item.subject)
+            if(item.productive == "0")
+            str.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, item.subject.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            holder.tvTitle.text = str
+
+            holder.itemView.setOnClickListener {
+                mList[position].productive = "1"
+                presenter.openNotification(item) }
         }
     }
 

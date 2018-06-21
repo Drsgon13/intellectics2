@@ -90,7 +90,7 @@ interface CommonApi {
     ): Single<ResponseBody>
 
     // Количество непрочитанных сообщений
-    @POST("?r=api/push/xdkpushunread")
+    @POST("?r=api/push/xdkmessageunread")
     fun unreadNotifications(
             @Body request: UnReadNotificationsRequest
     ): Single<UnReadNotificationsResponse>
@@ -104,6 +104,11 @@ interface CommonApi {
     fun getNotification(
             @Body body: GetNotificationRequest
     ): Observable<NotificationMessage>
+
+    @POST(JSON)
+    fun updateNotification(
+            @Body body: UpdateNotificationsRequest
+    ): Observable<Unit>
 
     @POST(JSON)
     fun getFavorites(

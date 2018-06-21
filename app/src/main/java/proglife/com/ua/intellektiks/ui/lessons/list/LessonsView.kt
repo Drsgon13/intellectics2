@@ -15,4 +15,7 @@ interface LessonsView: BaseView {
     fun showLessons(list: List<LessonPreview>)
     fun showLesson(lessonPreview: LessonPreview)
     fun showNoData()
+    fun favoriteState(favorite: Boolean)
+    fun showError(message: String)
+    fun showError(res: Int)
 }

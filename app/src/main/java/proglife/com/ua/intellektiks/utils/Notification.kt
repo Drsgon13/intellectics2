@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.RemoteViews
@@ -17,7 +18,7 @@ import proglife.com.ua.intellektiks.data.Constants.Field.MEDIA_NOTIFICATION
 import proglife.com.ua.intellektiks.data.Constants.Field.STATE_DELETE
 import proglife.com.ua.intellektiks.data.Constants.Field.STATE_PLAY
 
-class Notification(private val context: Context){
+class Notification(private val context: Context) : Notification() {
 
     private val CHANNEL_ID = "media"
     private var mNotificationManager: NotificationManager
@@ -26,13 +27,13 @@ class Notification(private val context: Context){
 
     init {
         val ns = Context.NOTIFICATION_SERVICE
-        mNotificationManager = context.getSystemService(ns) as NotificationManager
+
         builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(context,  createNotificationChannel())
         } else {
             Notification.Builder(context)
         }
-
+        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.mipmap.ic_logo)
             builder.setColor(ContextCompat.getColor(context, R.color.colorPrimary))
@@ -49,14 +50,11 @@ class Notification(private val context: Context){
         } else{
             builder.setContent(remoteViews)
         }
-        builder.setContentTitle("Bivi")
-        builder.setContentText("par")
+        builder.setContentTitle("Intelectics")
+        builder.setContentText("Intelectics")
         builder.setShowWhen(false)
 
        val notification = setImage(R.drawable.ic_pause)
-        notification.icon = R.mipmap.ic_launcher
-        notification.flags = notification.flags or Notification.FLAG_ONGOING_EVENT
-        notification.defaults = 0
         mNotificationManager.notify(548853, notification)
     }
 
@@ -66,16 +64,16 @@ class Notification(private val context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.channel_name)
             val description = context.getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_NONE
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance)
             channel.setSound(null,null)
             channel.description = description
             channel.enableLights(true)
-
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
 
-            mNotificationManager.createNotificationChannel(channel)
             return channel.id
         }
         return "0"

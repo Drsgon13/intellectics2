@@ -69,7 +69,7 @@ abstract class BaseActivity: MvpAppCompatActivity(), CommonView {
         progressDialog.dismiss()
     }
     override fun showNotificationCount(notificationCount: Int) {
-        Log.d("LOGS", "showNotificationCount")
+        Log.d("LOGS", "showNotificationCount: "+ notificationCount)
     }
 
 }

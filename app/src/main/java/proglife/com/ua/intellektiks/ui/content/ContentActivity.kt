@@ -3,16 +3,20 @@ package proglife.com.ua.intellektiks.ui.content
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -175,10 +179,11 @@ class ContentActivity : BaseActivity(), ContentView {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
-        if( intent.getParcelableExtra(Constants.Field.GOODS_PREVIEW) as GoodsPreview? !=null)
-        menuInflater.inflate(R.menu.favorites, menu)
-        menu.findItem(R.id.action_favorite).isChecked = isFavorite
-        setStateMenuItem( menu.findItem(R.id.action_favorite))
+        if( intent.getParcelableExtra(Constants.Field.GOODS_PREVIEW) as GoodsPreview? !=null ) {
+            menuInflater.inflate(R.menu.favorites, menu)
+            menu.findItem(R.id.action_favorite).isChecked = isFavorite
+            setStateMenuItem(menu.findItem(R.id.action_favorite))
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -353,7 +358,7 @@ class ContentActivity : BaseActivity(), ContentView {
                     presenter.clearTimer()
                 }
 
-                notification?.show(if(playWhenReady) R.drawable.ic_pause else R.drawable.ic_play)
+                notification?.setImage(if(playWhenReady) R.drawable.ic_pause else R.drawable.ic_play)
                 if(playbackState == Player.STATE_IDLE)
                     presenter.checkSource(player.currentWindowIndex, applicationContext)
             }

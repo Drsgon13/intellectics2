@@ -15,7 +15,7 @@ data class NotificationMessagePreview(
         @SerializedName("message_text") val text: String,
         @SerializedName("creation_date") val creationDate: Date,
         @SerializedName("sent_date") val sentDate: Date,
-        @SerializedName("productive") val productive: String,
+        @SerializedName("productive") var productive: String,
         @SerializedName("id_offer") val offerId : Long?
 ): Parcelable {
     constructor(parcel: Parcel) : this(

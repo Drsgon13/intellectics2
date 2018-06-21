@@ -44,6 +44,10 @@ class NetworkRepository(private val commonApi: CommonApi) {
         return commonApi.getNotification(GetNotificationRequest(login, password, id))
     }
 
+    fun updateNotification(login: String, password: String, id: Long): Observable<Unit> {
+        return commonApi.updateNotification(UpdateNotificationsRequest(login, password, id))
+    }
+
     fun getNotificationUrl(id: Long): Observable<NotificationURL> {
         return commonApi.getNotificationUrl(GetNotificationURLRequest(id))
     }
@@ -83,8 +87,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
 
     fun unreadNotifications(deviceId: String): Single<Int> {
         return commonApi.unreadNotifications(UnReadNotificationsRequest(deviceId))
-                // TODO
-                .map { 0 }
+                .map{t -> t.count }
+
     }
 
     fun recoveryPassword(email: String): Single<Unit> {

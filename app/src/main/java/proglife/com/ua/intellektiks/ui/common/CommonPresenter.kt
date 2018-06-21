@@ -51,15 +51,16 @@ class CommonPresenter: BasePresenter<CommonView>() {
                 .compose(sAsync())
                 .subscribe(
                         {
-
-
-                            notificationCount.let {
                                 notificationCount = it
                                 viewState.showNotificationCount(notificationCount)
-                            }
                         },
                         {
-                            notificationCount = 0
+                            it.printStackTrace()
+                            notificationCount = try {
+                                it.message!!.toInt()
+                            } catch (e: Exception){
+                                0
+                            }
                             viewState.showNotificationCount(notificationCount)
                         }
                 )
