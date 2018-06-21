@@ -3,18 +3,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def versionMajor = 0
-def versionMinor = 1
-def versionPatch = 0
-def versionBuild = 14
+def versionMajor = 3
+def versionMinor = 0
+def versionPatch = 1
+def versionBuild = 1
 
 android {
     compileSdkVersion 27
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 15
-        versionName "3.0"
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         setProperty("archivesBaseName", "intellectics" + "-v" + versionCode + "(" + versionName + ")")

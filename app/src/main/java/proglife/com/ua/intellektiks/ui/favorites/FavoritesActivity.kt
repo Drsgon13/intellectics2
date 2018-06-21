@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_favorites.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -15,7 +16,7 @@ import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.content.ContentActivity
 
-class FavoritesActivity: BaseActivity(), FavoritesView {
+class FavoritesActivity : BaseActivity(), FavoritesView {
 
     @InjectPresenter
     lateinit var presenter: FavoritesPresenter
@@ -26,7 +27,6 @@ class FavoritesActivity: BaseActivity(), FavoritesView {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setTitle(R.string.nav_favorites)
-
     }
 
     override fun onResume() {
@@ -35,7 +35,8 @@ class FavoritesActivity: BaseActivity(), FavoritesView {
     }
 
     override fun showFavorites(it: List<Favorite>) {
-       rvFavorites.adapter = FavoritesAdapter(it.toMutableList(), presenter)
+        emptyContainer.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+        rvFavorites.adapter = FavoritesAdapter(it.toMutableList(), presenter)
     }
 
     override fun removeItem(favorite: Favorite) {
@@ -48,11 +49,11 @@ class FavoritesActivity: BaseActivity(), FavoritesView {
         withStartAnimation()
     }
 
-    override fun showConfirmRemove(favorite: Favorite){
+    override fun showConfirmRemove(favorite: Favorite) {
         AlertDialog.Builder(this)
                 .setMessage("Потвердите удаление из избраного")
                 .setPositiveButton("Удалить") { dialog, which -> presenter.delete(favorite) }
-                .setNegativeButton("Отмена") { dialog, which ->  dialog.dismiss()}
+                .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
                 .show()
     }
 

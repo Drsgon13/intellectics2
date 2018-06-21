@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.settings
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -19,7 +20,7 @@ import proglife.com.ua.intellektiks.ui.base.BaseActivity
  * Created by Evhenyi Shcherbyna on 28.03.2018.
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
-class SettingsActivity: BaseActivity(), SettingsView {
+class SettingsActivity : BaseActivity(), SettingsView {
 
     @InjectPresenter
     lateinit var presenter: SettingsPresenter
@@ -87,7 +88,16 @@ class SettingsActivity: BaseActivity(), SettingsView {
             val view = LayoutInflater.from(this).inflate(R.layout.li_card, cardsContainer, false)
             view.tvCardType.text = card.type
             view.tvCardNumber.text = "**** **** **** ${card.mask}"
-            view.btnRemoveCard.setOnClickListener { presenter.removeCard(card) }
+            view.btnRemoveCard.setOnClickListener {
+                AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.cards_remove_hint))
+                        .setPositiveButton(R.string.cards_remove) { dialog, _ ->
+                            presenter.removeCard(card)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.cards_remove_cancel)) { dialog, _ -> dialog.dismiss() }
+                        .show()
+            }
             cardsContainer.addView(view)
         }
     }

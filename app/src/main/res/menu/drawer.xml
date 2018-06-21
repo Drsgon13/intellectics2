@@ -6,9 +6,14 @@
         android:title="@string/nav.user_goods"
         android:icon="@drawable/ic_user_goods"/>
     <item
+        android:id="@+id/nav_favorites"
+        android:title="@string/nav.favorites"
+        app:actionLayout="@layout/view_counter"
+        android:icon="@drawable/ic_bonus"/>
+    <item
         android:id="@+id/nav_bonus"
         android:title="@string/nav.bonus"
-        android:icon="@drawable/ic_bonus"/>
+        android:icon="@drawable/ic_gift"/>
     <item
         android:id="@+id/nav_contacts"
         android:title="@string/nav.contacts"
@@ -22,11 +27,6 @@
         android:title="@string/nav.notifications"
         app:actionLayout="@layout/view_counter"
         android:icon="@drawable/ic_notifications"/>
-    <item
-        android:id="@+id/nav_favorites"
-        android:title="@string/nav.favorites"
-        app:actionLayout="@layout/view_counter"
-        android:icon="@drawable/ic_bonus"/>
     <item
         android:id="@+id/nav_settings"
         android:title="@string/nav.settings"
