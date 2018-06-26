@@ -20,7 +20,7 @@ import proglife.com.ua.intellektiks.data.Constants.Field.STATE_PLAY
 
 class Notification(private val context: Context) : Notification() {
 
-    private val CHANNEL_ID = "media"
+    private val CHANNEL_ID = "media_intellektiks"
     private var mNotificationManager: NotificationManager
     private var remoteViews: RemoteViews
     var builder: Notification.Builder
@@ -114,5 +114,6 @@ class Notification(private val context: Context) : Notification() {
     fun destroy() {
         Log.d("LOGS", "destroy")
         mNotificationManager.cancel(548853)
+
     }
 }

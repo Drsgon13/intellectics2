@@ -14,6 +14,8 @@ import proglife.com.ua.intellektiks.data.models.Favorite
 import proglife.com.ua.intellektiks.data.models.GoodsPreview
 import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import proglife.com.ua.intellektiks.ui.content.ContentActivity
+import proglife.com.ua.intellektiks.ui.lessons.list.LessonsActivity
+import proglife.com.ua.intellektiks.ui.lessons.show.LessonActivity
 
 class FavoritesActivity : BaseActivity(), FavoritesView {
 
@@ -49,6 +51,12 @@ class FavoritesActivity : BaseActivity(), FavoritesView {
 
     override fun openGoods(goodsPreview: GoodsPreview) {
         startActivity(Intent(this, ContentActivity::class.java)
+                .putExtra(Constants.Field.GOODS_PREVIEW, goodsPreview))
+        withStartAnimation()
+    }
+
+    override fun openLessons(goodsPreview: GoodsPreview) {
+        startActivity(Intent(this, LessonsActivity::class.java)
                 .putExtra(Constants.Field.GOODS_PREVIEW, goodsPreview))
         withStartAnimation()
     }

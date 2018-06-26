@@ -160,7 +160,7 @@ class ContentActivity : BaseActivity(), ContentView {
                 Log.d("LOGS", "onReceive: "+intent.getStringExtra(EXTRA_STATE))
                 if(state == Constants.Field.STATE_PLAY) {
                     val play = exoPlayerView.player.playWhenReady
-                   // notification?.show(if(!play) R.drawable.ic_pause else R.drawable.ic_play)
+                    notification?.show(if(!play) R.drawable.ic_pause else R.drawable.ic_play)
                     exoPlayerView.player.playWhenReady = !play
 
                 } else {
@@ -212,8 +212,6 @@ class ContentActivity : BaseActivity(), ContentView {
     override fun onBackPressed() {
         presenter.back()
         exoPlayerView.player?.release()
-
-        notification?.destroy()
         super.onBackPressed()
         withBackAnimation()
     }

@@ -56,6 +56,8 @@ class FavoritesPresenter : BasePresenter<FavoritesView>() {
     }
 
     fun openItem(favorite: Favorite) {
-        viewState.openGoods(GoodsPreview(favorite.idGoods.toLong(), favorite.name, Date(), "", null, favorite.id))
+        if(favorite.idTraining!=null)
+            viewState.openLessons(GoodsPreview(favorite.idGoods.toLong(), favorite.name, Date(), "", favorite.idTraining, favorite.id))
+        else viewState.openGoods(GoodsPreview(favorite.idGoods.toLong(), favorite.name, Date(), "", null, favorite.id))
     }
 }

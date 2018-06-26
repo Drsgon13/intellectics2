@@ -10,4 +10,5 @@ interface FavoritesView: BaseView {
     fun showConfirmRemove(favorite: Favorite)
     fun openGoods(goodsPreview: GoodsPreview)
     fun showError(res: Int)
+    fun openLessons(goodsPreview: GoodsPreview)
 }

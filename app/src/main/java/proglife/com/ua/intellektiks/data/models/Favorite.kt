@@ -7,11 +7,13 @@ import com.google.gson.annotations.SerializedName
 data class Favorite(
         @SerializedName("name") val name: String,
         @SerializedName("id_goods") val idGoods: String,
+        @SerializedName("id_training") val idTraining: Long?,
         @SerializedName("id") val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
+            parcel.readLong(),
             parcel.readString()
     )
 
@@ -19,6 +21,7 @@ data class Favorite(
         parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(idGoods)
+        idTraining?.let { parcel.writeLong(it) }
     }
 
     override fun describeContents(): Int {
