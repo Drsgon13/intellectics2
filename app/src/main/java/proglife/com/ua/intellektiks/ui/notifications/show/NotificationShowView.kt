@@ -1,5 +1,6 @@
 package proglife.com.ua.intellektiks.ui.notifications.show
 
+import proglife.com.ua.intellektiks.data.models.Card
 import proglife.com.ua.intellektiks.data.models.NotificationMessage
 import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
 import proglife.com.ua.intellektiks.ui.base.BaseView
@@ -19,4 +20,5 @@ interface NotificationShowView: BaseView {
     fun showOrderSuccess(message: String)
     fun changeCanOrderState(can: Boolean)
     fun updateNotif()
+    fun confirmPayment(card: Card)
 }

@@ -3,11 +3,9 @@ package proglife.com.ua.intellektiks.ui.notifications.show
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.webkit.WebViewClient
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_notification_show.*
-import kotlinx.android.synthetic.main.content_main.*
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.data.Constants
 import proglife.com.ua.intellektiks.data.models.NotificationMessage
@@ -16,9 +14,9 @@ import proglife.com.ua.intellektiks.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import android.content.Intent
 import android.net.Uri
+import android.support.v7.app.AlertDialog
 import android.view.View
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
+import proglife.com.ua.intellektiks.data.models.Card
 
 
 /**
@@ -105,4 +103,14 @@ class NotificationShowActivity: BaseActivity(), NotificationShowView {
         fabBuy.visibility = if (can) View.VISIBLE else View.GONE
     }
 
+    override fun confirmPayment(card: Card) {
+        AlertDialog.Builder(this)
+                .setMessage(getString(R.string.payment_request_confirm, card.mask))
+                .setPositiveButton(R.string.payment_confirm) { dialog, _ ->
+                    mPresenter.makeOrder(card)
+                    dialog.dismiss()
+                }
+                .setNegativeButton(getString(R.string.payment_cancel)) { dialog, _ -> dialog.dismiss() }
+                .show()
+    }
 }

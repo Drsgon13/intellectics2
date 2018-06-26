@@ -3,6 +3,7 @@ package proglife.com.ua.intellektiks.ui.notifications.show
 import com.arellomobile.mvp.InjectViewState
 import proglife.com.ua.intellektiks.R
 import proglife.com.ua.intellektiks.business.CommonInteractor
+import proglife.com.ua.intellektiks.data.models.Card
 import proglife.com.ua.intellektiks.data.models.NotificationMessage
 import proglife.com.ua.intellektiks.data.models.NotificationMessagePreview
 import proglife.com.ua.intellektiks.ui.base.BasePresenter
@@ -93,9 +94,9 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                 )
     }
 
-    fun makeOrder() {
+    fun makeOrder(card: Card? = null) {
         if (mNotificationMessage?.offerId == null) return
-        mCommonInteractor.callPayment(mNotificationMessage!!.offerId!!)
+        mCommonInteractor.callPayment(mNotificationMessage!!.offerId!!, card)
                 .compose(sAsync())
                 .doOnSubscribe {
                     viewState.changeCanOrderState(false)
@@ -113,8 +114,12 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                         },
                         {
                             viewState.changeCanOrderState(true)
-                            viewState.showError(R.string.error_network)
-                            it.printStackTrace()
+                            if (it is CardConfirmThrowable) {
+                                viewState.confirmPayment(it.card)
+                            } else {
+                                viewState.showError(R.string.error_network)
+                                it.printStackTrace()
+                            }
                         }
                 )
     }

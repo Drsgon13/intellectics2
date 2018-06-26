@@ -16,6 +16,7 @@ import proglife.com.ua.intellektiks.data.network.models.ReminderResponse
 import proglife.com.ua.intellektiks.data.repositories.NetworkRepository
 import proglife.com.ua.intellektiks.data.repositories.SPRepository
 import proglife.com.ua.intellektiks.extensions.DownloadableFile
+import proglife.com.ua.intellektiks.ui.notifications.show.CardConfirmThrowable
 import proglife.com.ua.intellektiks.utils.ExoUtils
 import proglife.com.ua.intellektiks.utils.Hash
 import java.io.File
@@ -227,18 +228,19 @@ class CommonInteractor(
         return credentials()
                 .flatMap { mNetworkRepository.getNotification(it.first, it.second, id) }
     }
+
     fun updateNotification(id: Long): Observable<Unit> {
         return credentials()
                 .flatMap { mNetworkRepository.updateNotification(it.first, it.second, id) }
     }
 
-    fun getNotificationUrl( id: Long): Observable<NotificationURL> {
+    fun getNotificationUrl(id: Long): Observable<NotificationURL> {
         return mNetworkRepository.getNotificationUrl(id)
     }
 
     fun getFavorites(): Observable<List<Favorite>> {
         return credentials()
-                    .flatMap {
+                .flatMap {
                     Observable.mergeDelayError(
                             Observable.fromCallable {
                                 mSpRepository.getFavorite()
@@ -253,12 +255,12 @@ class CommonInteractor(
     }
 
     fun getFavoritesCash(): Single<List<Favorite>> {
-        return  Single.fromCallable { mSpRepository.getFavorite()}
+        return Single.fromCallable { mSpRepository.getFavorite() }
     }
 
-    fun changeFavorite(action: String, id: String?, id_bookmark:String?): Observable<ResponseFavorite> {
+    fun changeFavorite(action: String, id: String?, id_bookmark: String?): Observable<ResponseFavorite> {
         return credentials()
-                .flatMap {mNetworkRepository.changeFavorite(it.first, it.second, action, id, id_bookmark)}
+                .flatMap { mNetworkRepository.changeFavorite(it.first, it.second, action, id, id_bookmark) }
                 .doOnComplete {
                     mSpRepository.deleteFavorite(id, id_bookmark)
                 }
@@ -376,9 +378,23 @@ class CommonInteractor(
                 .flatMap { mNetworkRepository.removeCard(it.first, it.second, card.id) }
     }
 
-    fun callPayment(offerId: Long): Single<CallPaymentResponse> {
-        return getCards().map { if (it.isEmpty()) 2 else 1 }
-                .flatMap { action -> credentials().singleOrError().map { Pair(it, action) } }
+    /**
+     * Card используется для подтверждения снятия при наличии активной карты
+     */
+    fun callPayment(offerId: Long, card: Card? = null): Single<CallPaymentResponse> {
+        val flow =
+                if (card == null) {
+                    getCards().flatMap {
+                        if (it.isEmpty()) {
+                            Single.just(2)
+                        } else {
+                            Single.error(CardConfirmThrowable(it.first()))
+                        }
+                    }
+                } else {
+                    Single.just(1)
+                }
+        return flow.flatMap { action -> credentials().singleOrError().map { Pair(it, action) } }
                 .flatMap { mNetworkRepository.callPayment(it.first.first, it.first.second, offerId, it.second) }
     }
 
