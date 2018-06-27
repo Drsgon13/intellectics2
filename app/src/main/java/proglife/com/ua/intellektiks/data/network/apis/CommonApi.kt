@@ -90,7 +90,7 @@ interface CommonApi {
     ): Single<ResponseBody>
 
     // Количество непрочитанных сообщений
-    @POST("?r=api/push/xdkmessageunread")
+    @POST(JSON)
     fun unreadNotifications(
             @Body request: UnReadNotificationsRequest
     ): Single<UnReadNotificationsResponse>

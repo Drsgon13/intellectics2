@@ -7,5 +7,7 @@ import com.google.gson.annotations.SerializedName
  * Copyright (c) 2018 ProgLife. All rights reserved.
  */
 data class UnReadNotificationsRequest(
-        @SerializedName("id_device") val deviceId: String
-)
+        @SerializedName("id_device") val deviceId: String,
+        @SerializedName("login") val login: String,
+        @SerializedName("password") val password: String
+) : NetworkRequest(ServerMethod.COUNT_NOTIFICATION)

@@ -85,8 +85,8 @@ class NetworkRepository(private val commonApi: CommonApi) {
                 .map { Unit }
     }
 
-    fun unreadNotifications(deviceId: String): Single<Int> {
-        return commonApi.unreadNotifications(UnReadNotificationsRequest(deviceId))
+    fun unreadNotifications(deviceId: String, login: String, pass: String): Single<Int> {
+        return commonApi.unreadNotifications(UnReadNotificationsRequest(deviceId, login, pass))
                 .map{t -> t.count }
 
     }

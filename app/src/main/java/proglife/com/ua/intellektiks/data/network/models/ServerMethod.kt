@@ -33,5 +33,6 @@ enum class ServerMethod {
     @SerializedName("setFavorites") SET_FAVORITES,
     @SerializedName("getCard") GET_CARDS,
     @SerializedName("setCard") SET_CARD,
-    @SerializedName("callPayment") CALL_PAYMENT
+    @SerializedName("callPayment") CALL_PAYMENT,
+    @SerializedName("countNotification") COUNT_NOTIFICATION
 }

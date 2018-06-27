@@ -48,7 +48,7 @@ class CommonPresenter: BasePresenter<CommonView>() {
 
     private fun notification() {
         mCommonInteractor.unreadNotifications()
-                .compose(sAsync())
+                .compose(oAsync())
                 .subscribe(
                         {
                                 notificationCount = it

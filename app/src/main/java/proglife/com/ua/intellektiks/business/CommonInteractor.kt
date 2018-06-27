@@ -324,8 +324,9 @@ class CommonInteractor(
         return Settings.Secure.getString(mContext.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
-    fun unreadNotifications(): Single<Int> {
-        return mNetworkRepository.unreadNotifications(getDeviceId())
+    fun unreadNotifications(): Observable<Int> {
+        return credentials()
+                .flatMap { mNetworkRepository.unreadNotifications(getDeviceId(),  it.first, it.second).toObservable()}
     }
 
     fun setDraft(lessonId: Long, message: String?): Single<Boolean> {

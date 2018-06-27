@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 def versionMajor = 3
 def versionMinor = 0
 def versionPatch = 2
-def versionBuild = 2
+def versionBuild = 3
 
 android {
     signingConfigs {
