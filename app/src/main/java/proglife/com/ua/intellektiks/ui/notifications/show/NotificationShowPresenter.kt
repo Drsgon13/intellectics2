@@ -47,8 +47,6 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                 .doOnNext { viewState.dismissLoading() }
                 .subscribe(
                         {
-
-
                             viewState.showURL(it.notification.url)
                             updateNotification(id.toLong())
                         },
@@ -69,7 +67,7 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
                         {
                             updateNotification(item.id)
                             mNotificationMessage = it
-                            if (it?.offerId != null) viewState.changeCanOrderState(true)
+                            if (it?.offerId != null && it.offerId != 0L) viewState.changeCanOrderState(true)
                             viewState.showContent(item, it)
                         },
                         {
@@ -95,7 +93,7 @@ class NotificationShowPresenter(item: NotificationMessagePreview?, idMessage: St
     }
 
     fun makeOrder(card: Card? = null) {
-        if (mNotificationMessage?.offerId == null) return
+        if (mNotificationMessage?.offerId == null || mNotificationMessage?.offerId == 0L) return
         mCommonInteractor.callPayment(mNotificationMessage!!.offerId!!, card)
                 .compose(sAsync())
                 .doOnSubscribe {

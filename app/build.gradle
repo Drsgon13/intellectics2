@@ -42,7 +42,7 @@ android {
             dimension "content"
             buildConfigField "String", "SERVER", '"https://sheremetev.aoserver.ru/"'
             buildConfigField "String", "TEST_LOGIN", '"mail@sheremetev.info"'
-            buildConfigField "String", "TEST_PASSWORD", '"168ffe9"'
+            buildConfigField "String", "TEST_PASSWORD", '"420df0e"'
         }
         arsamandi {
             applicationId "intellectics.arnion.arsamandi"
@@ -62,7 +62,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:design:$support_version"
     implementation "com.android.support:cardview-v7:$support_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     /* Firebase **/
     implementation "com.google.firebase:firebase-core:$firebaseVersion"
     implementation "com.google.firebase:firebase-messaging:$firebaseVersion"
